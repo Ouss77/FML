@@ -1,4 +1,6 @@
 
+'use client'; // Important! Forces client-side rendering
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Briefcase, Star, Plus, Pencil, Trash2 } from "lucide-react"

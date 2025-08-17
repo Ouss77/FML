@@ -227,7 +227,7 @@ export default function ReplacementDashboard() {
   ] 
 
   const sidebarItems = [
-    { id: "overview", label: "Vue d'ensemble", icon: Home, badge: null },
+    // { id: "overview", label: "Vue d'ensemble", icon: Home, badge: null },
     { id: "missions", label: "Missions disponibles", icon: Briefcase, badge: availableMissions.length },
     { id: "proposals", label: "Propositions reçues", icon: Mail, badge: pendingProposals.length },
     { id: "my-missions", label: "Mes missions", icon: Calendar, badge: null },
@@ -262,85 +262,85 @@ export default function ReplacementDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "overview":
-        return (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-green-50 to-green-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-green-700">Missions terminées</p>
-                      <p className="text-3xl font-bold text-green-900">12</p>
-                    </div>
-                    <div className="p-3 bg-green-500 rounded-full">
-                      <CheckCircle className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-orange-50 to-orange-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-orange-700">Propositions en attente</p>
-                      <p className="text-3xl font-bold text-orange-900">3</p>
-                    </div>
-                    <div className="p-3 bg-orange-500 rounded-full">
-                      <Clock className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-yellow-50 to-yellow-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-yellow-700">Note moyenne</p>
-                      <p className="text-3xl font-bold text-yellow-900">4.9</p>
-                    </div>
-                    <div className="p-3 bg-yellow-500 rounded-full">
-                      <Star className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-blue-50 to-blue-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-blue-700">Revenus ce mois</p>
-                      <p className="text-3xl font-bold text-blue-900">3,240€</p>
-                    </div>
-                    <div className="p-3 bg-blue-500 rounded-full">
-                      <DollarSign className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-2">
-                <ProfileSection
-                  profileData={profileData}
-                  setProfileData={setProfileData}
-                  isEditProfileOpen={isEditProfileOpen}
-                  setIsEditProfileOpen={setIsEditProfileOpen}
-                  handleSaveProfile={handleSaveProfile}
-                />
-              </div>
-              <div className="md:col-span-1">
-                <RatesSection
-                  profileData={profileData}
-                  setProfileData={setProfileData}
-                  isEditRatesOpen={isEditRatesOpen}
-                  setIsEditRatesOpen={setIsEditRatesOpen}
-                  handleSaveRates={handleSaveRates}
-                />
-              </div>
-            </div>
-          </>
-        )
+      // case "overview":
+      //   return (
+      //     <>
+      //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-green-50 to-green-100">
+      //           <CardContent className="p-6">
+      //             <div className="flex items-center justify-between">
+      //               <div>
+      //                 <p className="text-sm font-medium text-green-700">Missions terminées</p>
+      //                 <p className="text-3xl font-bold text-green-900">12</p>
+      //               </div>
+      //               <div className="p-3 bg-green-500 rounded-full">
+      //                 <CheckCircle className="w-6 h-6 text-white" />
+      //               </div>
+      //             </div>
+      //           </CardContent>
+      //         </Card>
+      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-orange-50 to-orange-100">
+      //           <CardContent className="p-6">
+      //             <div className="flex items-center justify-between">
+      //               <div>
+      //                 <p className="text-sm font-medium text-orange-700">Propositions en attente</p>
+      //                 <p className="text-3xl font-bold text-orange-900">3</p>
+      //               </div>
+      //               <div className="p-3 bg-orange-500 rounded-full">
+      //                 <Clock className="w-6 h-6 text-white" />
+      //               </div>
+      //             </div>
+      //           </CardContent>
+      //         </Card>
+      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-yellow-50 to-yellow-100">
+      //           <CardContent className="p-6">
+      //             <div className="flex items-center justify-between">
+      //               <div>
+      //                 <p className="text-sm font-medium text-yellow-700">Note moyenne</p>
+      //                 <p className="text-3xl font-bold text-yellow-900">4.9</p>
+      //               </div>
+      //               <div className="p-3 bg-yellow-500 rounded-full">
+      //                 <Star className="w-6 h-6 text-white" />
+      //               </div>
+      //             </div>
+      //           </CardContent>
+      //         </Card>
+      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-blue-50 to-blue-100">
+      //           <CardContent className="p-6">
+      //             <div className="flex items-center justify-between">
+      //               <div>
+      //                 <p className="text-sm font-medium text-blue-700">Revenus ce mois</p>
+      //                 <p className="text-3xl font-bold text-blue-900">3,240€</p>
+      //               </div>
+      //               <div className="p-3 bg-blue-500 rounded-full">
+      //                 <DollarSign className="w-6 h-6 text-white" />
+      //               </div>
+      //             </div>
+      //           </CardContent>
+      //         </Card>
+      //       </div>
+      //       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      //         <div className="md:col-span-2">
+      //           <ProfileSection
+      //             profileData={profileData}
+      //             setProfileData={setProfileData}
+      //             isEditProfileOpen={isEditProfileOpen}
+      //             setIsEditProfileOpen={setIsEditProfileOpen}
+      //             handleSaveProfile={handleSaveProfile}
+      //           />
+      //         </div>
+      //         <div className="md:col-span-1">
+      //           <RatesSection
+      //             profileData={profileData}
+      //             setProfileData={setProfileData}
+      //             isEditRatesOpen={isEditRatesOpen}
+      //             setIsEditRatesOpen={setIsEditRatesOpen}
+      //             handleSaveRates={handleSaveRates}
+      //           />
+      //         </div>
+      //       </div>
+      //     </>
+      //   )
       case "missions":
         return <AvailableMissionsSection availableMissions={availableMissions} />
       case "proposals":
