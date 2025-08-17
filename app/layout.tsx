@@ -1,0 +1,39 @@
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter, Merriweather } from "next/font/google"
+import "./globals.css"
+import { AuthProvider } from "@/lib/auth"
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+})
+
+const merriweather = Merriweather({
+  weight: ["300", "400", "700", "900"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-merriweather",
+})
+
+export const metadata: Metadata = {
+  title: "MedReplace - Plateforme de Remplacements Médicaux",
+  description:
+    "Connectez établissements de santé et médecins remplaçants grâce à notre système de matching intelligent.",
+  generator: "v0.dev",
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="fr" className={`${inter.variable} ${merriweather.variable} antialiased`}>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
+    </html>
+  )
+}
