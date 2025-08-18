@@ -1,15 +1,12 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import DocumentsSection from "./components/DocumentsSection"
-import { Card, CardContent } from "@/components/ui/card"
 import { Avatar } from "@/components/ui/avatar"
 import { Bell, Home, Briefcase, Mail, Calendar, User, FileText, LogOut, ChevronLeft, ChevronRight } from "lucide-react"
-import { CheckCircle, Clock, Star, DollarSign } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useAuth } from "@/lib/auth"
 import ProfileSection from "./components/ProfileSection"
 import RatesSection from "./components/RatesSection"
-import ExperienceSection from "./components/ExperienceSection"
 import ProposalsSection from "./components/ProposalsSection"
 import AvailableMissionsSection from "./components/AvailableMissionsSection"
 import MyMissionsSection from "./components/MyMissionsSection"
@@ -20,7 +17,6 @@ export default function ReplacementDashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
   const [isEditRatesOpen, setIsEditRatesOpen] = useState(false)
-  const [isAddExperienceOpen, setIsAddExperienceOpen] = useState(false)
 
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -52,15 +48,6 @@ export default function ReplacementDashboard() {
     }
   }, [user, profile])
 
-  const [newExperience, setNewExperience] = useState({
-    workplace: "",
-    location: "",
-    duration: "",
-    period: "",
-    specialty: "",
-    reference: "",
-    rating: "",
-  })
 
   const handleProfileUpdate = (field: string, value: string) => {
     setProfileData((prev) => ({ ...prev, [field]: value }))
@@ -175,32 +162,6 @@ export default function ReplacementDashboard() {
     },
   ]
 
-  const availableMissions = [
-    {
-      id: 3,
-      hospital: "Hôpital Privé de Provence",
-      specialty: "Cardiologie",
-      location: "Aix-en-Provence, Bouches-du-Rhône",
-      startDate: "2024-03-01",
-      endDate: "2024-03-15",
-      dailyRate: 500,
-      description: "Remplacement longue durée en cardiologie",
-      postedDate: "2024-01-20",
-      applicants: 3,
-    },
-    {
-      id: 4,
-      hospital: "Centre Hospitalier de Grenoble",
-      specialty: "Cardiologie",
-      location: "Grenoble, Isère",
-      startDate: "2024-02-25",
-      endDate: "2024-02-28",
-      dailyRate: 420,
-      description: "Remplacement urgences cardiologiques",
-      postedDate: "2024-01-18",
-      applicants: 1,
-    },
-  ] 
 
   const myMissions = [
     {
@@ -228,7 +189,7 @@ export default function ReplacementDashboard() {
 
   const sidebarItems = [
     // { id: "overview", label: "Vue d'ensemble", icon: Home, badge: null },
-    { id: "missions", label: "Missions disponibles", icon: Briefcase, badge: availableMissions.length },
+    { id: "missions", label: "Missions disponibles", icon: Briefcase, badge: null },
     { id: "proposals", label: "Propositions reçues", icon: Mail, badge: pendingProposals.length },
     { id: "my-missions", label: "Mes missions", icon: Calendar, badge: null },
     { id: "profile", label: "Mon profil", icon: User, badge: null },
@@ -342,7 +303,7 @@ export default function ReplacementDashboard() {
       //     </>
       //   )
       case "missions":
-        return <AvailableMissionsSection availableMissions={availableMissions} />
+        return <AvailableMissionsSection  />
       case "proposals":
         return (
           <ProposalsSection

@@ -41,13 +41,16 @@ export default function RegisterPage() {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false)
   const router = useRouter()
 
-  // Récupérer le type depuis l'URL si présent
-  useState(() => {
-    const typeFromUrl = window.location.search.split("=")[1]
-    if (typeFromUrl === "replacement" || typeFromUrl === "employer") {
-      setUserType(typeFromUrl as "replacement" | "employer")
+  // Récupérer le type depuis l'URL si présent (côté client uniquement)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search)
+      const typeFromUrl = params.get("type")
+      if (typeFromUrl === "replacement" || typeFromUrl === "employer") {
+        setUserType(typeFromUrl as "replacement" | "employer")
+      }
     }
-  })
+  }, [])
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
