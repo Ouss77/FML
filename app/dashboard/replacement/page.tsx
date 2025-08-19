@@ -357,7 +357,7 @@ return (
                   <span className="text-white font-bold text-xl">M</span>
                 </div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  MedReplace
+                  Le foyer médical
                 </h1>
               </div>
             )}

@@ -18,11 +18,14 @@ const merriweather = Merriweather({
 })
 
 export const metadata: Metadata = {
-  title: "MedReplace - Plateforme de Remplacements Médicaux",
+  
+  title: "Le foyer médical",
   description:
     "Connectez établissements de santé et médecins remplaçants grâce à notre système de matching intelligent.",
   generator: "v0.dev",
 }
+
+import Head from "next/head"
 
 export default function RootLayout({
   children,
@@ -31,6 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${inter.variable} ${merriweather.variable} antialiased`}>
+      <Head>
+        <title>Le foyer médical</title>
+        <link rel="icon" href="logo.png" type="image/png" />
+      </Head>
       <body>
         <AuthProvider>{children}</AuthProvider>
       </body>

@@ -120,7 +120,7 @@ export default function EmployerDashboard() {
                 </div>
                 <div>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    MedReplace
+                    Le foyer médical
                   </h1>
                   <Badge variant="secondary" className="mt-1 bg-blue-100 text-blue-700 text-xs">
                     {profileData.establishmentName}
@@ -425,7 +425,7 @@ export default function EmployerDashboard() {
                 </Button>
                 <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg">
                   Publier la mission
-                </Button>
+                </Button> 
               </div>
             </CardContent>
           </Card>

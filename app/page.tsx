@@ -34,12 +34,20 @@ export default function HomePage() {
       {/* Header */}
       <header className="border-b bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Stethoscope className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-serif font-bold text-gray-900">MedReplace</span>
-          </div>
+<div className="flex items-center gap-4">
+  {/* Logo */}
+  <img
+    src="logo.png"
+    alt="Logo Le Foyer Médical"
+    className="w-12 h-12 rounded-full shadow-md border border-white"
+  />
+
+  {/* Nom du site */}
+  <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+    Le Foyer Médical
+  </h1>
+</div>
+
           <nav className="hidden md:flex items-center gap-8">
             <Link href="#features" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
               Fonctionnalités
@@ -67,139 +75,58 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-24 px-4 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
-        <div className="absolute top-20 right-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 floating-animation"></div>
-        <div
-          className="absolute bottom-20 left-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 floating-animation"
-          style={{ animationDelay: "2s" }}
-        ></div>
+<section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100 py-24">
+      {/* Decorative circles */}
+      <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-40" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-300 rounded-full blur-3xl opacity-30" />
 
-        <div className="container mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="text-left">
-              <Badge className="mb-6 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 hover:from-blue-200 hover:to-purple-200 border-0 px-4 py-2">
-                <Heart className="w-4 h-4 mr-2" />
-                Plateforme de confiance pour les professionnels de santé
-              </Badge>
-              <h1 className="text-5xl lg:text-7xl font-serif font-bold text-gray-900 mb-6 leading-tight">
-                Trouvez votre{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  remplaçant médical
-                </span>{" "}
-                en quelques clics
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-xl">
-                Connectez établissements de santé et médecins remplaçants grâce à notre système de matching intelligent.
-                Simplifiez vos remplacements médicaux avec la technologie.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Link href="/register?type=replacement">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl text-lg px-8 py-4"
-                  >
-                    Je cherche des missions
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/register?type=employer">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full sm:w-auto border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 text-lg px-8 py-4 bg-transparent"
-                  >
-                    Je cherche un remplaçant
-                  </Button>
-                </Link>
-              </div>
-              <div className="flex items-center gap-6 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Inscription gratuite</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Profils vérifiés</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                  <span>Support 24/7</span>
-                </div>
-              </div>
-            </div>
+      <div className="relative container mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
+        {/* Left content */}
+        <div className="max-w-2xl text-center md:text-left space-y-6">
+          <div className="flex items-center justify-center md:justify-start gap-2 text-blue-600 font-semibold">
+            <Stethoscope className="w-5 h-5" />
+            <span>Votre santé, toujours assurée</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800 leading-tight">
+            Trouvez un <span className="text-blue-600">médecin remplaçant</span> en un clic
+          </h1>
+          <p className="text-lg text-gray-600">
+            Gagnez du temps et restez serein : notre plateforme connecte instantanément
+            médecins titulaires et remplaçants partout au Maroc.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 flex items-center gap-2">
+              <Users className="w-5 h-5" /> Trouver un remplaçant
+            </Button>
+            <Button size="lg" variant="outline" className="rounded-full px-6 flex items-center gap-2">
+              Proposer mes services <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
 
-            {/* Right Content - Hero Image */}
-            <div className="relative">
-              <div className="relative z-10">
-                <img
-                  src="/modern-doctor-stethoscope.png"
-                  alt="Médecin professionnel avec stéthoscope"
-                  className="w-full h-auto rounded-2xl shadow-2xl"
-                />
-                {/* Floating Cards */}
-                <div className="absolute -top-6 -left-6 bg-white rounded-xl shadow-lg p-4 floating-animation">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <Users className="w-5 h-5 text-green-600" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900">2,500+</div>
-                      <div className="text-sm text-gray-500">Médecins</div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-lg p-4 floating-animation"
-                  style={{ animationDelay: "1s" }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Award className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900">4.8/5</div>
-                      <div className="text-sm text-gray-500">Satisfaction</div>
-                    </div>
-                  </div>
-                </div>
+        {/* Right image */}
+        <div className="relative mt-10 md:mt-0 w-full md:w-1/2 flex justify-center">
+          <div className="relative">
+            <img
+              src="hero.png"
+              alt="Doctor replacement illustration"
+              className="drop-shadow-2xl rounded-3xl border-4 border-white h-[90%] ml-32"
+            />
+            {/* Floating card */}
+            <div className="absolute -bottom-8 -left-8 bg-white shadow-xl rounded-2xl px-6 py-4 flex items-center gap-3 animate-bounce">
+              <Users className="w-6 h-6 text-blue-600" />
+              <div>
+                <p className="text-sm font-semibold text-gray-800">+300 médecins</p>
+                <p className="text-xs text-gray-500">déjà inscrits</p>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="group">
-              <div className="text-4xl lg:text-5xl font-bold mb-2 group-hover:scale-110 transition-transform">
-                2,500+
-              </div>
-              <div className="text-blue-100 font-medium">Médecins inscrits</div>
-            </div>
-            <div className="group">
-              <div className="text-4xl lg:text-5xl font-bold mb-2 group-hover:scale-110 transition-transform">850+</div>
-              <div className="text-blue-100 font-medium">Établissements partenaires</div>
-            </div>
-            <div className="group">
-              <div className="text-4xl lg:text-5xl font-bold mb-2 group-hover:scale-110 transition-transform">
-                15,000+
-              </div>
-              <div className="text-blue-100 font-medium">Missions réalisées</div>
-            </div>
-            <div className="group">
-              <div className="text-4xl lg:text-5xl font-bold mb-2 group-hover:scale-110 transition-transform">
-                4.8/5
-              </div>
-              <div className="text-blue-100 font-medium">Satisfaction moyenne</div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Features Section */}
       <section id="features" className="py-24 px-4 bg-gray-50">
@@ -346,11 +273,11 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-12">
+              <div className="mt-12 ml-20  ">
                 <img
-                  src="/placeholder-srdqb.png"
+                  src="remp.png"
                   alt="Médecin utilisant une tablette"
-                  className="w-full h-64 object-cover rounded-2xl shadow-xl"
+                  className="w-96 h-96 object-contain rounded-2xl shadow-xl"
                 />
               </div>
             </div>
@@ -400,11 +327,12 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-12">
+
+              <div className="mt-12 ml-20  ">
                 <img
-                  src="/placeholder-yf7el.png"
-                  alt="Réception d'hôpital moderne"
-                  className="w-full h-64 object-cover rounded-2xl shadow-xl"
+                  src="empl.png"
+                  alt="Médecin utilisant une tablette"
+                  className="w-96 h-96 object-contain rounded-2xl shadow-xl"
                 />
               </div>
             </div>
@@ -447,7 +375,7 @@ export default function HomePage() {
             <Card className="medical-card border-0 shadow-xl p-8">
               <div className="flex items-center gap-4 mb-6">
                 <img
-                  src="/placeholder-j5w77.png"
+                  src="/empl.png"
                   alt="Jean Martin"
                   className="w-15 h-15 rounded-full object-cover"
                 />
@@ -531,12 +459,19 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Stethoscope className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-2xl font-serif font-bold">MedReplace</span>
-              </div>
+           <div className="flex items-center gap-4">
+  {/* Logo */}
+  <img
+    src="logo.png"
+    alt="Logo Le Foyer Médical"
+    className="w-12 h-12 rounded-full shadow-md border border-white"
+  />
+
+  {/* Nom du site */}
+  <h1 className="text-xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+    Le Foyer Médical
+  </h1>
+</div>
               <p className="text-gray-400 leading-relaxed mb-6">
                 La plateforme de référence pour les remplacements médicaux en France. Connectons les professionnels de
                 santé.
@@ -632,7 +567,7 @@ export default function HomePage() {
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 mb-4 md:mb-0">&copy; 2024 MedReplace. Tous droits réservés.</p>
             <div className="flex items-center gap-6 text-sm text-gray-400">
-              <span>🇫🇷 Fait en France</span>
+              <span>🇫🇷 Fait en Maroc</span>
               <span>•</span>
               <span>Certifié HDS</span>
               <span>•</span>
