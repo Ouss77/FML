@@ -162,7 +162,6 @@ export default function ReplacementDashboard() {
     },
   ]
 
-
   const myMissions = [
     {
       id: 5,
@@ -353,13 +352,18 @@ return (
           <div className="flex items-center justify-between p-6 border-b border-gray-100 flex-shrink-0">
             {!sidebarCollapsed && (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">M</span>
-                </div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  Le foyer médical
-                </h1>
-              </div>
+
+        <div className="flex items-center gap-4">
+          <img
+            src="../logo.png"
+            alt="Logo Le Foyer Médical"
+            className="w-12 h-12 rounded-full shadow-md border border-white"
+          />
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+            Le Foyer Médical
+          </h1>
+        </div>
+              </div> 
             )}
             <button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -452,7 +456,7 @@ return (
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
-              </div>
+              </div>  
             )}
           </div>
         </div>

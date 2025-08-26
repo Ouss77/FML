@@ -3,6 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
 import {
   Users,
   Calendar,
@@ -17,7 +20,6 @@ import {
   ArrowRight,
   Play
 } from "lucide-react"
-import Link from "next/link"
 
 export default function HomePage() {
   // Clear any existing auth data when landing page loads
@@ -28,105 +30,168 @@ export default function HomePage() {
     // Clear auth-token cookie
     document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
   }
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-<div className="flex items-center gap-4">
-  {/* Logo */}
-  <img
-    src="logo.png"
-    alt="Logo Le Foyer Médical"
-    className="w-12 h-12 rounded-full shadow-md border border-white"
-  />
+   <header className="border-b bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Logo + Title */}
+        <div className="flex items-center gap-4">
+          <img
+            src="logo.png"
+            alt="Logo Le Foyer Médical"
+            className="w-12 h-12 rounded-full shadow-md border border-white"
+          />
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+            Le Foyer Médical
+          </h1>
+        </div>
 
-  {/* Nom du site */}
-  <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-    Le Foyer Médical
-  </h1>
-</div>
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          <Link
+            href="#features"
+            className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+          >
+            Fonctionnalités
+          </Link>
+          <Link
+            href="#how-it-works"
+            className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+          >
+            Comment ça marche
+          </Link>
+          <Link
+            href="#testimonials"
+            className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+          >
+            Témoignages
+          </Link>
+        </nav>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <Link href="#features" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+        {/* Buttons (desktop) */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link href="/login">
+            <Button variant="ghost" className="font-medium">
+              Connexion
+            </Button>
+          </Link>
+          <Link href="/register">
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg">
+              S'inscrire
+            </Button>
+          </Link>
+        </div>
+
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="md:hidden bg-white shadow-md border-t">
+          <nav className="flex flex-col items-start gap-4 p-4">
+            <Link
+              href="#features"
+              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              onClick={() => setMobileOpen(false)}
+            >
               Fonctionnalités
             </Link>
-            <Link href="#how-it-works" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+            <Link
+              href="#how-it-works"
+              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              onClick={() => setMobileOpen(false)}
+            >
               Comment ça marche
             </Link>
-            <Link href="#testimonials" className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+            <Link
+              href="#testimonials"
+              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
+              onClick={() => setMobileOpen(false)}
+            >
               Témoignages
             </Link>
-          </nav>
-          <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="ghost" className="font-medium">
+            <hr className="w-full border-gray-200 my-2" />
+            <Link href="/login" onClick={() => setMobileOpen(false)}>
+              <Button variant="ghost" className="w-full text-left">
                 Connexion
               </Button>
             </Link>
-            <Link href="/register">
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg">
+            <Link href="/register" onClick={() => setMobileOpen(false)}>
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg">
                 S'inscrire
               </Button>
             </Link>
-          </div>
+          </nav>
         </div>
-      </header>
+      )}
+    </header>
 
       {/* Hero Section */}
-<section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100 py-24">
-      {/* Decorative circles */}
-      <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-40" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-300 rounded-full blur-3xl opacity-30" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100 py-20 md:pb-28 pt-10">
+        {/* Decorative circles */}
+        <div className="absolute -top-32 -left-32 w-80 h-80 bg-blue-200 rounded-full blur-3xl opacity-40" />
+        <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-blue-300 rounded-full blur-3xl opacity-30" />
 
-      <div className="relative container mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-12">
-        {/* Left content */}
-        <div className="max-w-2xl text-center md:text-left space-y-6">
-          <div className="flex items-center justify-center md:justify-start gap-2 text-blue-600 font-semibold">
-            <Stethoscope className="w-5 h-5" />
-            <span>Votre santé, toujours assurée</span>
+        <div className="relative container mx-auto flex flex-col md:flex-row items-center justify-between px-6 lg:px-12 gap-12">
+          {/* Left content */}
+          <div className="max-w-2xl text-center md:text-left space-y-6">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-blue-600 font-semibold">
+              <Stethoscope className="w-5 h-5" />
+              <span>Votre santé, toujours assurée</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-800 leading-tight">
+              Trouvez un <span className="text-blue-600">médecin remplaçant</span> en un clic
+            </h1>
+            <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto md:mx-0">
+              Gagnez du temps et restez serein : notre plateforme connecte instantanément
+              médecins titulaires et remplaçants partout au Maroc.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 flex items-center gap-2 shadow-md"
+              >
+                <Users className="w-5 h-5" /> Trouver un remplaçant
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="rounded-full px-6 flex items-center gap-2 border-2"
+              >
+                Proposer mes services <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800 leading-tight">
-            Trouvez un <span className="text-blue-600">médecin remplaçant</span> en un clic
-          </h1>
-          <p className="text-lg text-gray-600">
-            Gagnez du temps et restez serein : notre plateforme connecte instantanément
-            médecins titulaires et remplaçants partout au Maroc.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 flex items-center gap-2">
-              <Users className="w-5 h-5" /> Trouver un remplaçant
-            </Button>
-            <Button size="lg" variant="outline" className="rounded-full px-6 flex items-center gap-2">
-              Proposer mes services <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
 
-        {/* Right image */}
-        <div className="relative mt-10 md:mt-0 w-full md:w-1/2 flex justify-center">
-          <div className="relative">
-            <img
-              src="hero.png"
-              alt="Doctor replacement illustration"
-              className="drop-shadow-2xl rounded-3xl border-4 border-white h-[90%] ml-32"
-            />
-            {/* Floating card */}
-            <div className="absolute -bottom-8 -left-8 bg-white shadow-xl rounded-2xl px-6 py-4 flex items-center gap-3 animate-bounce">
-              <Users className="w-6 h-6 text-blue-600" />
-              <div>
-                <p className="text-sm font-semibold text-gray-800">+300 médecins</p>
-                <p className="text-xs text-gray-500">déjà inscrits</p>
+          {/* Right image */}
+          <div className="relative w-full md:w-1/2 flex justify-center">
+            <div className="relative">
+              <img
+                src="hero.png"
+                alt="Doctor replacement illustration"
+                className="drop-shadow-2xl rounded-3xl border-4 border-white w-[90%] sm:w-[80%] md:w-full mx-auto"
+              />
+              {/* Floating card */}
+              <div className="absolute -bottom-8 -left-6 sm:-left-10 bg-white shadow-xl rounded-2xl px-6 py-4 flex items-center gap-3 animate-bounce">
+                <Users className="w-6 h-6 text-blue-600" />
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">+300 médecins</p>
+                  <p className="text-xs text-gray-500">déjà inscrits</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-      {/* Stats Section */}
-
+      </section>
 
       {/* Features Section */}
       <section id="features" className="py-24 px-4 bg-gray-50">
@@ -219,126 +284,135 @@ export default function HomePage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">Processus</Badge>
-            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6">Comment ça marche ?</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">Un processus simple et efficace pour tous</p>
+ <section id="how-it-works" className="py-20 md:py-28 bg-white">
+  <div className="container mx-auto px-6 lg:px-12">
+    {/* Section header */}
+    <div className="text-center mb-16 md:mb-20">
+      <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
+        Processus
+      </Badge>
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6">
+        Comment ça marche ?
+      </h2>
+      <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+        Un processus simple et efficace pour tous
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
+      {/* Pour les remplaçants */}
+      <div className="relative flex flex-col items-center lg:items-start">
+        <div className="text-center lg:text-left mb-12">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto lg:mx-0 mb-4 shadow-xl">
+            <Stethoscope className="w-10 h-10 text-white" />
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            {/* Pour les remplaçants */}
-            <div className="relative">
-              <div className="text-center mb-12">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                  <Stethoscope className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-3xl font-serif font-bold text-gray-900">Pour les médecins remplaçants</h3>
-              </div>
-
-              <div className="space-y-8">
-                <div className="flex gap-6 items-start group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                    1
-                  </div>
-                  <div className="pt-2">
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Créez votre profil</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Renseignez vos spécialités, disponibilités et tarifs en quelques minutes
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-6 items-start group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                    2
-                  </div>
-                  <div className="pt-2">
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Uploadez vos documents</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      RPPS, diplômes et certifications pour validation rapide et sécurisée
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-6 items-start group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                    3
-                  </div>
-                  <div className="pt-2">
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Recevez des propositions</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Acceptez ou refusez les missions qui correspondent à vos critères
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-12 ml-20  ">
-                <img
-                  src="remp.png"
-                  alt="Médecin utilisant une tablette"
-                  className="w-96 h-96 object-contain rounded-2xl shadow-xl"
-                />
-              </div>
-            </div>
-
-            {/* Pour les demandeurs */}
-            <div className="relative">
-              <div className="text-center mb-12">
-                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                  <Users className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-3xl font-serif font-bold text-gray-900">Pour les établissements</h3>
-              </div>
-
-              <div className="space-y-8">
-                <div className="flex gap-6 items-start group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                    1
-                  </div>
-                  <div className="pt-2">
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Publiez votre mission</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Spécialité, dates, tarif et localisation en quelques clics
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-6 items-start group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                    2
-                  </div>
-                  <div className="pt-2">
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Consultez les profils</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Parcourez les médecins correspondant parfaitement à vos critères
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-6 items-start group">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                    3
-                  </div>
-                  <div className="pt-2">
-                    <h4 className="font-bold text-gray-900 mb-3 text-lg">Trouvez votre remplaçant</h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      Envoyez des propositions et gérez vos contrats facilement
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-
-              <div className="mt-12 ml-20  ">
-                <img
-                  src="empl.png"
-                  alt="Médecin utilisant une tablette"
-                  className="w-96 h-96 object-contain rounded-2xl shadow-xl"
-                />
-              </div>
-            </div>
-          </div>
+          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
+            Pour les médecins remplaçants
+          </h3>
         </div>
-      </section>
+
+        <div className="space-y-8 w-full">
+          {[
+            {
+              step: "1",
+              title: "Créez votre profil",
+              desc: "Renseignez vos spécialités, disponibilités et tarifs en quelques minutes",
+            },
+            {
+              step: "2",
+              title: "Uploadez vos documents",
+              desc: "RPPS, diplômes et certifications pour validation rapide et sécurisée",
+            },
+            {
+              step: "3",
+              title: "Recevez des propositions",
+              desc: "Acceptez ou refusez les missions qui correspondent à vos critères",
+            },
+          ].map((item) => (
+            <div
+              key={item.step}
+              className="flex gap-6 items-start group transition-transform"
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                {item.step}
+              </div>
+              <div className="pt-1">
+                <h4 className="font-bold text-gray-900 mb-2 text-lg">
+                  {item.title}
+                </h4>
+                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 w-full flex justify-center lg:justify-start">
+          <img
+            src="remp.png"
+            alt="Médecin utilisant une tablette"
+            className="w-full max-w-sm object-contain rounded-2xl shadow-xl"
+          />
+        </div>
+      </div>
+
+      {/* Pour les établissements */}
+      <div className="relative flex flex-col items-center lg:items-start">
+        <div className="text-center lg:text-left mb-12">
+          <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto lg:mx-0 mb-4 shadow-xl">
+            <Users className="w-10 h-10 text-white" />
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
+            Pour les établissements
+          </h3>
+        </div>
+
+        <div className="space-y-8 w-full">
+          {[
+            {
+              step: "1",
+              title: "Publiez votre mission",
+              desc: "Spécialité, dates, tarif et localisation en quelques clics",
+            },
+            {
+              step: "2",
+              title: "Consultez les profils",
+              desc: "Parcourez les médecins correspondant parfaitement à vos critères",
+            },
+            {
+              step: "3",
+              title: "Trouvez votre remplaçant",
+              desc: "Envoyez des propositions et gérez vos contrats facilement",
+            },
+          ].map((item) => (
+            <div
+              key={item.step}
+              className="flex gap-6 items-start group transition-transform"
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                {item.step}
+              </div>
+              <div className="pt-1">
+                <h4 className="font-bold text-gray-900 mb-2 text-lg">
+                  {item.title}
+                </h4>
+                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 w-full flex justify-center lg:justify-start">
+          <img
+            src="empl.png"
+            alt="Établissement médical"
+            className="w-full max-w-sm object-contain rounded-2xl shadow-xl"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Testimonials */}
       <section id="testimonials" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">

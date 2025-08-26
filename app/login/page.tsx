@@ -78,114 +78,138 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-white" />
+<div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+  {/* Left Side */}
+  <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
+       <h2 className="text-4xl font-bold mb-4 text-center">
+      Bienvenue sur MedReplace
+    </h2>
+    <img
+      src="https://www.praktischarzt.de/wp-content/uploads/2023/03/Becoming-a-medical-doctor-or-physician-in-Germany.jpg"
+      alt="Connexion illustration"
+      className="  mb-6 drop-shadow-2xl rounded-2xl"
+    />
+
+    <p className="text-lg text-gray-100 text-center max-w-md">
+      La plateforme qui connecte médecins titulaires et remplaçants partout au Maroc.  
+      Accédez à vos missions ou trouvez un remplaçant en toute simplicité.
+    </p>
+  </div>
+
+  {/* Right Side (Form) */}
+  <div className="flex items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-white">
+    <div className="w-full max-w-md">
+      {/* === Your form (UNCHANGED) === */}
+      <div className="text-center mb-8">
+        <Link href="/" className="inline-flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <Users className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xl font-bold text-gray-900">MedReplace</span>
+        </Link>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">Connexion</h1>
+        <p className="text-gray-600">Accédez à votre espace personnel</p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Se connecter</CardTitle>
+          <CardDescription>
+            Choisissez votre type de compte et connectez-vous
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={userType} onValueChange={setUserType} className="mb-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="replacement">Remplaçant</TabsTrigger>
+              <TabsTrigger value="employer">Employeur</TabsTrigger>
+              <TabsTrigger value="admin">Admin</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
             </div>
-            <span className="text-xl font-bold text-gray-900">MedReplace</span>
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Connexion</h1>
-          <p className="text-gray-600">Accédez à votre espace personnel</p>
-        </div>
+          )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Se connecter</CardTitle>
-            <CardDescription>Choisissez votre type de compte et connectez-vous</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={userType} onValueChange={setUserType} className="mb-6">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="replacement">Remplaçant</TabsTrigger>
-                <TabsTrigger value="employer">Employeur</TabsTrigger>
-                <TabsTrigger value="admin">Admin</TabsTrigger>
-              </TabsList>
-            </Tabs>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="votre@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-                <p className="text-sm text-red-600">{error}</p>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+            <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
+              <div className="relative">
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="votre@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={isLoading}
                 />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-400" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-400" />
+                  )}
+                </Button>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Mot de passe</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <Link href="/forgot-password" className="text-sm text-blue-600 hover:underline">
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Connexion...
-                  </>
-                ) : (
-                  "Se connecter"
-                )}
-              </Button>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Pas encore de compte ?{" "}
-                <Link href="/register" className="text-blue-600 hover:underline">
-                  S'inscrire
-                </Link>
-              </p>
             </div>
-          </CardContent>
-        </Card>
 
+            <div className="flex items-center justify-between">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Mot de passe oublié ?
+              </Link>
+            </div>
 
-      </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Connexion...
+                </>
+              ) : (
+                "Se connecter"
+              )}
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Pas encore de compte ?{" "}
+              <Link href="/register" className="text-blue-600 hover:underline">
+                S'inscrire
+              </Link>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
+  </div>
+</div>
+
   )
 }
