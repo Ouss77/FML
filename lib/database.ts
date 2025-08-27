@@ -13,7 +13,7 @@ if (!process.env.DATABASE_URL) {
 
 // Create a reusable SQL client
 export const sql = neon(process.env.DATABASE_URL)
-
+ 
 // Database helper functions
 export const db = {
   // Fetch all active replacement doctors with their profile and relevant info

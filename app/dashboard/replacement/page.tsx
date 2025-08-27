@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import DocumentsSection from "./components/DocumentsSection"
 import { Avatar } from "@/components/ui/avatar"
-import { Bell, Home, Briefcase, Mail, Calendar, User, FileText, LogOut, ChevronLeft, ChevronRight } from "lucide-react"
+import { Bell, Home, Briefcase, Mail, Calendar, User, FileText, LogOut, ChevronLeft, ChevronRight, CheckCircle, Clock, DollarSign, Star } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useAuth } from "@/lib/auth"
 import ProfileSection from "./components/ProfileSection"
@@ -10,6 +10,7 @@ import RatesSection from "./components/RatesSection"
 import ProposalsSection from "./components/ProposalsSection"
 import AvailableMissionsSection from "./components/AvailableMissionsSection"
 import MyMissionsSection from "./components/MyMissionsSection"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function ReplacementDashboard() {
   const { user, profile, loading, logout } = useAuth()
@@ -162,29 +163,6 @@ export default function ReplacementDashboard() {
     },
   ]
 
-  const myMissions = [
-    {
-      id: 5,
-      hospital: "Clinique du Parc",
-      specialty: "Cardiologie",
-      location: "Nice, Alpes-Maritimes",
-      startDate: "2024-01-15",
-      endDate: "2024-01-20",
-      dailyRate: 480,
-      status: "completed",
-      rating: 5,
-    },
-    {
-      id: 6,
-      hospital: "Hôpital Saint-Antoine",
-      specialty: "Cardiologie",
-      location: "Paris, Île-de-France",
-      startDate: "2024-02-05",
-      endDate: "2024-02-08",
-      dailyRate: 520,
-      status: "confirmed",
-    },
-  ] 
 
   const sidebarItems = [
     // { id: "overview", label: "Vue d'ensemble", icon: Home, badge: null },
@@ -222,85 +200,85 @@ export default function ReplacementDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
-      // case "overview":
-      //   return (
-      //     <>
-      //       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-green-50 to-green-100">
-      //           <CardContent className="p-6">
-      //             <div className="flex items-center justify-between">
-      //               <div>
-      //                 <p className="text-sm font-medium text-green-700">Missions terminées</p>
-      //                 <p className="text-3xl font-bold text-green-900">12</p>
-      //               </div>
-      //               <div className="p-3 bg-green-500 rounded-full">
-      //                 <CheckCircle className="w-6 h-6 text-white" />
-      //               </div>
-      //             </div>
-      //           </CardContent>
-      //         </Card>
-      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-orange-50 to-orange-100">
-      //           <CardContent className="p-6">
-      //             <div className="flex items-center justify-between">
-      //               <div>
-      //                 <p className="text-sm font-medium text-orange-700">Propositions en attente</p>
-      //                 <p className="text-3xl font-bold text-orange-900">3</p>
-      //               </div>
-      //               <div className="p-3 bg-orange-500 rounded-full">
-      //                 <Clock className="w-6 h-6 text-white" />
-      //               </div>
-      //             </div>
-      //           </CardContent>
-      //         </Card>
-      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-yellow-50 to-yellow-100">
-      //           <CardContent className="p-6">
-      //             <div className="flex items-center justify-between">
-      //               <div>
-      //                 <p className="text-sm font-medium text-yellow-700">Note moyenne</p>
-      //                 <p className="text-3xl font-bold text-yellow-900">4.9</p>
-      //               </div>
-      //               <div className="p-3 bg-yellow-500 rounded-full">
-      //                 <Star className="w-6 h-6 text-white" />
-      //               </div>
-      //             </div>
-      //           </CardContent>
-      //         </Card>
-      //         <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-blue-50 to-blue-100">
-      //           <CardContent className="p-6">
-      //             <div className="flex items-center justify-between">
-      //               <div>
-      //                 <p className="text-sm font-medium text-blue-700">Revenus ce mois</p>
-      //                 <p className="text-3xl font-bold text-blue-900">3,240€</p>
-      //               </div>
-      //               <div className="p-3 bg-blue-500 rounded-full">
-      //                 <DollarSign className="w-6 h-6 text-white" />
-      //               </div>
-      //             </div>
-      //           </CardContent>
-      //         </Card>
-      //       </div>
-      //       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      //         <div className="md:col-span-2">
-      //           <ProfileSection
-      //             profileData={profileData}
-      //             setProfileData={setProfileData}
-      //             isEditProfileOpen={isEditProfileOpen}
-      //             setIsEditProfileOpen={setIsEditProfileOpen}
-      //             handleSaveProfile={handleSaveProfile}
-      //           />
-      //         </div>
-      //         <div className="md:col-span-1">
-      //           <RatesSection
-      //             profileData={profileData}
-      //             setProfileData={setProfileData}
-      //             isEditRatesOpen={isEditRatesOpen}
-      //             setIsEditRatesOpen={setIsEditRatesOpen}
-      //             handleSaveRates={handleSaveRates}
-      //           />
-      //         </div>
-      //       </div>
-      //     </>
-      //   )
+      case "overview":
+        return (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-green-50 to-green-100">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-green-700">Missions terminées</p>
+                      <p className="text-3xl font-bold text-green-900">12</p>
+                    </div>
+                    <div className="p-3 bg-green-500 rounded-full">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-orange-50 to-orange-100">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-orange-700">Propositions en attente</p>
+                      <p className="text-3xl font-bold text-orange-900">3</p>
+                    </div>
+                    <div className="p-3 bg-orange-500 rounded-full">
+                      <Clock className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-yellow-50 to-yellow-100">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-yellow-700">Note moyenne</p>
+                      <p className="text-3xl font-bold text-yellow-900">4.9</p>
+                    </div>
+                    <div className="p-3 bg-yellow-500 rounded-full">
+                      <Star className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-blue-50 to-blue-100">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-blue-700">Revenus ce mois</p>
+                      <p className="text-3xl font-bold text-blue-900">3,240€</p>
+                    </div>
+                    <div className="p-3 bg-blue-500 rounded-full">
+                      <DollarSign className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-2">
+                <ProfileSection
+                  profileData={profileData}
+                  setProfileData={setProfileData}
+                  isEditProfileOpen={isEditProfileOpen}
+                  setIsEditProfileOpen={setIsEditProfileOpen}
+                  handleSaveProfile={handleSaveProfile}
+                />
+              </div>
+              <div className="md:col-span-1">
+                <RatesSection
+                  profileData={profileData}
+                  setProfileData={setProfileData}
+                  isEditRatesOpen={isEditRatesOpen}
+                  setIsEditRatesOpen={setIsEditRatesOpen}
+                  handleSaveRates={handleSaveRates}
+                />
+              </div>
+            </div>
+          </>
+        )
       case "missions":
         return <AvailableMissionsSection  />
       case "proposals":
@@ -312,7 +290,7 @@ export default function ReplacementDashboard() {
           />
         )
       case "my-missions":
-        return <MyMissionsSection myMissions={myMissions} getStatusColor={getStatusColor} />
+        return <MyMissionsSection getStatusColor={getStatusColor} />
       case "profile":
         return (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -78,138 +78,139 @@ export default function LoginPage() {
   }
 
   return (
-<div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-  {/* Left Side */}
-  <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
-       <h2 className="text-4xl font-bold mb-4 text-center">
-      Bienvenue sur MedReplace
-    </h2>
-    <img
-      src="https://www.praktischarzt.de/wp-content/uploads/2023/03/Becoming-a-medical-doctor-or-physician-in-Germany.jpg"
-      alt="Connexion illustration"
-      className="  mb-6 drop-shadow-2xl rounded-2xl"
-    />
+  <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+    {/* Left Side */}
+    <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
+        <h2 className="text-4xl font-bold mb-4 text-center">
+        Bienvenue sur Le Foyer Medical
+      </h2>
+      <img
+        src="https://www.praktischarzt.de/wp-content/uploads/2023/03/Becoming-a-medical-doctor-or-physician-in-Germany.jpg"
+        alt="Connexion illustration"
+        className="  mb-6 drop-shadow-2xl rounded-2xl"
+      />
 
-    <p className="text-lg text-gray-100 text-center max-w-md">
-      La plateforme qui connecte médecins titulaires et remplaçants partout au Maroc.  
-      Accédez à vos missions ou trouvez un remplaçant en toute simplicité.
-    </p>
-  </div>
+      <p className="text-lg text-gray-100 text-center max-w-md">
+        La plateforme qui connecte médecins titulaires et remplaçants partout au Maroc.  
+        Accédez à vos missions ou trouvez un remplaçant en toute simplicité.
+      </p>
+    </div>
 
-  {/* Right Side (Form) */}
-  <div className="flex items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-white">
-    <div className="w-full max-w-md">
-      {/* === Your form (UNCHANGED) === */}
-      <div className="text-center mb-8">
-        <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Users className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold text-gray-900">MedReplace</span>
-        </Link>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Connexion</h1>
-        <p className="text-gray-600">Accédez à votre espace personnel</p>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Se connecter</CardTitle>
-          <CardDescription>
-            Choisissez votre type de compte et connectez-vous
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs value={userType} onValueChange={setUserType} className="mb-6">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="replacement">Remplaçant</TabsTrigger>
-              <TabsTrigger value="employer">Employeur</TabsTrigger>
-              <TabsTrigger value="admin">Admin</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{error}</p>
+    {/* Right Side (Form) */}
+    <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-br from-blue-100 via-white to-blue-50">
+      <div className="w-full max-w-xl bg-white/90 rounded-3xl shadow-2xl p-10 md:p-14 border border-blue-100">
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <img src="/logo.png" alt="Le Foyer Medical " />
             </div>
-          )}
+            <span className="text-xl font-bold text-gray-900"> Le Foyer Medical </span>
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Connexion</h1>
+          <p className="text-gray-600">Accédez à votre espace personnel</p>
+        </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="votre@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
+        <Card className="bg-white/90 rounded-2xl shadow-xl border border-blue-100">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-blue-700">Se connecter</CardTitle>
+            <CardDescription className="text-base text-gray-500">
+              Choisissez votre type de compte et connectez-vous
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs value={userType} onValueChange={setUserType} className="mb-8">
+              <TabsList className="grid w-full grid-cols-3 rounded-xl overflow-hidden pb-12">
+                <TabsTrigger value="replacement" className="text-lg py-2">Remplaçant</TabsTrigger>
+                <TabsTrigger value="employer" className="text-lg py-2">Employeur</TabsTrigger>
+                <TabsTrigger value="admin" className="text-lg py-2">Admin</TabsTrigger>
+              </TabsList>
+            </Tabs>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  disabled={isLoading}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowPassword(!showPassword)}
-                  disabled={isLoading}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-gray-400" />
-                  ) : (
-                    <Eye className="h-4 w-4 text-gray-400" />
-                  )}
-                </Button>
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-base">
+                <p className="text-red-600">{error}</p>
               </div>
+            )}
+
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-2">
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="votre@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={isLoading}
+                    className="py-6 px-6 text-2xl placeholder:text-xl rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 h-16"
+                    style={{ fontSize: "1.5rem" }}
+                  />
+              </div>
+
+              <div className="space-y-2">
+                <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      disabled={isLoading}
+                      className="py-6 px-6 text-2xl placeholder:text-xl rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 pr-14 h-16"
+                      style={{ fontSize: "1.5rem" }}
+                    />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-4 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5 text-gray-400" />
+                    ) : (
+                      <Eye className="h-5 w-5 text-gray-400" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/forgot-password"
+                  className="text-base text-blue-600 hover:underline font-medium"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
+
+              <Button type="submit" className="w-full py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Connexion...
+                  </>
+                ) : (
+                  "Se connecter"
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-8 text-center">
+              <p className="text-base text-gray-600">
+                Pas encore de compte ?{" "}
+                <Link href="/register" className="text-blue-600 hover:underline font-semibold">
+                  S'inscrire
+                </Link>
+              </p>
             </div>
-
-            <div className="flex items-center justify-between">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-blue-600 hover:underline"
-              >
-                Mot de passe oublié ?
-              </Link>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Connexion...
-                </>
-              ) : (
-                "Se connecter"
-              )}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Pas encore de compte ?{" "}
-              <Link href="/register" className="text-blue-600 hover:underline">
-                S'inscrire
-              </Link>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   </div>
-</div>
 
   )
 }
