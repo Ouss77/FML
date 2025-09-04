@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -13,11 +14,33 @@ const formatDate = (dateString: string) => {
 };
 
 export default function AvailableMissionsSection() {
+  const { user } = useAuth();
   const [missions, setMissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [contactOpen, setContactOpen] = useState(false);
   const [selectedMission, setSelectedMission] = useState<any | null>(null);
+  const [applyStatus, setApplyStatus] = useState<{ [missionId: string]: string }>({});
+  const [appliedMissions, setAppliedMissions] = useState<Set<string>>(new Set());
+
+  const handleApply = async (missionId: string) => {
+    if (!user?.id) {
+      setApplyStatus((prev) => ({ ...prev, [missionId]: "Vous devez être connecté pour postuler." }));
+      return;
+    }
+    setApplyStatus((prev) => ({ ...prev, [missionId]: "Envoi en cours..." }));
+    try {
+      const res = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ missionId, userId: user.id }),
+      });
+      if (!res.ok) throw new Error("Erreur lors de la candidature");
+      setApplyStatus((prev) => ({ ...prev, [missionId]: "Candidature envoyée !" }));
+    } catch (err) {
+      setApplyStatus((prev) => ({ ...prev, [missionId]: "Erreur lors de la candidature" }));
+    }
+  };
 
   useEffect(() => {
     const fetchMissions = async () => {
@@ -37,14 +60,32 @@ export default function AvailableMissionsSection() {
     fetchMissions();
   }, []);
 
+  // Fetch applications for the current user and mark applied missions
+  useEffect(() => {
+    const fetchApplications = async () => {
+      if (!user?.id) return;
+      try {
+        const res = await fetch(`/api/applications?userId=${user.id}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        console.log(" the applied persons are", data);
+        const applied = new Set<string>((data.applications || []).map((a: any) => String(a.mission_id)));
+        setAppliedMissions(applied);
+      } catch (err) {
+        // ignore
+      }
+    };
+    fetchApplications();
+  }, [user]);
+
   return (
    <Card className="mb-8 bg-gradient-to-br from-white to-gray-100 shadow-xl rounded-3xl overflow-hidden border border-gray-200">
-    <CardHeader className="bg-gradient-to-r from-indigo-700 to-purple-700 text-white p-8">
+    {/* <CardHeader className="bg-gradient-to-r from-indigo-700 to-purple-700 text-white p-8">
       <CardTitle className="text-3xl md:text-4xl font-extrabold tracking-tight">Missions disponibles</CardTitle>
       <CardDescription className="text-indigo-100 text-base md:text-lg mt-2 opacity-90">
         Explorez les opportunités pour votre prochaine mission professionnelle
       </CardDescription>
-    </CardHeader>
+    </CardHeader> */}
     <CardContent className="p-8">
       {error && (
         <div className="mb-6 p-4 bg-red-50 text-red-800 rounded-xl border border-red-300 flex items-center gap-2 transition-all duration-300">
@@ -97,25 +138,43 @@ export default function AvailableMissionsSection() {
                       <Calendar className="w-3.5 h-3.5 mr-1.5" />
                       {formatDate(mission.start_date)} - {formatDate(mission.end_date)}
                     </Badge>
-                    {(mission.daily_rate || mission.hourly_rate) && (
+                    {mission.start_date && mission.end_date && (
                       <Badge
                         variant="secondary"
                         className="bg-emerald-100 text-emerald-900 font-semibold px-3 py-1.5 rounded-full"
                       >
-                        <Euro className="w-3.5 h-3.5 mr-1.5" />
-                        {mission.daily_rate ? `${mission.daily_rate}€/jour` : `${mission.hourly_rate}€/h`}
+                        <Calendar className="w-3.5 h-3.5 mr-1.5" />
+                        {(() => {
+                          const start = new Date(mission.start_date);
+                          const end = new Date(mission.end_date);
+                          const diff = Math.round((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                          return `${diff} jour${diff > 1 ? 's' : ''}`;
+                        })()}
                       </Badge>
                     )}
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 flex gap-2">
                     <Button
                       variant="secondary"
-                      className="w-full bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 px-4 py-2.5 rounded-xl transition-colors duration-200"
+                      className="flex-1 bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 px-4 py-2.5 rounded-xl transition-colors duration-200"
                       onClick={() => { setSelectedMission(mission); setContactOpen(true); }}
                     >
                       Contacter
                     </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1 border-indigo-600 text-indigo-700 font-semibold hover:bg-indigo-50 px-4 py-2.5 rounded-xl transition-colors duration-200"
+                      onClick={() => handleApply(mission.id)}
+                      disabled={appliedMissions.has(mission.id) || (!!applyStatus[mission.id] && applyStatus[mission.id] !== "Erreur lors de la candidature")}
+                    >
+                      {appliedMissions.has(mission.id) || applyStatus[mission.id]?.startsWith("Candidature") ? "Deja postulé" : "Postuler"}
+                    </Button>
                   </div>
+                  {applyStatus[mission.id] && (
+                    <div className={`mt-2 text-sm ${applyStatus[mission.id].startsWith("Candidature") ? "text-green-600" : "text-red-600"}`}>
+                      {applyStatus[mission.id]}
+                    </div>
+                  )}
                 </div>
               </div>
             ))

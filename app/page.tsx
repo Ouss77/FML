@@ -529,125 +529,25 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div>
-           <div className="flex items-center gap-4">
-  {/* Logo */}
-  <img
-    src="logo.png"
-    alt="Logo Le Foyer Médical"
-    className="w-12 h-12 rounded-full shadow-md border border-white"
-  />
-
-  {/* Nom du site */}
-  <h1 className="text-xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-    Le Foyer Médical
-  </h1>
-</div>
-              <p className="text-gray-400 leading-relaxed mb-6">
-                La plateforme de référence pour les remplacements médicaux en France. Connectons les professionnels de
-                santé.
-              </p>
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <span className="text-sm font-bold">f</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <span className="text-sm font-bold">t</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <span className="text-sm font-bold">in</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-bold mb-6 text-lg">Produit</h3>
-              <ul className="space-y-3 text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Fonctionnalités
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Tarifs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    API
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Intégrations
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-6 text-lg">Support</h3>
-              <ul className="space-y-3 text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Centre d'aide
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Statut
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Formation
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-6 text-lg">Légal</h3>
-              <ul className="space-y-3 text-gray-400">
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Confidentialité
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    CGU
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Mentions légales
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-white transition-colors">
-                    Cookies
-                  </Link>
-                </li>
-              </ul>
-            </div>
+      <footer className="bg-gray-900 text-white py-10 mt-12">
+        <div className="container mx-auto px-4 flex flex-col items-center text-center">
+          <div className="flex items-center gap-4 mb-4">
+            <img
+              src="logo.png"
+              alt="Logo Le Foyer Médical"
+              className="w-12 h-12 rounded-full shadow-md border border-white"
+            />
+            <h1 className="text-xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+              Le Foyer Médical
+            </h1>
           </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 mb-4 md:mb-0">&copy; 2024 MedReplace. Tous droits réservés.</p>
-            <div className="flex items-center gap-6 text-sm text-gray-400">
-              <span>🇫🇷 Fait en Maroc</span>
-              <span>•</span>
-              <span>Certifié HDS</span>
-              <span>•</span>
-              <span>RGPD Compliant</span>
-            </div>
-          </div>
+          <p className="text-gray-400 leading-relaxed mb-2 max-w-md">
+            Plateforme de référence pour les remplacements médicaux en France et au Maroc.
+          </p>
+          <p className="text-gray-400 mb-2 text-sm">
+            Contact : <a href="mailto:contact@medreplace.com" className="underline hover:text-blue-300">contact@medreplace.com</a>
+          </p>
+          <p className="text-gray-500 text-xs">&copy; 2024 MedReplace. Tous droits réservés.</p>
         </div>
       </footer>
     </div>

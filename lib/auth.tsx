@@ -50,13 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         // Clear any existing auth state if token is invalid
         setUser(null)
-        setProfile(null)
+        setProfile(null) 
       }
     } catch (error) {
       console.error("Auth check failed:", error)
       setUser(null)
       setProfile(null)
-    } finally {
+    } finally { 
       setLoading(false)
     }
   }

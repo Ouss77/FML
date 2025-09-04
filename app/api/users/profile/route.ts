@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken" 
 import { sql, db } from "@/lib/database"
 
 const JWT_SECRET = process.env.JWT_SECRET || "medical-replacement-platform-secret-key-2024"
@@ -27,18 +27,7 @@ export async function GET(request: NextRequest) {
     if (user.user_type === "replacement") {
       profile = await db.getReplacementProfile(user.id)
     } else if (user.user_type === "employer") {
-      const rawProfile = await db.getEmployerProfile(user.id)
-      if (rawProfile) {
-        profile = {
-          establishment_name: rawProfile.organization_name,
-          establishment_type: rawProfile.organization_type,
-          siret: rawProfile.siret_number,
-          address: rawProfile.address,
-          position: rawProfile.contact_person,
-          description: rawProfile.description,
-          // add other fields as needed
-        }
-      }
+       profile = await db.getEmployerProfile(user.id)
     }
 
     return NextResponse.json({
@@ -79,9 +68,13 @@ export async function PUT(request: NextRequest) {
     } catch (err) {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
     }
-    const { firstName, lastName, phone, profileData } = body
 
-    if (!firstName && !lastName && !phone && !profileData) {
+    // Accept both flat and nested employer fields
+    const { firstName, lastName, phone, profileData,
+      establishment_name, establishment_type, address, siret, description, fonction
+    } = body;
+
+    if (!firstName && !lastName && !phone && !profileData && !establishment_name && !establishment_type && !address && !siret && !description && !fonction) {
       return NextResponse.json({ error: "No profile data provided" }, { status: 400 })
     }
 
@@ -122,19 +115,18 @@ export async function PUT(request: NextRequest) {
         console.error("Replacement profile update error:", err)
         return NextResponse.json({ error: "Failed to update replacement profile" }, { status: 500 })
       }
-    } else if (profileData && decoded.userType === "employer") {
+    } else if ((profileData && decoded.userType === "employer") || (decoded.userType === "employer" && (establishment_name || establishment_type || address || siret || description))) {
+      // Accept both nested and flat employer fields
+      const employer = profileData || {};
       try {
         await sql`
           UPDATE employer_profiles 
-          SET organization_name = ${profileData.organizationName || null},
-              organization_type = ${profileData.organizationType || null},
-              siret_number = ${profileData.siretNumber || null},
-              address = ${profileData.address || null},
-              city = ${profileData.city || null},
-              postal_code = ${profileData.postalCode || null},
-              contact_person = ${profileData.contactPerson || null},
-              description = ${profileData.description || null},
-              website = ${profileData.website || null},
+          SET organization_name = ${employer.organizationName || establishment_name || null},
+              organization_type = ${employer.organizationType || establishment_type || null},
+              siret_number = ${employer.siretNumber || siret || null},
+              address = ${employer.address || address || null},
+              description = ${employer.description || description || null},
+              fonction = ${employer.fonction || fonction || null},
               updated_at = NOW()
           WHERE user_id = ${decoded.userId}
         `

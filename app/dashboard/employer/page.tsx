@@ -1,6 +1,6 @@
 "use client"
 import { Users, Building2, Briefcase, UserCheck, Settings, Bell, LogOut, ChevronLeft, ChevronRight, Plus } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -10,17 +10,20 @@ import MissionsList from "./components/MissionsList"
 import DoctorsList from "./components/DoctorsList"
 import ProfileTabs from "./components/ProfileTabs"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import AddMissionModal from "./components/AddMissionModal"
+import Candidature from "./components/Candidature"
 
 export default function EmployerDashboard() {
   const [activeTab, setActiveTab] = useState("missions")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showCreateMission, setShowCreateMission] = useState(false)
 
-  const [profileData, setProfileData] = useState({
+  // Lifted state from MissionsList
+  const [missions, setMissions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [employerId, setEmployerId] = useState<string | null>(null);
+    const [profileData, setProfileData] = useState({
     establishmentName: "CHU de Lyon",
     establishmentType: "hospital",
     address: "103 Grande Rue de la Croix-Rousse, 69004 Lyon",
@@ -35,35 +38,39 @@ export default function EmployerDashboard() {
   })
 
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-700"
-      case "filled":
-        return "bg-blue-100 text-blue-700"
-      case "draft":
-        return "bg-gray-100 text-gray-700"
-      case "expired":
-        return "bg-red-100 text-red-700"
-      default:
-        return "bg-gray-100 text-gray-700"
+  // Fetch employerId from profile
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch("/api/users/profile", { credentials: "include" });
+        if (!res.ok) throw new Error("Erreur lors du chargement du profil");
+        const data = await res.json();
+        setEmployerId(data.user?.id || null);
+        setProfileData(data.profile || null);
+      } catch (err) {
+        setError("Impossible de charger le profil utilisateur");
+      }
     }
-  }
+    fetchProfile();
+  }, []);
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "active":
-        return "Active"
-      case "filled":
-        return "Pourvue"
-      case "draft":
-        return "Brouillon"
-      case "expired":
-        return "Expirée"
-      default:
-        return status
-    }
-  }
+  // Fetch missions from DB
+  useEffect(() => {
+    if (!employerId) return;
+    setLoading(true);
+    setError(null);
+    fetch(`/api/missions?employerId=${employerId}`, { credentials: "include" })
+      .then(res => res.json())
+      .then(data => {
+        setMissions(data.missions || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Erreur lors du chargement des missions");
+        setLoading(false);
+      });
+  }, [employerId]);
+
 
   const pendingApplications = 7
 
@@ -77,28 +84,20 @@ export default function EmployerDashboard() {
   const renderContent = () => {
     switch (activeTab) {
       case "missions":
-        return <MissionsList getStatusColor={getStatusColor} getStatusText={getStatusText} setShowCreateMission={setShowCreateMission} />
+        return <MissionsList 
+          setShowCreateMission={setShowCreateMission} 
+          missions={missions}
+          setMissions={setMissions}
+          employerId={employerId}
+          loading={loading}
+          setLoading={setLoading}
+          error={error}
+          setError={setError}
+        />
       case "doctors": 
         return <DoctorsList />
       case "applications":
-        return (
-          <Card className="border-0 shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg">
-              <CardTitle className="text-xl text-gray-900">Candidatures reçues</CardTitle>
-              <CardDescription>Gérez les candidatures pour vos missions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-16 text-gray-500">
-                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
-                  <Users className="w-10 h-10 text-blue-500" />
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Aucune candidature en attente</h3>
-                <p className="text-gray-500 mb-1">Les candidatures apparaîtront ici une fois que vous aurez publié des missions</p>
-                <p className="text-sm text-gray-400">Créez votre première mission pour commencer à recevoir des candidatures</p>
-              </div>
-            </CardContent>
-          </Card>
-        )
+        return <Candidature missions={missions} />
       case "profile":
         return <ProfileTabs />
       default:
@@ -115,17 +114,17 @@ export default function EmployerDashboard() {
           <div className="flex items-center justify-between p-6 border-b border-gray-100 flex-shrink-0">
             {!sidebarCollapsed && (
               <Link href="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    Le foyer médical
-                  </h1>
-                  <Badge variant="secondary" className="mt-1 bg-blue-100 text-blue-700 text-xs">
-                    {profileData.establishmentName}
-                  </Badge>
-                </div>
+
+        <div className="flex items-center gap-4">
+          <img
+            src="../logo.png"
+            alt="Logo Le Foyer Médical"
+            className="w-12 h-12 rounded-full shadow-md border border-white"
+          />
+          <h1 className="text-xl  font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+            Le Foyer Médical
+          </h1>
+        </div>
               </Link>
             )}
             <button
@@ -210,17 +209,18 @@ export default function EmployerDashboard() {
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
                 <Avatar className="ring-2 ring-white shadow-md">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
+                  <AvatarImage src={profileData.photo_url} />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold">
-                    {profileData.firstName?.[0]}{profileData.lastName?.[0]}
+                   ouss
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">
-                    {profileData.firstName} {profileData.lastName}
+                    {profileData.organization_name}  
                   </p>
-                  <p className="text-xs text-gray-500 truncate">{profileData.position}</p>
+                  <p className="text-xs text-gray-500 truncate">{profileData.organization_type}</p>
                 </div>
+                
                 <button
                   className="p-2 rounded-lg hover:bg-red-100 text-gray-400 hover:text-red-600 transition-colors duration-200"
                   title="Déconnexion"
@@ -286,151 +286,15 @@ export default function EmployerDashboard() {
         </div>
       </div>
 
-      {/* Modal création mission */}
-      {showCreateMission && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border-0 animate-in slide-in-from-bottom-4 duration-300">
-            <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-t-lg">
-              <CardTitle className="text-xl font-semibold flex items-center gap-2">
-                <Plus className="w-5 h-5" />
-                Créer une nouvelle mission
-              </CardTitle>
-              <CardDescription className="text-blue-100">Publiez une offre de remplacement médical</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6 p-6 bg-gradient-to-br from-slate-50 to-white">
-              <div className="space-y-2">
-                <Label htmlFor="mission-title" className="text-sm font-medium text-gray-700">
-                  Titre de la mission *
-                </Label>
-                <Input
-                  id="mission-title"
-                  placeholder="Ex: Remplacement Cardiologie"
-                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 transition-all"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="specialty" className="text-sm font-medium text-gray-700">
-                  Spécialité recherchée *
-                </Label>
-                <Select>
-                  <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500/20 transition-all">
-                    <SelectValue placeholder="Sélectionnez une spécialité" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cardiologie">Cardiologie</SelectItem>
-                    <SelectItem value="medecine-generale">Médecine générale</SelectItem>
-                    <SelectItem value="pediatrie">Pédiatrie</SelectItem>
-                    <SelectItem value="psychiatrie">Psychiatrie</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="start-date" className="text-sm font-medium text-gray-700">
-                    Date de début *
-                  </Label>
-                  <Input
-                    id="start-date"
-                    type="date"
-                    className="border-gray-300 focus:border-green-500 focus:ring-green-500/20 transition-all"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="end-date" className="text-sm font-medium text-gray-700">
-                    Date de fin *
-                  </Label>
-                  <Input
-                    id="end-date"
-                    type="date"
-                    className="border-gray-300 focus:border-green-500 focus:ring-green-500/20 transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="daily-rate" className="text-sm font-medium text-gray-700">
-                    Tarif journalier (€) *
-                  </Label>
-                  <Input
-                    id="daily-rate"
-                    type="number"
-                    placeholder="450"
-                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-all"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="hourly-rate" className="text-sm font-medium text-gray-700">
-                    Tarif horaire (€)
-                  </Label>
-                  <Input
-                    id="hourly-rate"
-                    type="number"
-                    placeholder="65"
-                    className="border-gray-300 focus:border-purple-500 focus:ring-purple-500/20 transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="location" className="text-sm font-medium text-gray-700">
-                  Localisation *
-                </Label>
-                <Input
-                  id="location"
-                  placeholder="Adresse ou ville"
-                  className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20 transition-all"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-                  Description de la mission *
-                </Label>
-                <Textarea
-                  id="description"
-                  placeholder="Décrivez la mission, les responsabilités, l'équipe..."
-                  rows={4}
-                  className="border-gray-300 focus:border-orange-500 focus:ring-orange-500/20 transition-all resize-none"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="requirements" className="text-sm font-medium text-gray-700">
-                  Exigences particulières
-                </Label>
-                <Textarea
-                  id="requirements"
-                  placeholder="Expérience requise, certifications, équipements..."
-                  rows={3}
-                  className="border-gray-300 focus:border-teal-500 focus:ring-teal-500/20 transition-all resize-none"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowCreateMission(false)}
-                  className="border-gray-300 text-gray-700 hover:bg-gray-50 transition-all"
-                >
-                  Annuler
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-blue-300 text-blue-700 hover:bg-blue-50 transition-all"
-                >
-                  Sauvegarder en brouillon
-                </Button>
-                <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg">
-                  Publier la mission
-                </Button> 
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+  {/* Modal création mission */}
+  <AddMissionModal 
+    showForm={showCreateMission}
+    setShowForm={setShowCreateMission}
+    setMissions={setMissions}
+    employerId={employerId}
+    setLoading={setLoading}
+    setError={setError}
+  />
     </div>
   )
 }

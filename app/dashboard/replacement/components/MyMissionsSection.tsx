@@ -1,4 +1,3 @@
-
 'use client'; // Important! Forces client-side rendering
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -9,12 +8,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState, useEffect } from "react"
+
 const formatMonthYear = (dateStr?: string) => {
   if (!dateStr) return "";
   const date = new Date(dateStr);
   return date.toLocaleString("fr-FR", { month: "long", year: "numeric" });
 };
-
 
 interface Experience {
   id: string;
@@ -52,7 +51,6 @@ export default function ExperienceSection() {
       if (!res.ok) throw new Error("Erreur lors du chargement des expériences");
       const data = await res.json();
       setExperiences(data.experiences || []);
-      console.log("Fetched experiences:", data.experiences);
     } catch (err) {
       setError("Erreur lors du chargement des expériences");
     } finally {
@@ -81,13 +79,11 @@ export default function ExperienceSection() {
         location: form.location || "",
         startDate: form.start_date || "",
         endDate: form.end_date,
-        durationMonths: form.duration_months,
         specialty: form.specialty,
         description: form.description,
         referenceContact: form.reference_contact,
         referencePhone: form.reference_phone,
         referenceEmail: form.reference_email,
-        rating: form.rating,
       };
       let res;
       if (editId) {
@@ -173,7 +169,14 @@ export default function ExperienceSection() {
                       <div className="text-gray-400 text-xs mt-1">Référence email : {exp.reference_email}</div>
                     </div>
                     <div className="flex items-center gap-3 mt-3 md:mt-0">
-                      <Badge className="bg-amber-100 text-amber-800 font-semibold px-3 py-1">{exp.duration_months ? `${exp.duration_months} mois` : ""}</Badge>
+                      <Badge className="bg-amber-100 text-amber-800 font-semibold px-3 py-1">
+                        {exp.start_date && exp.end_date ? (() => {
+                          const start = new Date(exp.start_date);
+                          const end = new Date(exp.end_date);
+                          const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+                          return `${months} mois`;
+                        })() : ""}
+                      </Badge>
                       {exp.rating && (
                         <span className="flex items-center gap-1 text-yellow-600 font-bold text-lg">
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -199,54 +202,46 @@ export default function ExperienceSection() {
               <DialogTitle className="text-amber-900 text-2xl font-bold mb-2">{editId ? "Modifier l'expérience" : "Ajouter une expérience"}</DialogTitle>
               <CardDescription className="text-amber-700 mb-4">{editId ? "Modifiez les informations de cette expérience." : "Ajoutez une nouvelle expérience à votre historique."}</CardDescription>
             </DialogHeader>
-            <form className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-3">
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-base p-2 md:p-6">
               <div>
                 <Label className="text-xs text-amber-800">Établissement</Label>
-                <Input className="mt-1" value={form.workplace_name || ""} onChange={e => handleChange("workplace_name", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.workplace_name || ""} onChange={e => handleChange("workplace_name", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Type d'établissement</Label>
-                <Input className="mt-1" value={form.workplace_type || ""} onChange={e => handleChange("workplace_type", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.workplace_type || ""} onChange={e => handleChange("workplace_type", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Localisation</Label>
-                <Input className="mt-1" value={form.location || ""} onChange={e => handleChange("location", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.location || ""} onChange={e => handleChange("location", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Date de début</Label>
-                <Input className="mt-1" type="date" value={form.start_date || ""} onChange={e => handleChange("start_date", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" type="date" value={form.start_date || ""} onChange={e => handleChange("start_date", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Date de fin</Label>
-                <Input className="mt-1" type="date" value={form.end_date || ""} onChange={e => handleChange("end_date", e.target.value)} />
-              </div>
-              <div>
-                <Label className="text-xs text-amber-800">Durée (mois)</Label>
-                <Input className="mt-1" type="number" min={0} value={form.duration_months || ""} onChange={e => handleChange("duration_months", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" type="date" value={form.end_date || ""} onChange={e => handleChange("end_date", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Spécialité</Label>
-                <Input className="mt-1" value={form.specialty || ""} onChange={e => handleChange("specialty", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.specialty || ""} onChange={e => handleChange("specialty", e.target.value)} />
               </div>
               <div className="md:col-span-2">
                 <Label className="text-xs text-amber-800">Description</Label>
-                <Input className="mt-1" value={form.description || ""} onChange={e => handleChange("description", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.description || ""} onChange={e => handleChange("description", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Référence (contact)</Label>
-                <Input className="mt-1" value={form.reference_contact || ""} onChange={e => handleChange("reference_contact", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.reference_contact || ""} onChange={e => handleChange("reference_contact", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Téléphone de référence</Label>
-                <Input className="mt-1" value={form.reference_phone || ""} onChange={e => handleChange("reference_phone", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.reference_phone || ""} onChange={e => handleChange("reference_phone", e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-amber-800">Email de référence</Label>
-                <Input className="mt-1" value={form.reference_email || ""} onChange={e => handleChange("reference_email", e.target.value)} />
-              </div>
-              <div>
-                <Label className="text-xs text-amber-800">Note</Label>
-                <Input className="mt-1" type="number" min={0} max={5} step={0.1} value={form.rating || ""} onChange={e => handleChange("rating", e.target.value)} />
+                <Input className="mt-2 h-12 text-lg px-4 bg-white border-2 border-amber-200 focus:border-amber-400 rounded-xl shadow-sm" value={form.reference_email || ""} onChange={e => handleChange("reference_email", e.target.value)} />
               </div>
             </form>
             <DialogFooter className="mt-6">
@@ -255,7 +250,7 @@ export default function ExperienceSection() {
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+        </Dialog> 
       </CardContent>
     </Card>
   );

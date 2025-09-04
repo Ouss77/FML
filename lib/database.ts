@@ -16,12 +16,11 @@ export const sql = neon(process.env.DATABASE_URL)
  
 // Database helper functions
 export const db = {
-  // Fetch all active replacement doctors with their profile and relevant info
   async getReplacementDoctors() {
     try {
       const result = await sql`
         SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
-         rp.specialty, rp.location, rp.hourly_rate, rp.daily_rate, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, rp.profile_status, rp.is_available
+        rp.photo_url,rp.specialty, rp.location,  rp.bio, rp.availability_start, rp.availability_end, rp.experience_years
         FROM users u
         JOIN replacement_profiles rp ON u.id = rp.user_id
         WHERE u.user_type = 'replacement' 
@@ -89,8 +88,6 @@ export const db = {
     experience_years?: number
     diploma?: string
     languages?: string[]
-    hourly_rate?: number
-    daily_rate?: number
     bio?: string
     availability_start?: string
     availability_end?: string
@@ -122,7 +119,7 @@ export const db = {
   async getReplacementProfile(user_id: string) {
     try {
       const result = await sql`
-        SELECT rp.*, u.first_name, u.last_name, u.email, u.phone
+        SELECT rp.photo_url, rp.specialty, rp.location, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, u.first_name, u.last_name, u.email, u.phone
         FROM replacement_profiles rp
         JOIN users u ON rp.user_id = u.id
         WHERE rp.user_id = ${user_id}
@@ -295,37 +292,39 @@ export const db = {
   },
 
   async getApplications(filters?: {
-    mission_id?: string
-    replacement_id?: string
-    status?: string
+    mission_id?: string;
+    replacement_id?: string;
+    status?: string;
   }) {
     try {
-      let query = sql`
+      let base = sql`
         SELECT a.*, m.title as mission_title, m.specialty_required,
-               rp.specialty, u.first_name, u.last_name, u.email
+               u.id as user_id, u.first_name, u.last_name, u.email, u.phone,
+               rp.photo_url, rp.specialty, rp.location
         FROM applications a
         JOIN missions m ON a.mission_id = m.id
         JOIN users u ON a.replacement_id = u.id
         LEFT JOIN replacement_profiles rp ON u.id = rp.user_id
-        WHERE 1=1
-      `
-
+      `;
+      const conditions = [];
       if (filters?.mission_id) {
-        query = sql`${query} AND a.mission_id = ${filters.mission_id}`
+        conditions.push(sql`a.mission_id = ${filters.mission_id}`);
       }
       if (filters?.replacement_id) {
-        query = sql`${query} AND a.replacement_id = ${filters.replacement_id}`
+        conditions.push(sql`a.replacement_id = ${filters.replacement_id}`);
       }
       if (filters?.status) {
-        query = sql`${query} AND a.status = ${filters.status}`
+        conditions.push(sql`a.status = ${filters.status}`);
       }
-
-      query = sql`${query} ORDER BY a.applied_at DESC`
-
-      return await query
+      let query = base;
+      if (conditions.length > 0) {
+        query = sql`${base} WHERE ${conditions.reduce((prev, curr) => sql`${prev} AND ${curr}`)}`;
+      }
+      query = sql`${query} ORDER BY a.applied_at DESC`;
+      return await query;
     } catch (error) {
-      console.error("Error getting applications:", error)
-      return []
+      console.error("Error getting applications:", error);
+      return [];
     }
   },
 
@@ -429,6 +428,58 @@ export const db = {
     } catch (error) {
       console.error("Error getting experiences:", error)
       return []
+    }
+  },
+
+    // Diploma operations
+  async getDiplomasByUser(user_id: string) {
+    try {
+      const result = await sql`
+        SELECT * FROM diplomas WHERE user_id = ${user_id} ORDER BY year DESC, created_at DESC
+      `
+      return result
+    } catch (error) {
+      console.error("Error getting diplomas:", error)
+      return []
+    }
+  },
+
+  async createDiploma(diplomaData: {user_id: string, title: string, institution: string, year?: string, description?: string
+  }) {
+    try {
+      const result = await sql`
+        INSERT INTO diplomas (user_id, title, institution, year, description)
+        VALUES (${diplomaData.user_id}, ${diplomaData.title}, ${diplomaData.institution}, ${diplomaData.year || null}, ${diplomaData.description || null})
+        RETURNING *
+      `
+      return result[0]
+    } catch (error) {
+      console.error("Error creating diploma:", error)
+      throw new Error("Failed to create diploma")
+    }
+  },
+
+  async deleteDiploma({ id, user_id }: { id: string; user_id: string }) {
+    try {
+      const result = await sql`
+        DELETE FROM diplomas WHERE id = ${id} AND user_id = ${user_id} RETURNING *
+      `
+      return result[0] || null
+    } catch (error) {
+      console.error("Error deleting diploma:", error)
+      throw new Error("Failed to delete diploma")
+    }
+  },
+
+  async updateProfilePhoto(user_id: string, photo_url: string) {
+    try {
+      const result = await sql`
+        UPDATE replacement_profiles SET photo_url = ${photo_url} WHERE user_id = ${user_id} RETURNING *
+      `;
+      return result[0];
+    } catch (error) {
+      console.error("Error updating profile photo:", error);
+      throw new Error("Failed to update profile photo");
     }
   },
 }

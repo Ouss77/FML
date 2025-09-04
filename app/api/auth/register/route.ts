@@ -34,8 +34,6 @@ export async function POST(request: NextRequest) {
       // Replacement doctor fields
       specialty,
       location,
-      hourlyRate,
-      dailyRate,
       availability,
       // Employer fields
       companyName,
@@ -71,8 +69,6 @@ export async function POST(request: NextRequest) {
         user_id: user.id,
         specialty,
         location,
-        hourly_rate: hourlyRate ? Number.parseFloat(hourlyRate) : undefined,
-        daily_rate: dailyRate ? Number.parseFloat(dailyRate) : undefined,
         bio: availability,
       })
     } else if (userType === "employer" && companyName && companyType) {

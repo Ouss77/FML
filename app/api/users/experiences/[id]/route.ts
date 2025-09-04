@@ -1,6 +1,5 @@
 // PATCH experience (alias for PUT)
 export async function PATCH(request: NextRequest, ctx: { params: { id: string } }) {
-  // Just call the PUT handler for PATCH requests
   return PUT(request, ctx);
 }
 import { type NextRequest, NextResponse } from "next/server"
@@ -34,7 +33,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       location,
       startDate,
       endDate,
-      durationMonths,
       specialty,
       description,
       referenceContact,
@@ -52,7 +50,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         location,
         start_date: startDate,
         end_date: endDate,
-        duration_months: durationMonths ? Number.parseInt(durationMonths) : undefined,
         specialty,
         description,
         reference_contact: referenceContact,

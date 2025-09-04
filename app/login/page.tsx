@@ -98,16 +98,14 @@ export default function LoginPage() {
 
     {/* Right Side (Form) */}
     <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-br from-blue-100 via-white to-blue-50">
-      <div className="w-full max-w-xl bg-white/90 rounded-3xl shadow-2xl p-10 md:p-14 border border-blue-100">
+      <div className="w-full max-w-2xl bg-white/90 rounded-3xl shadow-2xl p-10 md:p-14 border border-blue-100">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center">
               <img src="/logo.png" alt="Le Foyer Medical " />
             </div>
-            <span className="text-xl font-bold text-gray-900"> Le Foyer Medical </span>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Connexion</h1>
-          <p className="text-gray-600">Accédez à votre espace personnel</p>
+          <p className="text-gray-600 text-2xl font-bold">Accédez à votre espace personnel</p>
         </div>
 
         <Card className="bg-white/90 rounded-2xl shadow-xl border border-blue-100">

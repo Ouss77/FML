@@ -6,82 +6,43 @@ import { Bell, Home, Briefcase, Mail, Calendar, User, FileText, LogOut, ChevronL
 import { useState, useEffect } from "react"
 import { useAuth } from "@/lib/auth"
 import ProfileSection from "./components/ProfileSection"
-import RatesSection from "./components/RatesSection"
 import ProposalsSection from "./components/ProposalsSection"
 import AvailableMissionsSection from "./components/AvailableMissionsSection"
 import MyMissionsSection from "./components/MyMissionsSection"
-import { Card, CardContent } from "@/components/ui/card"
+import DiplomasSection from "./components/DiplomasSection"
 
 export default function ReplacementDashboard() {
   const { user, profile, loading, logout } = useAuth()
-  const [activeTab, setActiveTab] = useState("overview")
+  const [activeTab, setActiveTab] = useState("profile")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
-  const [isEditRatesOpen, setIsEditRatesOpen] = useState(false)
-
   const [profileData, setProfileData] = useState({
+    userId: "",
+    imageProfile: "",
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
     specialty: "",
     location: "",
-    hourlyRate: "",
-    dailyRate: "",
     availability: "",
   })
 
-  useEffect(() => {
-    console.log("User:", user)
-    console.log("Profile:", profile)
+  useEffect(() => { 
     if (user && profile) {
       setProfileData({
+        userId: user.id || "",
         firstName: user.firstName || "",
         lastName: user.lastName || "",
         email: user.email || "",
         phone: user.phone || "",
+        imageProfile: profile.photo_url || "",
         specialty: profile.specialty || "",
         location: profile.location || "",
-        hourlyRate: profile.hourlyRate?.toString() || "",
-        dailyRate: profile.dailyRate?.toString() || "",
-        availability: profile.availability || "",
+        availability: profile.availability || ""
       })
     }
   }, [user, profile])
-
-
-  const handleProfileUpdate = (field: string, value: string) => {
-    setProfileData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const handleSaveProfile = async () => {
-    try {
-      const res = await fetch("/api/users/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: profileData.firstName,
-          lastName: profileData.lastName,
-          phone: profileData.phone,
-          profileData: {
-            specialty: profileData.specialty,
-            location: profileData.location,
-            // Add other fields as needed
-          },
-        }),
-      })
-      if (!res.ok) throw new Error("Erreur lors de la sauvegarde du profil")
-      // Optionally, refetch user/profile here
-      setIsEditProfileOpen(false)
-    } catch (err) {
-      alert("Erreur lors de la sauvegarde du profil")
-    }
-  }
-
-  const handleSaveRates = () => {
-    // Save rates logic here
-    setIsEditRatesOpen(false)
-  }
 
   const handleProposalResponse = (id: number, response: "accept" | "decline") => {
     console.log(`Proposition ${id} ${response}`)
@@ -100,32 +61,6 @@ export default function ReplacementDashboard() {
         return "bg-gray-100 text-gray-800"
     }
   }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-green-100 text-green-800"
-      case "confirmed":
-        return "bg-blue-100 text-blue-800"
-      case "pending":
-        return "bg-yellow-100 text-yellow-800"
-      default:
-        return "bg-gray-100 text-gray-800"
-    }
-  }
-
-  const specialties = [
-    "Médecine générale",
-    "Cardiologie",
-    "Dermatologie",
-    "Gynécologie",
-    "Pédiatrie",
-    "Psychiatrie",
-    "Radiologie",
-    "Anesthésie",
-    "Chirurgie générale",
-    "Urgences",
-  ]
 
   const pendingProposals = [
     {
@@ -163,12 +98,10 @@ export default function ReplacementDashboard() {
     },
   ]
 
-
   const sidebarItems = [
     // { id: "overview", label: "Vue d'ensemble", icon: Home, badge: null },
     { id: "missions", label: "Missions disponibles", icon: Briefcase, badge: null },
-    { id: "proposals", label: "Propositions reçues", icon: Mail, badge: pendingProposals.length },
-    { id: "my-missions", label: "Mes missions", icon: Calendar, badge: null },
+    // { id: "proposals", label: "Propositions reçues", icon: Mail, badge: pendingProposals.length },
     { id: "profile", label: "Mon profil", icon: User, badge: null },
     { id: "documents", label: "Documents", icon: FileText, badge: null },
   ]
@@ -200,85 +133,7 @@ export default function ReplacementDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "overview":
-        return (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-green-50 to-green-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-green-700">Missions terminées</p>
-                      <p className="text-3xl font-bold text-green-900">12</p>
-                    </div>
-                    <div className="p-3 bg-green-500 rounded-full">
-                      <CheckCircle className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-orange-50 to-orange-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-orange-700">Propositions en attente</p>
-                      <p className="text-3xl font-bold text-orange-900">3</p>
-                    </div>
-                    <div className="p-3 bg-orange-500 rounded-full">
-                      <Clock className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-yellow-50 to-yellow-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-yellow-700">Note moyenne</p>
-                      <p className="text-3xl font-bold text-yellow-900">4.9</p>
-                    </div>
-                    <div className="p-3 bg-yellow-500 rounded-full">
-                      <Star className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:shadow-lg transition-shadow duration-200 border-0 bg-gradient-to-br from-blue-50 to-blue-100">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-blue-700">Revenus ce mois</p>
-                      <p className="text-3xl font-bold text-blue-900">3,240€</p>
-                    </div>
-                    <div className="p-3 bg-blue-500 rounded-full">
-                      <DollarSign className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-2">
-                <ProfileSection
-                  profileData={profileData}
-                  setProfileData={setProfileData}
-                  isEditProfileOpen={isEditProfileOpen}
-                  setIsEditProfileOpen={setIsEditProfileOpen}
-                  handleSaveProfile={handleSaveProfile}
-                />
-              </div>
-              <div className="md:col-span-1">
-                <RatesSection
-                  profileData={profileData}
-                  setProfileData={setProfileData}
-                  isEditRatesOpen={isEditRatesOpen}
-                  setIsEditRatesOpen={setIsEditRatesOpen}
-                  handleSaveRates={handleSaveRates}
-                />
-              </div>
-            </div>
-          </>
-        )
+
       case "missions":
         return <AvailableMissionsSection  />
       case "proposals":
@@ -290,27 +145,27 @@ export default function ReplacementDashboard() {
           />
         )
       case "my-missions":
-        return <MyMissionsSection getStatusColor={getStatusColor} />
+        return <MyMissionsSection />
+      case "diplomas":
+        return <DiplomasSection />
       case "profile":
         return (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-2">
+            <div className="md:col-span-1">
               <ProfileSection
                 profileData={profileData}
                 setProfileData={setProfileData}
                 isEditProfileOpen={isEditProfileOpen}
                 setIsEditProfileOpen={setIsEditProfileOpen}
-                handleSaveProfile={handleSaveProfile}
               />
             </div>
-            <div className="md:col-span-1">
-              <RatesSection
-                profileData={profileData}
-                setProfileData={setProfileData}
-                isEditRatesOpen={isEditRatesOpen}
-                setIsEditRatesOpen={setIsEditRatesOpen}
-                handleSaveRates={handleSaveRates}
-              />
+            <div className="md:col-span-2 flex flex-col gap-8">
+              <div>
+                <MyMissionsSection />
+              </div>
+              <div>
+                <DiplomasSection />
+              </div>
             </div>
           </div>
         )
@@ -399,7 +254,7 @@ return (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
                 <Avatar className="ring-2 ring-white shadow-md">
                   <img
-                    src={profile?.photoUrl || "/placeholder-user.jpg"}
+                    src={profileData.imageProfile || "/placeholder-user.jpg"}    
                     alt="Profile"
                     className="h-10 w-10 rounded-full object-cover"
                   />
@@ -422,7 +277,7 @@ return (
               <div className="flex flex-col items-center gap-2">
                 <Avatar className="ring-2 ring-white shadow-md">
                   <img
-                    src={profile?.photoUrl || "/placeholder-user.jpg"}
+                    src={ profileData.imageProfile}
                     alt="Profile"
                     className="h-10 w-10 rounded-full object-cover"
                   />

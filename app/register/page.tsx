@@ -22,13 +22,9 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
     acceptTerms: false,
-    // Replacement doctor fields
     specialty: "",
     location: "",
-    hourlyRate: "",
-    dailyRate: "",
     availability: "",
-    // Employer fields
     companyName: "",
     companyType: "",
     siret: "",
@@ -37,7 +33,6 @@ export default function RegisterPage() {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const router = useRouter();
 
-  // Retrieve type from URL if present (client-side only)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -134,122 +129,113 @@ export default function RegisterPage() {
   ];
 
   return (
-    <div className="min-h-screen flex items-stretch bg-gray-50">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gradient-to-br from-blue-50 to-indigo-100">
       {showSuccessPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl p-10 max-w-md w-full text-center shadow-2xl transform animate-in zoom-in-95 duration-300">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-green-600" />
-            </div>
-            <h3 className="text-3xl font-bold text-gray-900 mb-3">Compte créé avec succès !</h3>
-            <p className="text-lg text-gray-600 mb-6">
-              Bienvenue sur  Le Foyer Médical ! Votre compte {userType === "replacement" ? "médecin remplaçant" : "établissement"} a été créé.
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl p-8 max-w-sm w-full text-center shadow-lg animate-in zoom-in-95 duration-300">
+            <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <h3 className="text-2xl font-semibold text-gray-800 mb-2">Inscription réussie !</h3>
+            <p className="text-gray-600 mb-4">
+              Votre compte {userType === "replacement" ? "médecin remplaçant" : "établissement"} est prêt.
             </p>
-            <p className="text-base text-gray-500">Redirection vers votre tableau de bord...</p>
-            <div className="mt-6">
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div className="bg-green-600 h-3 rounded-full animate-pulse" style={{ width: "100%" }}></div>
-              </div>
+            <p className="text-sm text-gray-500">Redirection en cours...</p>
+            <div className="mt-4 bg-gray-200 rounded-full h-2">
+              <div className="bg-green-500 h-2 rounded-full animate-pulse" style={{ width: "100%" }}></div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Left side: Attractive message */}
-      <div className="hidden lg:flex flex-col items-center w-1/2 bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-12 pt-16">
-        <div className="w-full max-w-lg">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-              <Users className="w-8 h-8 text-white" />
-            </div>
-            <span className="text-3xl font-extrabold tracking-wide">MedReplace</span>
-          </div>
-          <h2 className="text-4xl font-extrabold mb-6 drop-shadow-lg">Rejoignez la communauté MedReplace</h2>
-          <p className="text-xl mb-8 font-medium drop-shadow">
-            Inscrivez-vous dès aujourd'hui et profitez d'un service <span className="font-bold text-yellow-200">100% gratuit</span> pour trouver ou proposer des remplacements médicaux en toute simplicité.
+      {/* Left side: Logo Section */}
+        <div className="lg:w-2/5 bg-gradient-to-b from-blue-500 to-indigo-600 text-white flex flex-col items-center p-0 relative top-0">
+          <div className="flex flex-col items-center w-full h-full pt-6 pb-2">
+          <img
+            src="/logo.png"
+            alt="MedReplace Logo"
+            className="w-72 h-72 rounded-full shadow-lg mb-4 border-4 border-white bg-white object-contain"
+          />
+          <span className="text-4xl font-extrabold tracking-tight mb-2">MedReplace</span>
+          <h2 className="text-2xl font-semibold mb-1 text-blue-100">Rejoignez MedReplace</h2>
+          <p className="text-lg mb-4 max-w-md text-center">
+            Trouvez ou proposez des remplacements médicaux facilement avec notre plateforme <span className="font-semibold text-yellow-200">100% gratuite</span>.
           </p>
-          <ul className="text-left text-lg space-y-4 mb-10">
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-3 h-3 bg-yellow-300 rounded-full"></span>
-              Mise en relation rapide et sécurisée
+          <ul className="space-y-2 text-left text-base max-w-xs mx-auto">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
+              Connexion rapide et sécurisée
             </li>
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-3 h-3 bg-yellow-300 rounded-full"></span>
-              Plateforme dédiée aux professionnels de santé
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
+              Conçu pour les professionnels de santé
             </li>
-            <li className="flex items-center gap-3">
-              <span className="inline-block w-3 h-3 bg-yellow-300 rounded-full"></span>
-              Aucun frais caché, aucune commission
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
+              Sans frais ni commissions
             </li>
           </ul>
-          <div className="text-base text-blue-100 font-medium">Votre inscription ne prend que 2 minutes !</div>
-          <div className="mt-10 text-sm text-blue-100 opacity-70">© {new Date().getFullYear()} MedReplace</div>
+          <p className="mt-4 text-sm text-blue-100">Inscription en moins de 2 minutes !</p>
+          <p className="mt-2 text-xs text-blue-100 opacity-70">© {new Date().getFullYear()} MedReplace</p>
         </div>
       </div>
 
-      {/* Right side: Registration form */}
-      <div className="flex flex-col justify-center items-center w-full lg:w-1/2 bg-white p-8 lg:p-12">
-        <div className="w-full max-w-4xl">
-          {/* <div className="text-center mb-10">
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Créer un compte</h1>
-            <p className="text-lg text-gray-600 mt-3">Rejoignez notre communauté de professionnels de santé</p>
-          </div> */}
-          <Card className="shadow-2xl rounded-3xl border border-blue-200 bg-gradient-to-br from-white to-blue-50">
-            {/* <CardHeader className="pb-4">
-              <CardTitle className="text-3xl font-bold text-gray-900">Inscription</CardTitle>
-            </CardHeader> */}
-            <CardContent className="px-10 pb-10">
-              <Tabs value={userType} onValueChange={(value: string) => setUserType(value as "replacement" | "employer")} className="mb-6">
-                <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-xl p-1">
-                  <TabsTrigger
-                    value="replacement"
-                    className="py-3 text-lg font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-300"
-                  >
-                    Médecin remplaçant
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="employer"
-                    className="py-3 text-lg font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg transition-all duration-300"
-                  >
-                    Demandeur de remplacement
-                  </TabsTrigger>
-                </TabsList>
+      {/* Right side: Registration Form */}
+      <div className="lg:w-3/5 w-full flex flex-col p-10 m-0 ">
+          <CardContent className="p-0">
+            <Tabs value={userType} onValueChange={(value: string) => setUserType(value as 'replacement' | 'employer')}>
+              <TabsList className="flex w-4/5 mx-auto justify-center bg-gray-100 border border-blue-200 shadow rounded-lg p-0 mb-8 gap-0 overflow-hidden rounded-2xl">
+                <TabsTrigger
+                  value="replacement"
+                  className="flex-1 py-3 px-6 text-base font-semibold border-r border-blue-200 last:border-r-0 transition-all duration-200
+                    data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:scale-105 data-[state=active]:shadow-md
+                    data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
+                    rounded-none focus:outline-none"
+                >
+                  Médecin remplaçant
+                </TabsTrigger>
+                <TabsTrigger
+                  value="employer"
+                  className="flex-1 py-3 px-6 text-base font-semibold transition-all duration-200
+                    data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:scale-105 data-[state=active]:shadow-md
+                    data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
+                    rounded-none focus:outline-none"
+                >
+                  Demandeur
+                </TabsTrigger>
+              </TabsList>
 
-                <TabsContent value="replacement" className="mt-6">
-                  <ReplacementRegisterForm
-                    formData={formData}
-                    setFormData={setFormData}
-                    showPassword={showPassword}
-                    setShowPassword={setShowPassword}
-                    handleInputChange={handleInputChange}
-                    handleSubmit={handleSubmit}
-                    specialties={specialties}
-                  />
-                </TabsContent>
+              <TabsContent value="replacement">
+                <ReplacementRegisterForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                  handleInputChange={handleInputChange}
+                  handleSubmit={handleSubmit}
+                  specialties={specialties}
+                />
+              </TabsContent>
 
-                <TabsContent value="employer" className="mt-6">
-                  <EmployerRegisterForm
-                    formData={formData}
-                    setFormData={setFormData}
-                    showPassword={showPassword}
-                    setShowPassword={setShowPassword}
-                    handleInputChange={handleInputChange}
-                    handleSubmit={handleSubmit}
-                    companyTypes={companyTypes}
-                  />
-                </TabsContent>
-              </Tabs>
-              <div className="mt-8 text-center">
-                <p className="text-lg text-gray-600">
-                  Déjà un compte ?{" "}
-                  <Link href="/login" className="text-blue-600 hover:underline font-semibold">
-                    Se connecter
-                  </Link>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              <TabsContent value="employer">
+                <EmployerRegisterForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                  handleInputChange={handleInputChange}
+                  handleSubmit={handleSubmit}
+                  companyTypes={companyTypes}
+                />
+              </TabsContent>
+            </Tabs>
+            <div className="mt-8 text-center">
+              <p className="text-base text-gray-600">
+                Déjà inscrit ?{" "}
+                <Link href="/login" className="text-blue-600 hover:underline font-semibold">
+                  Se connecter
+                </Link>
+              </p>
+            </div>
+          </CardContent>
       </div>
     </div>
   );
