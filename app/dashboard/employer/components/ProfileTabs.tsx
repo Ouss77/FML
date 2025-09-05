@@ -1,9 +1,4 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import EditEstablishmentDialog from "./EditEstablishmentDialog";
 import EditContactDialog from "./EditContactDialog";
 import { Building2, User2, BarChart2 } from "lucide-react";
@@ -19,7 +14,7 @@ export default function ProfileTabs() {
   const [establishmentForm, setEstablishmentForm] = useState<any>(null);
   const [contactForm, setContactForm] = useState<any>(null);
 
-  useEffect(() => {
+  useEffect(() => { 
     async function fetchProfile() {
       setLoading(true);
       setError(null);
@@ -36,9 +31,15 @@ export default function ProfileTabs() {
           description: data.profile?.description || "",
           firstName: data.user?.firstName || "",
           lastName: data.user?.lastName || "",
-          email: data.user?.email || "",
+          email: data.user?.email || "", 
           phone: data.user?.phone || "",
           fonction: data.profile?.fonction || "",
+          experience_years: data.profile?.experience_years || "",
+          languages: data.profile?.languages || "",
+          bio: data.profile?.bio || "",
+          is_available: data.profile?.is_available || "",
+          availability_start: data.profile?.availability_start || "",
+          availability_end: data.profile?.availability_end || "",
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erreur inconnue");
@@ -175,6 +176,30 @@ export default function ProfileTabs() {
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-green-900 w-48">Téléphone:</span>
           <span className="text-base text-green-950 font-medium">{profileData.phone || <span className="text-gray-400">-</span>}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-green-900 w-48">Années d'expérience:</span>
+          <span className="text-base text-green-950 font-medium">{profileData.experience_years ?? <span className="text-gray-400">-</span>}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-green-900 w-48">Langues parlées:</span>
+          <span className="text-base text-green-950 font-medium">{Array.isArray(profileData.languages) ? profileData.languages.join(', ') : (profileData.languages || <span className="text-gray-400">-</span>)}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-green-900 w-48">Bio:</span>
+          <span className="text-base text-green-950 font-medium">{profileData.bio || <span className="text-gray-400">-</span>}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-green-900 w-48">Disponible:</span>
+          <span className="text-base text-green-950 font-medium">{profileData.is_available === true ? 'Oui' : profileData.is_available === false ? 'Non' : <span className="text-gray-400">-</span>}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-green-900 w-48">Début disponibilité:</span>
+          <span className="text-base text-green-950 font-medium">{profileData.availability_start ? new Date(profileData.availability_start).toLocaleDateString() : <span className="text-gray-400">-</span>}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-green-900 w-48">Fin disponibilité:</span>
+          <span className="text-base text-green-950 font-medium">{profileData.availability_end ? new Date(profileData.availability_end).toLocaleDateString() : <span className="text-gray-400">-</span>}</span>
         </div>
         <Button
           className="float-right bg-gradient-to-r from-green-400 to-green-500 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition-all mt-2"

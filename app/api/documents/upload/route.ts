@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
-import { db } from "@/lib/database"
+import { db, sql } from "@/lib/database"
 import { writeFile, mkdir } from "fs/promises"
 import { join } from "path"
 import { existsSync } from "fs"
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const decoded = jwt.verify(token, JWT_SECRET) as {
       userId: string
       userType: string
-    }
+    } 
 
     const formData = await request.formData()
     const file = formData.get("file") as File
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, buffer)
 
     // Save document info to database
-    const document = await db.sql`
+    const document = await sql`
       INSERT INTO documents (
         user_id, document_type, file_name, file_path, file_size, mime_type
       )
@@ -101,6 +101,12 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error("File upload error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    let message = "Internal server error"
+    if (error instanceof Error) {
+      message = error.message
+    } else if (typeof error === "string") {
+      message = error
+    }
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

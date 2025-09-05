@@ -21,24 +21,52 @@ export default function EditContactDialog({ open, onOpenChange, form, setForm, o
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="text-green-800 font-semibold">Prénom</Label>
-              <Input value={form?.firstName || ""} onChange={e => setForm(f => ({ ...f, firstName: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+              <Input value={form?.firstName || ""} onChange={e => setForm((f: typeof form) => ({ ...f, firstName: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
             </div>
             <div>
               <Label className="text-green-800 font-semibold">Nom</Label>
-              <Input value={form?.lastName || ""} onChange={e => setForm(f => ({ ...f, lastName: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+              <Input value={form?.lastName || ""} onChange={e => setForm((f: typeof form) => ({ ...f, lastName: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
             </div>
           </div>
           <div>
             <Label className="text-green-800 font-semibold">Fonction</Label>
-            <Input value={form?.fonction || ""} onChange={e => setForm(f => ({ ...f, fonction: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+            <Input value={form?.fonction || ""} onChange={e => setForm((f: typeof form) => ({ ...f, fonction: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
           </div>
           <div>
             <Label className="text-green-800 font-semibold">Email</Label>
-            <Input value={form?.email || ""} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+            <Input value={form?.email || ""} onChange={e => setForm((f: typeof form) => ({ ...f, email: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
           </div>
           <div>
             <Label className="text-green-800 font-semibold">Téléphone</Label>
-            <Input value={form?.phone || ""} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+            <Input value={form?.phone || ""} onChange={e => setForm((f: typeof form) => ({ ...f, phone: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+          </div>
+          <div>
+            <Label className="text-green-800 font-semibold">Années d'expérience</Label>
+            <Input type="number" min="0" value={form?.experience_years || ""} onChange={e => setForm((f: typeof form) => ({ ...f, experience_years: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+          </div>
+          <div>
+            <Label className="text-green-800 font-semibold">Langues parlées (séparées par des virgules)</Label>
+            <Input value={form?.languages || ""} onChange={e => setForm((f: typeof form) => ({ ...f, languages: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+          </div>
+          <div>
+            <Label className="text-green-800 font-semibold">Bio</Label>
+            <Input value={form?.bio || ""} onChange={e => setForm((f: typeof form) => ({ ...f, bio: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+          </div>
+          <div>
+            <Label className="text-green-800 font-semibold">Disponible</Label>
+            <select value={form?.is_available === true ? "true" : form?.is_available === false ? "false" : ""} onChange={e => setForm((f: typeof form) => ({ ...f, is_available: e.target.value === "true" }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow">
+              <option value="">--</option>
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </select>
+          </div>
+          <div>
+            <Label className="text-green-800 font-semibold">Début disponibilité</Label>
+            <Input type="date" value={form?.availability_start || ""} onChange={e => setForm((f: typeof form) => ({ ...f, availability_start: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
+          </div>
+          <div>
+            <Label className="text-green-800 font-semibold">Fin disponibilité</Label>
+            <Input type="date" value={form?.availability_end || ""} onChange={e => setForm((f: typeof form) => ({ ...f, availability_end: e.target.value }))} className="mt-1 h-12 text-lg px-4 border-green-200 focus:border-green-500 bg-white/90 rounded-lg shadow" />
           </div>
         </form>
         <DialogFooter className="mt-6">

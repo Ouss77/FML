@@ -36,10 +36,10 @@ export default function ReplacementRegisterForm({
   specialties,
 }: ReplacementRegisterFormProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br flex items-center justify-center ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-xl w-full space-y-8 border border-gray-200 "
+        className="bg-white p-8 rounded-2xl shadow-xl w-full space-y-8 border border-gray-200 mt-0"
       >
         {/* Header */}
         <div className="text-center space-y-4">
@@ -57,7 +57,7 @@ export default function ReplacementRegisterForm({
                 value={formData.firstName}
                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                 required
-                className="pl-14 h-16 !text-2xl placeholder:!text-lg border-gray-300 
+                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
                            focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                 placeholder="Prénom (ex: Jean)"
               />
@@ -69,7 +69,7 @@ export default function ReplacementRegisterForm({
                 value={formData.lastName}
                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                 required
-                className="pl-14 h-16 !text-2xl placeholder:!text-lg border-gray-300 
+                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
                            focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                 placeholder="Nom (ex: Dupont)"
               />
@@ -82,7 +82,7 @@ export default function ReplacementRegisterForm({
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 required
-                className="pl-14 h-16 !text-2xl placeholder:!text-lg border-gray-300 
+                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
                            focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                 placeholder="Adresse email professionnelle"
               />
@@ -95,7 +95,7 @@ export default function ReplacementRegisterForm({
                 value={formData.phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
                 required
-                className="pl-14 h-16 !text-2xl placeholder:!text-lg border-gray-300 
+                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
                            focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                 placeholder="Numéro de téléphone (ex: +33 6 12 34 56 78)"
               />
@@ -111,7 +111,7 @@ export default function ReplacementRegisterForm({
               value={formData.specialty}
               onValueChange={(value) => handleInputChange("specialty", value)}
             >
-              <SelectTrigger className="h-16 !text-2xl  py-8 placeholder:!text-lg border-gray-300 
+              <SelectTrigger className="h-16 !text-xl  py-8 placeholder:!text-lg border-gray-300 
                                         focus:border-blue-500 focus:ring-blue-500 rounded-lg">
                 <SelectValue placeholder="Sélectionnez votre spécialité" />
               </SelectTrigger>
@@ -131,27 +131,11 @@ export default function ReplacementRegisterForm({
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
                 required
-                className="pl-14 h-16 !text-2xl placeholder:!text-lg border-gray-300 
+                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
                            focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                 placeholder="Ville, département ou région (ex: Paris, 75)"
               />
             </div>
-          </div>
-        </section>
-
-        {/* Availability Section */}
-        <section className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Disponibilités</h3>
-          <div className="relative">
-            <Calendar className="absolute left-4 top-6 text-gray-400 h-6 w-6" />
-            <Textarea
-              id="availability"
-              value={formData.availability}
-              onChange={(e) => handleInputChange("availability", e.target.value)}
-              className="pl-14 pt-5 h-32 !text-2xl placeholder:!text-lg border-gray-300 
-                         focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-              placeholder="Décrivez vos disponibilités (ex: Disponible les weekends, vacances scolaires...)"
-            />
           </div>
         </section>
 
@@ -166,7 +150,7 @@ export default function ReplacementRegisterForm({
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 required
-                className="pr-12 pl-6 h-16 !text-2xl placeholder:!text-lg border-gray-300 
+                className="pr-12 pl-6 h-16 !text-xl placeholder:!text-lg border-gray-300 
                            focus:border-blue-500 focus:ring-blue-500 rounded-lg"
                 placeholder="Créer un mot de passe sécurisé"
               />
@@ -185,7 +169,7 @@ export default function ReplacementRegisterForm({
               value={formData.confirmPassword}
               onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
               required
-              className="h-16 !text-2xl placeholder:!text-lg border-gray-300 
+              className="h-16 !text-xl placeholder:!text-lg border-gray-300 
                          focus:border-blue-500 focus:ring-blue-500 rounded-lg"
               placeholder="Confirmez votre mot de passe"
             />

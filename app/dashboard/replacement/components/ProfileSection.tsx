@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { User } from "lucide-react";
+import { Mail, Phone, MapPin, Briefcase, Globe, Heart, Pencil, Calendar, FileText } from "lucide-react"
+import EditProfileDialog from "./EditProfileDialog";
 
 interface ProfileData {
   imageProfile: string | undefined;
@@ -14,11 +13,14 @@ interface ProfileData {
   lastName: string;
   email: string;
   phone: string;
-  specialty: string;
+  specialty: string; 
   location: string;
-  hourlyRate: string;
-  dailyRate: string;
-  availability: string;
+  experience_years?: number;
+  languages?: string[];
+  bio?: string;
+  is_available?: boolean;
+  availability_start?: string;
+  availability_end?: string;
 }
 
 interface ProfileSectionProps {
@@ -28,14 +30,49 @@ interface ProfileSectionProps {
   setIsEditProfileOpen: (open: boolean) => void;
 }
 
+// Helper to fetch profile data from API
+async function fetchProfileData(): Promise<ProfileData | null> {
+  try {
+    const res = await fetch("/api/users/profile");
+    if (!res.ok) return null;
+    const { user, profile } = await res.json();
+    return {
+      userId: user?.id || "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
+      imageProfile: profile?.photo_url || "",
+      specialty: profile?.specialty || "",
+      location: profile?.location || "",
+      experience_years: profile?.experience_years ?? "",
+      languages: profile?.languages || [],
+      bio: profile?.bio || "",
+      is_available: profile?.is_available ?? false,
+      availability_start: profile?.availability_start || "",
+      availability_end: profile?.availability_end || "",
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function ProfileSection({
   profileData, setProfileData, isEditProfileOpen, setIsEditProfileOpen,
 }: ProfileSectionProps) {
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(profileData.photoUrl);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
+
+  // Fetch profile data on mount
+  useEffect(() => {
+    (async () => {
+      const data = await fetchProfileData();
+      console.log("the data", data)
+      if (data) setProfileData(data);
+    })();
+  }, []);
 
   // Cleanup temporary preview URLs
   useEffect(() => {
@@ -44,240 +81,127 @@ export default function ProfileSection({
     };
   }, [previewUrl, selectedFile]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setSelectedFile(file);
-    const tempUrl = URL.createObjectURL(file);
-    setPreviewUrl(tempUrl);
-    console.log('[PROFILE] Selected file:', file);
-    console.log('[PROFILE] Preview URL:', tempUrl); 
-  };
-
-  const handleSaveProfile = async () => {
-    setUploading(true);
-    setUploadError("");
-    let photoUrl = profileData.photoUrl;
-    // 1. Upload image if selected
-  console.log('[PROFILE] userId before upload:', profileData.userId, typeof profileData.userId);
-if (selectedFile && profileData.userId) {
-  try {
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("userId", profileData.userId);
-
-    const res = await fetch("/api/profile/upload-photo", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) throw new Error("Erreur lors de l'upload");
-    const data = await res.json();
-
-    photoUrl = data.photo_url;
-
-    setProfileData((prev) => ({ ...prev, photoUrl: data.photo_url }));
-    setPreviewUrl(undefined); // reset temporary preview
-    setSelectedFile(null);
-  } catch (err) {
-    setUploadError("Erreur lors de l'upload de la photo");
-    setUploading(false);
-    return;
-  }
-}
-
-    // 2. Save profile data
-    try {
-      const res = await fetch("/api/users/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: profileData.firstName,
-          lastName: profileData.lastName,
-          phone: profileData.phone,
-          profileData: {
-            specialty: profileData.specialty,
-            location: profileData.location,
-            photoUrl,
-          },
-        }),
-      });
-      if (!res.ok) throw new Error("Erreur lors de la sauvegarde du profil");
-      setIsEditProfileOpen(false);
-    } catch (err) {
-      setUploadError("Erreur lors de la sauvegarde du profil");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Log on mount and when profileData changes
-    console.log('[PROFILE] profileData:', profileData);
-    console.log("the image profile", profileData.imageProfile)
-  }, [profileData]);
-
   return (
-    <Card className="mb-6 shadow-lg border-0 bg-gradient-to-br from-blue-50 to-white min-h-[480px] flex flex-col justify-center">
-    <CardHeader className="flex flex-col items-center gap-4 pb-0">
-  <div className="relative h-24 w-24 rounded-full bg-blue-100 overflow-hidden flex items-center justify-center">
+  <Card className="relative max-w-3xl mx-auto shadow-xl border-0 bg-white rounded-3xl overflow-hidden">
+      {/* Top gradient */}
+      <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-36"></div>
 
-      <img src={ profileData.imageProfile} alt="ouss" className="object-cover w-full h-full" />
-      {/* <User className="w-12 h-12 text-blue-500" /> */}
-   
-  </div>
+      {/* Profile Image */}
+      <div className="absolute top-12 left-1/2 transform -translate-x-1/2">
+        <div className="w-56 h-62 rounded-full border-4 border-white overflow-hidden shadow-md">
+          <img
+            src={profileData.imageProfile}
+            alt="profile"
+            className="object-cover w-full h-full"
+          />
+        </div>
+      </div>
 
-  <div className="text-center">
-    <CardTitle className="text-3xl font-bold text-blue-900 mb-1">Profil Médecin</CardTitle>
-    <CardDescription className="text-blue-700 text-lg">Informations personnelles</CardDescription>
-  </div>
+      <CardContent className="pt-28 pb-10 flex flex-col items-center text-center">
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-blue-900">Profil Médecin</h2>
+        <p className="text-lg font-medium text-gray-800">
+          {profileData.firstName} {profileData.lastName}
+        </p>
+        <p className="text-blue-600">{profileData.specialty || "-"}</p>
 
-  <Button variant="outline" size="lg" className="mt-2" onClick={() => setIsEditProfileOpen(true)}>
-    Modifier
-  </Button>
-</CardHeader>
-      <CardContent className="pt-0 flex flex-col gap-6 mt-6">
-        <div className="flex flex-col gap-4 text-lg">
-          <div>
-            <Label className="text-base text-blue-800">Nom Complet</Label>
-            <div className="font-semibold text-2xl text-gray-900 mb-2 break-words">{profileData.firstName} {profileData.lastName}</div>
+        {/* Buttons */}
+        <div className="flex gap-3 mt-4">
+          <Button
+            className="bg-blue-600 text-white px-5 rounded-xl shadow"
+            onClick={() => setIsEditProfileOpen(true)}
+          >
+            <Pencil className="w-4 h-4 mr-1" /> Modifier
+          </Button>
+          <Button variant="outline" className="px-5 rounded-xl shadow">
+            Télécharger CV
+          </Button>
+        </div>
+
+        {/* Info grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-8 text-sm">
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Mail className="w-5 h-5 text-blue-500" />
+            <span>{profileData.email}</span>
           </div>
 
-          <div>
-            <Label className="text-base text-blue-800">Email</Label>
-            <div className="text-gray-700 mb-2 break-words">{profileData.email}</div>
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Phone className="w-5 h-5 text-blue-500" />
+            <span>{profileData.phone}</span>
           </div>
-          <div>
-            <Label className="text-base text-blue-800">Téléphone</Label>
-            <div className="text-gray-700 mb-2 break-words">{profileData.phone}</div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <MapPin className="w-5 h-5 text-blue-500" />
+            <span>{profileData.location}</span>
           </div>
-          <div>
-            <Label className="text-base text-blue-800">Spécialité</Label>
-            <div className="text-gray-700 mb-2 break-words">{profileData.specialty}</div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Briefcase className="w-5 h-5 text-blue-500" />
+            <span>{profileData.experience_years ?? "-"} ans</span>
           </div>
-          <div>
-            <Label className="text-base text-blue-800">Localisation</Label>
-            <div className="text-gray-700 mb-2 break-words">{profileData.location}</div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Globe className="w-5 h-5 text-blue-500" />
+            <span>
+              {Array.isArray(profileData.languages)
+                ? profileData.languages.join(", ")
+                : profileData.languages || "-"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Heart className="w-5 h-5 text-blue-500" />
+            <span>{profileData.specialty}</span>
+          </div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl col-span-2">
+            <Label className="text-gray-600">Disponibilité :</Label>
+            <span
+              className={`ml-2 font-medium ${
+                profileData.is_available ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {profileData.is_available ? "Disponible" : "Non disponible"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Calendar className="w-5 h-5 text-blue-500" />
+            <span>
+              {profileData.availability_start
+                ? new Date(profileData.availability_start).toLocaleDateString()
+                : "-"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+            <Calendar className="w-5 h-5 text-blue-500" />
+            <span>
+              {profileData.availability_end
+                ? new Date(profileData.availability_end).toLocaleDateString()
+                : "-"}
+            </span>
+          </div>
+
+          <div className="flex items-start gap-2 bg-gray-50 p-3 rounded-xl col-span-2">
+            <FileText className="w-5 h-5 text-blue-500 mt-1" />
+            <span>{profileData.bio || "-"}</span>
           </div>
         </div>
 
-        <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
-          <DialogContent className="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6">
-            <DialogHeader>
-              <DialogTitle className="text-blue-900 text-2xl font-bold mb-2">Modifier le profil</DialogTitle>
-              <CardDescription className="text-blue-700 mb-4">Mettez à jour vos informations personnelles</CardDescription>
-            </DialogHeader>
-
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2 flex flex-col items-center mb-4">
-                <div className="relative h-24 w-24 rounded-full bg-blue-100 mb-2 overflow-hidden flex items-center justify-center">
-                  {previewUrl || profileData.photoUrl ? (
-                    <img
-                      src={previewUrl || profileData.photoUrl}
-                      alt="Profil"
-                      className="object-cover w-full h-full"
-                    />
-                  ) : (
-                    <User className="w-12 h-12 text-blue-500" />
-                  )}
-                  <button
-                    type="button"
-                    className="absolute bottom-0 right-0 bg-white border border-blue-200 rounded-full p-1 shadow hover:bg-blue-50"
-                    onClick={() => fileInputRef.current?.click()}
-                    title="Changer la photo"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5 text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2a2.828 2.828 0 11-4-4 2.828 2.828 0 014 4z"
-                      />
-                    </svg>
-                  </button>
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={handleImageChange}
-                    disabled={uploading}
-                  />
-                </div>
-
-                {uploading && <div className="text-xs text-blue-600 mt-1">Upload en cours...</div>}
-                {uploadError && <div className="text-xs text-red-600 mt-1">{uploadError}</div>}
-              </div>
-
-              {/* Existing form inputs */}
-              <div>
-                <Label className="text-xs text-blue-800">Prénom</Label>
-                <Input
-                  className="mt-1"
-                  value={profileData.firstName}
-                  onChange={(e) => setProfileData((prev: any) => ({ ...prev, firstName: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-blue-800">Nom</Label>
-                <Input
-                  className="mt-1"
-                  value={profileData.lastName}
-                  onChange={(e) => setProfileData((prev: any) => ({ ...prev, lastName: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-blue-800">Email</Label>
-                <Input
-                  className="mt-1"
-                  value={profileData.email}
-                  onChange={(e) => setProfileData((prev: any) => ({ ...prev, email: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-blue-800">Téléphone</Label>
-                <Input
-                  className="mt-1"
-                  value={profileData.phone}
-                  onChange={(e) => setProfileData((prev: any) => ({ ...prev, phone: e.target.value }))}
-                />
-              </div>
-              <div className="md:col-span-2">
-                <Label className="text-xs text-blue-800">Spécialité</Label>
-                <Input
-                  className="mt-1"
-                  value={profileData.specialty}
-                  onChange={(e) => setProfileData((prev: any) => ({ ...prev, specialty: e.target.value }))}
-                />
-              </div>
-              <div className="md:col-span-2">
-                <Label className="text-xs text-blue-800">Localisation</Label>
-                <Input
-                  className="mt-1"
-                  value={profileData.location}
-                  onChange={(e) => setProfileData((prev: any) => ({ ...prev, location: e.target.value }))}
-                />
-              </div>
-            </form>
-
-            <DialogFooter className="mt-6 flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center">
-              <Button
-                className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow"
-                onClick={handleSaveProfile}
-                disabled={uploading}
-              >
-                Enregistrer
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        {/* Edit dialog */}
+        <EditProfileDialog
+          open={isEditProfileOpen}
+          onOpenChange={setIsEditProfileOpen}
+          profileData={profileData}
+          setProfileData={setProfileData}
+          fileInputRef={fileInputRef}
+          previewUrl={previewUrl}
+          setPreviewUrl={setPreviewUrl}
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+          setIsEditProfileOpen={setIsEditProfileOpen}
+        />
       </CardContent>
     </Card>
   );

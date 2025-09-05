@@ -26,6 +26,7 @@ export default function ReplacementDashboard() {
     specialty: "",
     location: "",
     availability: "",
+    
   })
 
   useEffect(() => { 
@@ -73,28 +74,6 @@ export default function ReplacementDashboard() {
       dailyRate: 450,
       description: "Remplacement en service de cardiologie interventionnelle",
       urgency: "high",
-    },
-    {
-      id: 2,
-      hospital: "Clinique Saint-Jean",
-      specialty: "Médecine générale",
-      location: "Marseille, Bouches-du-Rhône",
-      startDate: "2024-02-10",
-      endDate: "2024-02-12",
-      dailyRate: 380,
-      description: "Remplacement weekend en médecine générale",
-      urgency: "medium",
-    },
-    {
-      id: 3,
-      hospital: "Hôpital Privé de Provence",
-      specialty: "Cardiologie",
-      location: "Aix-en-Provence, Bouches-du-Rhône",
-      startDate: "2024-03-01",
-      endDate: "2024-03-15",
-      dailyRate: 500,
-      description: "Remplacement longue durée en cardiologie",
-      urgency: "normal",
     },
   ]
 
@@ -150,8 +129,8 @@ export default function ReplacementDashboard() {
         return <DiplomasSection />
       case "profile":
         return (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <div className="md:col-span-2">
               <ProfileSection
                 profileData={profileData}
                 setProfileData={setProfileData}
@@ -159,7 +138,7 @@ export default function ReplacementDashboard() {
                 setIsEditProfileOpen={setIsEditProfileOpen}
               />
             </div>
-            <div className="md:col-span-2 flex flex-col gap-8">
+            <div className="md:col-span-3 flex flex-col gap-8">
               <div>
                 <MyMissionsSection />
               </div>
@@ -269,7 +248,7 @@ return (
                   onClick={logout}
                   className="p-2 rounded-lg hover:bg-red-100 text-gray-400 hover:text-red-600 transition-colors duration-200"
                   title="Déconnexion"
-                >
+                > 
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
@@ -317,7 +296,7 @@ return (
           </header>
 
           {/* Page Content */}
-          <div className="p-6">
+          <div className="p-6 ">
             {renderContent()}
           </div>
         </div>

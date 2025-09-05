@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Euro, Briefcase } from "lucide-react";
+import { Calendar, Euro, Briefcase } from "lucide-react";
+import { Stethoscope, MapPin, Search, RefreshCcw } from "lucide-react"
 
 // Helper function to format dates to YYYY-MM-DD
 const formatDate = (dateString: string) => {
@@ -16,6 +17,10 @@ const formatDate = (dateString: string) => {
 export default function AvailableMissionsSection() {
   const { user } = useAuth();
   const [missions, setMissions] = useState<any[]>([]);
+  const [filteredMissions, setFilteredMissions] = useState<any[]>([]);
+  const [specialtyFilter, setSpecialtyFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [keywordFilter, setKeywordFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [contactOpen, setContactOpen] = useState(false);
@@ -29,7 +34,7 @@ export default function AvailableMissionsSection() {
       return;
     }
     setApplyStatus((prev) => ({ ...prev, [missionId]: "Envoi en cours..." }));
-    try {
+    try { 
       const res = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,7 +48,7 @@ export default function AvailableMissionsSection() {
   };
 
   useEffect(() => {
-    const fetchMissions = async () => {
+    const fetchMissions = async () => { 
       setLoading(true);
       setError("");
       try {
@@ -59,6 +64,24 @@ export default function AvailableMissionsSection() {
     };
     fetchMissions();
   }, []);
+
+  // Filter missions when filters or missions change
+  useEffect(() => {
+    let filtered = missions;
+    if (specialtyFilter) {
+      filtered = filtered.filter(m => (m.specialty_required || "").toLowerCase().includes(specialtyFilter.toLowerCase()));
+    }
+    if (locationFilter) {
+      filtered = filtered.filter(m => (m.location || "").toLowerCase().includes(locationFilter.toLowerCase()));
+    }
+    if (keywordFilter) {
+      filtered = filtered.filter(m =>
+        (m.title || "").toLowerCase().includes(keywordFilter.toLowerCase()) ||
+        (m.description || "").toLowerCase().includes(keywordFilter.toLowerCase())
+      );
+    }
+    setFilteredMissions(filtered);
+  }, [missions, specialtyFilter, locationFilter, keywordFilter]);
 
   // Fetch applications for the current user and mark applied missions
   useEffect(() => {
@@ -80,31 +103,94 @@ export default function AvailableMissionsSection() {
 
   return (
    <Card className="mb-8 bg-gradient-to-br from-white to-gray-100 shadow-xl rounded-3xl overflow-hidden border border-gray-200">
-    {/* <CardHeader className="bg-gradient-to-r from-indigo-700 to-purple-700 text-white p-8">
-      <CardTitle className="text-3xl md:text-4xl font-extrabold tracking-tight">Missions disponibles</CardTitle>
-      <CardDescription className="text-indigo-100 text-base md:text-lg mt-2 opacity-90">
-        Explorez les opportunités pour votre prochaine mission professionnelle
-      </CardDescription>
-    </CardHeader> */}
     <CardContent className="p-8">
+      {/* Filter Bar */}
+
+<div className="flex flex-col md:flex-row gap-4 mb-8 items-end bg-white p-4 rounded-2xl shadow-sm border">
+  {/* Specialty */}
+  <div className="flex-1">
+    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+      <Stethoscope className="w-4 h-4 text-blue-500" /> Spécialité
+    </label>
+    <div className="relative">
+      <Stethoscope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <input
+        type="text"
+        className="w-full pl-10 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Ex: Cardiologie"
+        value={specialtyFilter}
+        onChange={e => setSpecialtyFilter(e.target.value)}
+      />
+    </div>
+  </div>
+
+  {/* Location */}
+  <div className="flex-1">
+    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+      <MapPin className="w-4 h-4 text-blue-500" /> Localisation
+    </label>
+    <div className="relative">
+      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <input
+        type="text"
+        className="w-full pl-10 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Ex: Paris"
+        value={locationFilter}
+        onChange={e => setLocationFilter(e.target.value)}
+      />
+    </div>
+  </div>
+
+  {/* Keywords */}
+  <div className="flex-1">
+    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+      <Search className="w-4 h-4 text-blue-500" /> Mots-clés
+    </label>
+    <div className="relative">
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <input
+        type="text"
+        className="w-full pl-10 border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Ex: urgence, nuit, clinique..."
+        value={keywordFilter}
+        onChange={e => setKeywordFilter(e.target.value)}
+      />
+    </div>
+  </div>
+
+  {/* Reset button */}
+  <div className="flex-shrink-0">
+    <button
+      onClick={() => {
+        setSpecialtyFilter("")
+        setLocationFilter("")
+        setKeywordFilter("")
+      }}
+      className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-600 text-sm"
+    >
+      <RefreshCcw className="w-4 h-4" /> Réinitialiser
+    </button>
+  </div>
+</div>
+
       {error && (
         <div className="mb-6 p-4 bg-red-50 text-red-800 rounded-xl border border-red-300 flex items-center gap-2 transition-all duration-300">
           <span className="font-semibold text-sm">Erreur :</span> 
           <span className="text-sm">{error}</span>
         </div>
       )}
-      {loading ? (
+  {loading ? (
         <div className="text-center text-gray-600 py-12 animate-pulse text-lg font-medium">
           Chargement des missions...
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {missions.length === 0 ? (
+          {filteredMissions.length === 0 ? (
             <div className="col-span-full text-gray-500 text-center py-12 text-lg font-medium">
               Aucune mission disponible pour le moment.
             </div>
           ) : (
-            missions.map((mission) => (
+            filteredMissions.map((mission) => (
               <div
                 key={mission.id}
                 className="relative border border-gray-200 rounded-2xl p-6 bg-white hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 hover:bg-gray-50 group"

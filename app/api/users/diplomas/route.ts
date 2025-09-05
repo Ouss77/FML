@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
     const diploma = await db.createDiploma({
       user_id: user.userId,
       title: title,
-      institution: institution,
+      institution: institution, 
       year: year,
       description: description,
     })

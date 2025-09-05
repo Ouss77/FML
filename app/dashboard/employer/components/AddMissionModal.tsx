@@ -7,7 +7,16 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
-export default function AddMissionModal({ showForm, setShowForm, setMissions, employerId, setLoading, setError }) {
+interface AddMissionModalProps {
+  showForm: boolean;
+  setShowForm: (open: boolean) => void;
+  setMissions: (missions: any[]) => void;
+  employerId: string;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+}
+
+export default function AddMissionModal({ showForm, setShowForm, setMissions, employerId, setLoading, setError }: AddMissionModalProps) {
   const [form, setForm] = useState({
     title: "",
     specialty: "",
@@ -17,38 +26,46 @@ export default function AddMissionModal({ showForm, setShowForm, setMissions, em
     description: "",
   });
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
     try {
       const res = await fetch("/api/missions", {
         method: "POST",
-        headers: { "Content-Type": "application/json" }, 
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
           title: form.title,
           description: form.description,
-          specialtyRequired: form.specialty,
+          specialty_required: form.specialty,
           location: form.location,
-          startDate: form.startDate,
-          endDate: form.endDate
+          start_date: form.startDate,
+          end_date: form.endDate, // ✅ fixed
         }),
-      });
-      if (!res.ok) throw new Error("Erreur lors de l'ajout de la mission");
-      const missionsRes = await fetch(`/api/missions?employerId=${employerId}`, { credentials: "include" });
-      const missionsData = await missionsRes.json();
-      setMissions(missionsData.missions || []);
-      setForm({ title: "", specialty: "", startDate: "", endDate: "", location: "", description: "" });
-      setShowForm(false);
-    } catch (err) {
-      setError("Erreur lors de l'ajout de la mission");
+      })
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.error || "Erreur lors de l'ajout de la mission")
+      }
+
+      // Option A: Refresh list
+      const missionsRes = await fetch(`/api/missions?employerId=${employerId}`, { credentials: "include" })
+      const missionsData = await missionsRes.json()
+      setMissions(missionsData.missions || [])
+
+      setForm({ title: "", specialty: "", startDate: "", endDate: "", location: "", description: "" })
+      setShowForm(false)
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de l'ajout de la mission")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 

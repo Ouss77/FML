@@ -82,7 +82,6 @@ export const db = {
   // Replacement profile operations
   async createReplacementProfile(profileData: {
     user_id: string
-    rpps_number?: string
     specialty: string
     location: string
     experience_years?: number
@@ -95,16 +94,14 @@ export const db = {
     try {
       const result = await sql`
         INSERT INTO replacement_profiles (
-          user_id, rpps_number, specialty, location, experience_years, 
+          user_id,  specialty, location, experience_years, 
           diploma, languages, hourly_rate, daily_rate, bio, 
           availability_start, availability_end
         )
         VALUES (
-          ${profileData.user_id}, ${profileData.rpps_number || null}, 
-          ${profileData.specialty}, ${profileData.location}, 
+          ${profileData.user_id}, ${profileData.specialty}, ${profileData.location}, 
           ${profileData.experience_years || null}, ${profileData.diploma || null},
-          ${profileData.languages || []}, ${profileData.hourly_rate || null}, 
-          ${profileData.daily_rate || null}, ${profileData.bio || null},
+          ${profileData.languages || []}, ${profileData.bio || null},
           ${profileData.availability_start || null}, ${profileData.availability_end || null}
         )
         RETURNING *
@@ -119,7 +116,9 @@ export const db = {
   async getReplacementProfile(user_id: string) {
     try {
       const result = await sql`
-        SELECT rp.photo_url, rp.specialty, rp.location, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, u.first_name, u.last_name, u.email, u.phone
+        SELECT rp.photo_url, rp.specialty, rp.location, rp.bio, rp.availability_start, rp.availability_end,
+        rp.availability_start, rp.availability_end, rp.is_available, rp.languages,
+        rp.experience_years, u.first_name, u.last_name, u.email, u.phone
         FROM replacement_profiles rp
         JOIN users u ON rp.user_id = u.id
         WHERE rp.user_id = ${user_id}
@@ -203,27 +202,17 @@ export const db = {
     location: string
     start_date: string
     end_date: string
-    hourly_rate?: number
-    daily_rate?: number
-    requirements?: string
-    mission_type?: "replacement" | "vacation" | "emergency"
-    is_urgent?: boolean
   }) {
     try {
       const result = await sql`
-        INSERT INTO missions (
-          employer_id, title, description, specialty_required, location,
-          start_date, end_date, hourly_rate, daily_rate, requirements,
-          mission_type, is_urgent
-        )
-        VALUES (
-          ${missionData.employer_id}, ${missionData.title}, ${missionData.description},
-          ${missionData.specialty_required}, ${missionData.location},
-          ${missionData.start_date}, ${missionData.end_date},
-          ${missionData.hourly_rate || null}, ${missionData.daily_rate || null},
-          ${missionData.requirements || null}, ${missionData.mission_type || "replacement"},
-          ${missionData.is_urgent || false}
-        )
+    INSERT INTO missions (employer_id, title, description, specialty_required, location,
+      start_date, end_date
+    )
+    VALUES (
+      ${missionData.employer_id}, ${missionData.title}, ${missionData.description},
+      ${missionData.specialty_required}, ${missionData.location},
+      ${missionData.start_date}, ${missionData.end_date}
+    )
         RETURNING *
       `
       return result[0]

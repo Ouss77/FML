@@ -14,23 +14,12 @@ import { useRouter } from "next/navigation";
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState<"replacement" | "employer">("replacement");
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    acceptTerms: false,
-    specialty: "",
-    location: "",
-    availability: "",
-    companyName: "",
-    companyType: "",
-    siret: "",
-    description: "",
+    firstName: "", lastName: "", email: "", phone: "",  password: "",
+    confirmPassword: "", acceptTerms: false, specialty: "", location: "",
+    availability: "", companyName: "", companyType: "", siret: "", description: "",
   });
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -75,8 +64,6 @@ export default function RegisterPage() {
           phone: formData.phone,
           specialty: formData.specialty,
           location: formData.location,
-          hourlyRate: formData.hourlyRate,
-          dailyRate: formData.dailyRate,
           availability: formData.availability,
           companyName: formData.companyName,
           companyType: formData.companyType,
@@ -147,18 +134,14 @@ export default function RegisterPage() {
       )}
 
       {/* Left side: Logo Section */}
-        <div className="lg:w-2/5 bg-gradient-to-b from-blue-500 to-indigo-600 text-white flex flex-col items-center p-0 relative top-0">
+        <div className="lg:w-2/5 bg-gradient-to-b from-blue-200 to-blue-300 text-white flex flex-col items-center p-0 relative top-0">
           <div className="flex flex-col items-center w-full h-full pt-6 pb-2">
           <img
             src="/logo.png"
             alt="MedReplace Logo"
             className="w-72 h-72 rounded-full shadow-lg mb-4 border-4 border-white bg-white object-contain"
           />
-          <span className="text-4xl font-extrabold tracking-tight mb-2">MedReplace</span>
           <h2 className="text-2xl font-semibold mb-1 text-blue-100">Rejoignez MedReplace</h2>
-          <p className="text-lg mb-4 max-w-md text-center">
-            Trouvez ou proposez des remplacements médicaux facilement avec notre plateforme <span className="font-semibold text-yellow-200">100% gratuite</span>.
-          </p>
           <ul className="space-y-2 text-left text-base max-w-xs mx-auto">
             <li className="flex items-center gap-2">
               <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
@@ -179,13 +162,13 @@ export default function RegisterPage() {
       </div>
 
       {/* Right side: Registration Form */}
-      <div className="lg:w-3/5 w-full flex flex-col p-10 m-0 ">
+      <div className="lg:w-2/5 w-full mx-auto flex flex-col p-10 m-0 ">
           <CardContent className="p-0">
             <Tabs value={userType} onValueChange={(value: string) => setUserType(value as 'replacement' | 'employer')}>
-              <TabsList className="flex w-4/5 mx-auto justify-center bg-gray-100 border border-blue-200 shadow rounded-lg p-0 mb-8 gap-0 overflow-hidden rounded-2xl">
+              <TabsList className="flex w-full mx-auto justify-center bg-gray-100 border border-blue-200 shadow  p-10 mb-8 gap-0 overflow-hidden rounded-2xl">
                 <TabsTrigger
                   value="replacement"
-                  className="flex-1 py-3 px-6 text-base font-semibold border-r border-blue-200 last:border-r-0 transition-all duration-200
+                  className="flex-1 p-10 text-2xl font-semibold border-r border-blue-200 last:border-r-0 transition-all duration-200
                     data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:scale-105 data-[state=active]:shadow-md
                     data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
                     rounded-none focus:outline-none"
@@ -194,7 +177,7 @@ export default function RegisterPage() {
                 </TabsTrigger>
                 <TabsTrigger
                   value="employer"
-                  className="flex-1 py-3 px-6 text-base font-semibold transition-all duration-200
+                  className="flex-1 w-full p-10 text-xl font-semibold transition-all duration-200
                     data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:scale-105 data-[state=active]:shadow-md
                     data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
                     rounded-none focus:outline-none"

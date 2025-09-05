@@ -1,6 +1,7 @@
+
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
-import { db } from "@/lib/database"
+import { sql } from "@/lib/database"
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
 
@@ -18,25 +19,30 @@ export async function GET(request: NextRequest) {
       userType: string
     }
 
+
     const { searchParams } = new URL(request.url)
     const documentType = searchParams.get("documentType")
+    const userIdParam = searchParams.get("userId")
 
-    let query = db.sql`
-      SELECT d.*, u.first_name, u.last_name, u.email,
-             v.first_name as verified_by_first_name, v.last_name as verified_by_last_name
-      FROM documents d
-      JOIN users u ON d.user_id = u.id
-      LEFT JOIN users v ON d.verified_by = v.id
-      WHERE d.user_id = ${decoded.userId}
-    `
-
-    if (documentType) {
-      query = db.sql`${query} AND d.document_type = ${documentType}`
+    let targetUserId = decoded.userId
+    if (userIdParam && decoded.userType === "employer") {
+      targetUserId = userIdParam
     }
 
-    query = db.sql`${query} ORDER BY d.uploaded_at DESC`
-
-    const documents = await query
+    let documents
+    if (documentType) {
+      documents = await sql`
+        SELECT * FROM documents
+        WHERE user_id = ${targetUserId} AND document_type = ${documentType}
+        ORDER BY uploaded_at DESC
+      `
+    } else {
+      documents = await sql`
+        SELECT * FROM documents
+        WHERE user_id = ${targetUserId}
+        ORDER BY uploaded_at DESC
+      `
+    }
 
     return NextResponse.json({ documents })
   } catch (error) {

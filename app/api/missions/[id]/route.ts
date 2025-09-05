@@ -93,8 +93,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-
-
 // Update mission (employer only)
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -111,38 +109,26 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     if (decoded.userType !== "employer") {
       return NextResponse.json({ error: "Only employers can update missions" }, { status: 403 })
-    }
+    } 
 
     const body = await request.json()
     const {
       title,
       description,
-      specialtyRequired,
+      specialty,
       location,
       startDate,
       endDate,
-      hourlyRate,
-      dailyRate,
-      requirements,
-      missionType,
-      isUrgent,
-      status,
     } = body
 
     await sql`
       UPDATE missions 
       SET title = ${title},
           description = ${description},
-          specialty_required = ${specialtyRequired},
-          location = ${location},
+          specialty_required = ${specialty},
+          location = ${location}, 
           start_date = ${startDate},
           end_date = ${endDate},
-          hourly_rate = ${hourlyRate ? Number.parseFloat(hourlyRate) : null},
-          daily_rate = ${dailyRate ? Number.parseFloat(dailyRate) : null},
-          requirements = ${requirements || null},
-          mission_type = ${missionType || "replacement"},
-          is_urgent = ${isUrgent || false},
-          status = ${status || "open"},
           updated_at = NOW()
       WHERE id = ${params.id} AND employer_id = ${decoded.userId}
     `

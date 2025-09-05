@@ -102,12 +102,13 @@ export async function PUT(request: NextRequest) {
           UPDATE replacement_profiles 
           SET specialty = ${profileData.specialty || null},
               location = ${profileData.location || null},
-              experience_years = ${profileData.experienceYears || null},
+              experience_years = ${profileData.experience_years || null},
               diploma = ${profileData.diploma || null},
               languages = ${profileData.languages || []},
               bio = ${profileData.bio || null},
-              availability_start = ${profileData.availabilityStart || null},
-              availability_end = ${profileData.availabilityEnd || null},
+              is_available = ${typeof profileData.is_available === 'boolean' ? profileData.is_available : null},
+              availability_start = ${profileData.availability_start || null},
+              availability_end = ${profileData.availability_end || null},
               updated_at = NOW()
           WHERE user_id = ${decoded.userId}
         `

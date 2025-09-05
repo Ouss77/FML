@@ -28,7 +28,7 @@ export default function EditMissionModal({
     endDate: "",
     location: "",
     description: "",
-  });
+  }); 
 
   useEffect(() => {
     if (editMission) {
@@ -71,13 +71,13 @@ export default function EditMissionModal({
             setError(null);
             try {
               const res = await fetch(`/api/missions/${editMission.id}`, {
-                method: "PATCH",
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({
                   title: form.title,
                   description: form.description,
-                  specialtyRequired: form.specialty,
+                  specialty: form.specialty,
                   location: form.location,
                   startDate: form.startDate,
                   endDate: form.endDate,

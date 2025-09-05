@@ -9,11 +9,13 @@ import StatsCards from "./components/StatsCards"
 import MissionsList from "./components/MissionsList"
 import DoctorsList from "./components/DoctorsList"
 import ProfileTabs from "./components/ProfileTabs"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import AddMissionModal from "./components/AddMissionModal"
 import Candidature from "./components/Candidature"
+import { useAuth } from "@/lib/auth"
 
 export default function EmployerDashboard() {
+  
+  const { logout } = useAuth()
   const [activeTab, setActiveTab] = useState("missions")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showCreateMission, setShowCreateMission] = useState(false)
@@ -237,9 +239,10 @@ export default function EmployerDashboard() {
                   </AvatarFallback>
                 </Avatar>
                 <button
+                  onClick={logout}
                   className="p-2 rounded-lg hover:bg-red-100 text-gray-400 hover:text-red-600 transition-colors duration-200"
                   title="Déconnexion"
-                >
+                > 
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
@@ -257,7 +260,7 @@ export default function EmployerDashboard() {
                   {sidebarItems.find(item => item.id === activeTab)?.label}
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  {profileData.establishmentName} • {profileData.position}
+                  {profileData.establishmentName}  {profileData.position}
                 </p>
               </div>
               <div className="flex items-center gap-4">
@@ -275,12 +278,12 @@ export default function EmployerDashboard() {
           {/* Stats Cards - Only show on missions tab */}
           {activeTab === 'missions' && (
             <div className="p-6 pb-0">
-              <StatsCards />
+              {/* <StatsCards /> */}
             </div>
           )}
 
           {/* Page Content */}
-          <div className="p-6">
+          <div className="px-6">
             {renderContent()}
           </div>
         </div>
