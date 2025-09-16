@@ -129,7 +129,7 @@ export default function ReplacementDashboard() {
         return <DiplomasSection />
       case "profile":
         return (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-5  mt-0 pt-0">
             <div className="md:col-span-2">
               <ProfileSection
                 profileData={profileData}
@@ -138,11 +138,11 @@ export default function ReplacementDashboard() {
                 setIsEditProfileOpen={setIsEditProfileOpen}
               />
             </div>
-            <div className="md:col-span-3 flex flex-col gap-8">
-              <div>
+            <div className="md:col-span-3 flex flex-col gap-0 ">
+              <div className="mt-0 mb-0 pt-0">
                 <MyMissionsSection />
               </div>
-              <div>
+              <div className="mt-[-20px] mb-0 pt-0">
                 <DiplomasSection />
               </div>
             </div>
@@ -169,11 +169,8 @@ return (
           <img
             src="../logo.png"
             alt="Logo Le Foyer Médical"
-            className="w-12 h-12 rounded-full shadow-md border border-white"
+            className="w-32 h-32 ml-10 rounded-full shadow-md border border-white"
           />
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-            Le Foyer Médical
-          </h1>
         </div>
               </div> 
             )}
@@ -296,7 +293,7 @@ return (
           </header>
 
           {/* Page Content */}
-          <div className="p-6 ">
+          <div className="p-0 pt-0 mt-0">
             {renderContent()}
           </div>
         </div>

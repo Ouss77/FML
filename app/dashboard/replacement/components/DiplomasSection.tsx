@@ -87,20 +87,20 @@ export default function DiplomasSection() {
   };
 
   return (
-    <Card className="mb-6 shadow-lg border-0 bg-gradient-to-br from-blue-50 to-white">
-      <CardHeader className="flex flex-row items-center gap-4 pb-0">
-        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-          <GraduationCap className="w-6 h-6 text-blue-500" />
+  <Card className="mb-6 mt-0 shadow-lg border-0 bg-gradient-to-br from-blue-50 to-white scale-[0.9] text-[0.92rem]">
+  <CardHeader className="flex flex-row items-center gap-3 pb-0 text-sm">
+        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-100">
+          <GraduationCap className="w-5 h-5 text-blue-500" />
         </div>
         <div className="flex-1">
-          <CardTitle className="text-xl font-bold text-blue-900">Diplômes & Formations</CardTitle>
-          <CardDescription className="text-blue-700">Vos diplômes, certificats, universités, forums...</CardDescription>
+          <CardTitle className="text-lg font-bold text-blue-900">Diplômes & Formations</CardTitle>
+          <CardDescription className="text-blue-700 text-xs">Vos diplômes, certificats, universités, forums...</CardDescription>
         </div>
         <Button size="sm" variant="outline" className="ml-auto" onClick={() => setOpenDialog(true)}>
           <Plus className="w-4 h-4 mr-1" /> Ajouter
         </Button>
       </CardHeader>
-      <CardContent>
+  <CardContent className="text-xs">
         {error && <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>}
         {success && <div className="mb-4 p-2 bg-green-100 text-green-800 rounded">{success}</div>}
         {loading ? (
@@ -111,16 +111,16 @@ export default function DiplomasSection() {
               <div className="text-gray-500 text-center">Aucun diplôme ou formation ajouté.</div>
             ) : (
               diplomas.map((diploma) => (
-                <div key={diploma.id} className="bg-white border border-gray-100 shadow-sm rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between hover:shadow-md transition">
+                <div key={diploma.id} className="bg-white border border-gray-100 shadow-sm rounded-xl p-2 flex flex-col md:flex-row md:items-center md:justify-between hover:shadow-md transition text-xs">
                   <div className="flex-1">
-                    <div className="font-semibold text-lg text-blue-900 flex items-center gap-2">
+                    <div className="font-semibold text-base text-blue-900 flex items-center gap-1">
                       <GraduationCap className="w-4 h-4 text-blue-400" />
                       {diploma.title}
                     </div>
-                    <div className="text-gray-600">
+                    <div className="text-gray-600 text-xs">
                       {diploma.institution} {diploma.year && <span className="text-gray-400">({diploma.year})</span>}
                     </div>
-                    {diploma.description && <div className="text-gray-500 text-sm mt-1">{diploma.description}</div>}
+                    {diploma.description && <div className="text-gray-500 text-xs mt-1">{diploma.description}</div>}
                   </div>
                   <div className="flex items-center mt-4 md:mt-0 md:ml-4">
                     <Button

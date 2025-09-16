@@ -80,58 +80,59 @@ export default function LoginPage() {
   return (
   <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
     {/* Left Side */}
-    <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
-        <h2 className="text-4xl font-bold mb-4 text-center">
+    <div className="hidden md:flex flex-col items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10 relative">
+      <h2 className="text-2xl font-bold text-center w-full absolute top-0 left-0 mt-0 pt-6">
         Bienvenue sur Le Foyer Medical
       </h2>
-      <img
-        src="https://www.praktischarzt.de/wp-content/uploads/2023/03/Becoming-a-medical-doctor-or-physician-in-Germany.jpg"
-        alt="Connexion illustration"
-        className="  mb-6 drop-shadow-2xl rounded-2xl"
-      />
-
-      <p className="text-lg text-gray-100 text-center max-w-md">
-        La plateforme qui connecte médecins titulaires et remplaçants partout au Maroc.  
-        Accédez à vos missions ou trouvez un remplaçant en toute simplicité.
-      </p>
+      <div className="flex-1 flex flex-col justify-center w-full pt-20">
+        <img
+          src="https://www.praktischarzt.de/wp-content/uploads/2023/03/Becoming-a-medical-doctor-or-physician-in-Germany.jpg"
+          alt="Connexion illustration"
+          className="mb-4 drop-shadow-2xl rounded-2xl"
+        />
+        <p className="text-base text-gray-100 text-center max-w-md mx-auto">
+          La plateforme qui connecte médecins titulaires et remplaçants partout au Maroc.  
+          Accédez à vos missions ou trouvez un remplaçant en toute simplicité.
+        </p>
+      </div>
     </div>
 
     {/* Right Side (Form) */}
-    <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-br from-blue-100 via-white to-blue-50">
-      <div className="w-full max-w-2xl bg-white/90 rounded-3xl shadow-2xl p-10 md:p-14 border border-blue-100">
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-100 via-white to-blue-50">
+      <div className="w-full max-w-xl rounded-3xl shadow-2xl p-6 md:p-10">
+        <div className="text-center mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 mb-3">
+            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
               <img src="/logo.png" alt="Le Foyer Medical " />
             </div>
           </Link>
-          <p className="text-gray-600 text-2xl font-bold">Accédez à votre espace personnel</p>
+          <p className="text-gray-600 text-lg font-bold">Accédez à votre espace personnel</p>
         </div>
 
-        <Card className="bg-white/90 rounded-2xl shadow-xl border border-blue-100">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-blue-700">Se connecter</CardTitle>
-            <CardDescription className="text-base text-gray-500">
+        <Card className="rounded-2xl shadow-xl">
+          <CardHeader> 
+            <CardTitle className="text-xl font-bold text-blue-700">Se connecter</CardTitle>
+            <CardDescription className="text-sm text-gray-500">
               Choisissez votre type de compte et connectez-vous
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={userType} onValueChange={setUserType} className="mb-8">
+            <Tabs value={userType} onValueChange={setUserType} className="mb-9">
               <TabsList className="grid w-full grid-cols-3 rounded-xl overflow-hidden pb-12">
-                <TabsTrigger value="replacement" className="text-lg py-2">Remplaçant</TabsTrigger>
-                <TabsTrigger value="employer" className="text-lg py-2">Employeur</TabsTrigger>
-                <TabsTrigger value="admin" className="text-lg py-2">Admin</TabsTrigger>
+                <TabsTrigger value="replacement" className="text-base py-2">Remplaçant</TabsTrigger>
+                <TabsTrigger value="employer" className="text-base py-2">Employeur</TabsTrigger>
+                <TabsTrigger value="admin" className="text-base py-2">Admin</TabsTrigger>
               </TabsList>
             </Tabs>
 
             {error && (
-              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-base">
+              <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm">
                 <p className="text-red-600">{error}</p>
               </div>
             )}
 
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-1">
                   <Input
                     id="email"
                     type="email"
@@ -140,12 +141,12 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="py-6 px-6 text-2xl placeholder:text-xl rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 h-16"
-                    style={{ fontSize: "1.5rem" }}
+                    className="py-3 px-4 text-base placeholder:text-base rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 h-12"
+                    style={{ fontSize: "1rem" }}
                   />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="relative">
                     <Input
                       id="password"
@@ -155,14 +156,14 @@ export default function LoginPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       disabled={isLoading}
-                      className="py-6 px-6 text-2xl placeholder:text-xl rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 pr-14 h-16"
-                      style={{ fontSize: "1.5rem" }}
+                      className="py-3 px-4 text-base placeholder:text-base rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 pr-12 h-12"
+                      style={{ fontSize: "1rem" }}
                     />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-4 py-2 hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading}
                   >
@@ -178,13 +179,13 @@ export default function LoginPage() {
               <div className="flex items-center justify-between">
                 <Link
                   href="/forgot-password"
-                  className="text-base text-blue-600 hover:underline font-medium"
+                  className="text-sm text-blue-600 hover:underline font-medium"
                 >
                   Mot de passe oublié ?
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg" disabled={isLoading}>
+              <Button type="submit" className="w-full py-3 text-base font-bold rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -196,8 +197,8 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="mt-8 text-center">
-              <p className="text-base text-gray-600">
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
                 Pas encore de compte ?{" "}
                 <Link href="/register" className="text-blue-600 hover:underline font-semibold">
                   S'inscrire

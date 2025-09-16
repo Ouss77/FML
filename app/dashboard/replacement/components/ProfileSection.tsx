@@ -21,6 +21,7 @@ interface ProfileData {
   is_available?: boolean;
   availability_start?: string;
   availability_end?: string;
+  profile_status?: string;
 }
 
 interface ProfileSectionProps {
@@ -51,6 +52,7 @@ async function fetchProfileData(): Promise<ProfileData | null> {
       is_available: profile?.is_available ?? false,
       availability_start: profile?.availability_start || "",
       availability_end: profile?.availability_end || "",
+      profile_status: profile?.profile_status || undefined,
     };
   } catch {
     return null;
@@ -82,13 +84,13 @@ export default function ProfileSection({
   }, [previewUrl, selectedFile]);
 
   return (
-  <Card className="relative max-w-3xl mx-auto shadow-xl border-0 bg-white rounded-3xl overflow-hidden">
+  <Card className="relative max-w-3xl mx-auto shadow-xl border-0 bg-white rounded-3xl overflow-hidden scale-[0.9] mt-0">
       {/* Top gradient */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-36"></div>
+  <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-32"></div>
 
       {/* Profile Image */}
-      <div className="absolute top-12 left-1/2 transform -translate-x-1/2">
-        <div className="w-56 h-62 rounded-full border-4 border-white overflow-hidden shadow-md">
+      <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+        <div className="w-40 h-40 rounded-full border-4 border-white overflow-hidden shadow-md">
           <img
             src={profileData.imageProfile}
             alt="profile"
@@ -97,16 +99,24 @@ export default function ProfileSection({
         </div>
       </div>
 
-      <CardContent className="pt-28 pb-10 flex flex-col items-center text-center">
+  <CardContent className="pt-10 pb-6 flex flex-col items-center text-center text-[0.92rem]">
         {/* Title */}
-        <h2 className="text-2xl font-bold text-blue-900">Profil Médecin</h2>
-        <p className="text-lg font-medium text-gray-800">
+        <div className="flex items-center justify-center gap-2">
+          <h2 className="text-lg font-bold text-blue-900">Profil Médecin</h2>
+          {profileData.profile_status === "approved" && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+              Profil vérifié
+            </span>
+          )}
+        </div>
+  <p className="text-base font-medium text-gray-800">
           {profileData.firstName} {profileData.lastName}
         </p>
-        <p className="text-blue-600">{profileData.specialty || "-"}</p>
+  <p className="text-blue-600 text-sm">{profileData.specialty || "-"}</p>
 
         {/* Buttons */}
-        <div className="flex gap-3 mt-4">
+  <div className="flex gap-2 mt-2">
           <Button
             className="bg-blue-600 text-white px-5 rounded-xl shadow"
             onClick={() => setIsEditProfileOpen(true)}
@@ -119,28 +129,28 @@ export default function ProfileSection({
         </div>
 
         {/* Info grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-8 text-sm">
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full mt-4 text-xs">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Mail className="w-5 h-5 text-blue-500" />
             <span>{profileData.email}</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Phone className="w-5 h-5 text-blue-500" />
             <span>{profileData.phone}</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <MapPin className="w-5 h-5 text-blue-500" />
             <span>{profileData.location}</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Briefcase className="w-5 h-5 text-blue-500" />
             <span>{profileData.experience_years ?? "-"} ans</span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Globe className="w-5 h-5 text-blue-500" />
             <span>
               {Array.isArray(profileData.languages)
@@ -149,12 +159,12 @@ export default function ProfileSection({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Heart className="w-5 h-5 text-blue-500" />
-            <span>{profileData.specialty}</span>
+            <span>{profileData.specialty}</span> 
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl col-span-2">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl col-span-2">
             <Label className="text-gray-600">Disponibilité :</Label>
             <span
               className={`ml-2 font-medium ${
@@ -165,7 +175,7 @@ export default function ProfileSection({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Calendar className="w-5 h-5 text-blue-500" />
             <span>
               {profileData.availability_start
@@ -174,7 +184,7 @@ export default function ProfileSection({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
+          <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Calendar className="w-5 h-5 text-blue-500" />
             <span>
               {profileData.availability_end
@@ -183,7 +193,7 @@ export default function ProfileSection({
             </span>
           </div>
 
-          <div className="flex items-start gap-2 bg-gray-50 p-3 rounded-xl col-span-2">
+          <div className="flex items-start gap-1 bg-gray-50 p-2 rounded-xl col-span-2">
             <FileText className="w-5 h-5 text-blue-500 mt-1" />
             <span>{profileData.bio || "-"}</span>
           </div>

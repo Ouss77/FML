@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
         lastName: user.last_name,
         phone: user.phone,
         isActive: user.is_active,
+        
       },
       profile,
     })

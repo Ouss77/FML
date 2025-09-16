@@ -70,21 +70,22 @@ export async function PUT(request: NextRequest) {
     }
 
     // Accept both flat and nested employer fields
-    const { firstName, lastName, phone, profileData,
+    const { firstName, lastName, email, phone, profileData,
       establishment_name, establishment_type, address, siret, description, fonction
     } = body;
 
-    if (!firstName && !lastName && !phone && !profileData && !establishment_name && !establishment_type && !address && !siret && !description && !fonction) {
+    if (!firstName && !lastName && !email && !phone && !profileData && !establishment_name && !establishment_type && !address && !siret && !description && !fonction) {
       return NextResponse.json({ error: "No profile data provided" }, { status: 400 })
     }
 
     // Update basic user info
-    if (firstName || lastName || phone) {
+    if (firstName || lastName || email || phone) {
       try {
         await sql`
           UPDATE users 
           SET first_name = ${firstName || null}, 
               last_name = ${lastName || null}, 
+              email = ${email || null},
               phone = ${phone || null},
               updated_at = NOW()
           WHERE id = ${decoded.userId}

@@ -39,16 +39,15 @@ export default function ReplacementRegisterForm({
     <div className="bg-gradient-to-br flex items-center justify-center ">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-xl w-full space-y-8 border border-gray-200 mt-0"
+        className="bg-white p-8 rounded-2xl shadow    w-full space-y-8 border border-gray-200 mt-0"
       >
         {/* Header */}
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold text-gray-900">Inscription Remplaçant</h2>
+        <div className="text-center ">
+          <h2 className="text-2xl font-bold text-gray-900">Inscription Remplaçant</h2>
         </div>
 
         {/* Personal Information Section */}
-        <section className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Informations Personnelles</h3>
+        <section className="space-y-4 ">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
               <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
@@ -57,8 +56,8 @@ export default function ReplacementRegisterForm({
                 value={formData.firstName}
                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                 required
-                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
-                           focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                className="pl-14 h-14 placeholder: border-gray-300 
+                           focus:border-blue-500 focus:ring-blue-500 rounded  "
                 placeholder="Prénom (ex: Jean)"
               />
             </div>
@@ -69,8 +68,8 @@ export default function ReplacementRegisterForm({
                 value={formData.lastName}
                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                 required
-                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
-                           focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                className="pl-14 h-14      placeholder:    border-gray-300 
+                           focus:border-blue-500 focus:ring-blue-500 rounded  "
                 placeholder="Nom (ex: Dupont)"
               />
             </div>
@@ -82,8 +81,8 @@ export default function ReplacementRegisterForm({
                 value={formData.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
                 required
-                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
-                           focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+                className="pl-14 h-14      placeholder:    border-gray-300 
+                           focus:border-blue-500 focus:ring-blue-500 rounded  "
                 placeholder="Adresse email professionnelle"
               />
             </div>
@@ -95,9 +94,9 @@ export default function ReplacementRegisterForm({
                 value={formData.phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
                 required
-                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
-                           focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                placeholder="Numéro de téléphone (ex: +33 6 12 34 56 78)"
+                className="pl-14 h-14      placeholder:    border-gray-300 
+                           focus:border-blue-500 focus:ring-blue-500 rounded  "
+                placeholder="Numéro de téléphone"
               />
             </div>
           </div>
@@ -105,22 +104,21 @@ export default function ReplacementRegisterForm({
 
         {/* Professional Information Section */}
         <section className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Informations Professionnelles</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
               value={formData.specialty}
               onValueChange={(value) => handleInputChange("specialty", value)}
             >
-              <SelectTrigger className="h-16 !text-xl  py-8 placeholder:!text-lg border-gray-300 
-                                        focus:border-blue-500 focus:ring-blue-500 rounded-lg">
+              <SelectTrigger className="h-14       py-8 placeholder:    border-gray-300 
+                                        focus:border-blue-500 focus:ring-blue-500 rounded  ">
                 <SelectValue placeholder="Sélectionnez votre spécialité" />
               </SelectTrigger>
               <SelectContent>
                 {specialties.map((specialty: string) => (
-                  <SelectItem key={specialty} value={specialty} className="text-xl">
+                  <SelectItem key={specialty} value={specialty} className="text   ">
                     {specialty}
                   </SelectItem>
-                ))}
+                ))} 
               </SelectContent>
             </Select>
 
@@ -131,9 +129,9 @@ export default function ReplacementRegisterForm({
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
                 required
-                className="pl-14 h-16 !text-xl placeholder:!text-lg border-gray-300 
-                           focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                placeholder="Ville, département ou région (ex: Paris, 75)"
+                className="pl-14 h-14      placeholder:    border-gray-300 
+                           focus:border-blue-500 focus:ring-blue-500 rounded  "
+                placeholder="Ville ou région "
               />
             </div>
           </div>
@@ -141,7 +139,6 @@ export default function ReplacementRegisterForm({
 
         {/* Security Section */}
         <section className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Sécurité</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative">
               <Input
@@ -150,9 +147,9 @@ export default function ReplacementRegisterForm({
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 required
-                className="pr-12 pl-6 h-16 !text-xl placeholder:!text-lg border-gray-300 
-                           focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                placeholder="Créer un mot de passe sécurisé"
+                className="pr-12 pl-6 h-14      placeholder:    border-gray-300 
+                           focus:border-blue-500 focus:ring-blue-500 rounded  "
+                placeholder="Créer un mot de passe "
               />
               <button
                 type="button"
@@ -166,11 +163,11 @@ export default function ReplacementRegisterForm({
             <Input
               id="confirmPassword"
               type="password"
-              value={formData.confirmPassword}
+              value={formData.confirmPassword} 
               onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
               required
-              className="h-16 !text-xl placeholder:!text-lg border-gray-300 
-                         focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+              className="h-14      placeholder:    border-gray-300 
+                         focus:border-blue-500 focus:ring-blue-500 rounded  "
               placeholder="Confirmez votre mot de passe"
             />
           </div>
@@ -199,7 +196,7 @@ export default function ReplacementRegisterForm({
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition duration-300 disabled:opacity-50"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded   shadow-md transition duration-300 disabled:opacity-50"
           disabled={!formData.acceptTerms}
         >
           Créer mon compte

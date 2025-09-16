@@ -9,6 +9,8 @@ if (!process.env.DATABASE_URL) {
   console.error("You can get a free Neon database at: https://neon.tech")
   console.error("")
   throw new Error("DATABASE_URL is not set. Please check the console for setup instructions.")
+
+
 }
 
 // Create a reusable SQL client
@@ -16,11 +18,27 @@ export const sql = neon(process.env.DATABASE_URL)
  
 // Database helper functions
 export const db = {
+  async getEmployers() {
+    try {
+      const result = await sql`
+        SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
+        ep.organization_name, ep.organization_type, ep.address, ep.city, ep.contact_person, ep.description, ep.profile_status
+        FROM users u
+        JOIN employer_profiles ep ON u.id = ep.user_id
+        WHERE u.user_type = 'employer'
+        ORDER BY ep.organization_name
+      `
+      return result
+    } catch (error) {
+      console.error("Error fetching employers:", error)
+      return []
+    }
+  },
   async getReplacementDoctors() {
     try {
       const result = await sql`
         SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
-        rp.photo_url,rp.specialty, rp.location,  rp.bio, rp.availability_start, rp.availability_end, rp.experience_years
+        rp.photo_url, rp.specialty, rp.location, rp.created_at, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, rp.profile_status
         FROM users u
         JOIN replacement_profiles rp ON u.id = rp.user_id
         WHERE u.user_type = 'replacement' 
@@ -116,8 +134,8 @@ export const db = {
   async getReplacementProfile(user_id: string) {
     try {
       const result = await sql`
-        SELECT rp.photo_url, rp.specialty, rp.location, rp.bio, rp.availability_start, rp.availability_end,
-        rp.availability_start, rp.availability_end, rp.is_available, rp.languages,
+        SELECT rp.photo_url, rp.specialty, rp.location, rp.bio,
+        rp.availability_start, rp.availability_end, rp.is_available, rp.languages, rp.profile_status,
         rp.experience_years, u.first_name, u.last_name, u.email, u.phone
         FROM replacement_profiles rp
         JOIN users u ON rp.user_id = u.id
@@ -460,15 +478,38 @@ export const db = {
     }
   },
 
-  async updateProfilePhoto(user_id: string, photo_url: string) {
+
+  async updateProfilePhoto(user_id: string, user_type: "replacement" | "employer", photo_url: string) {
     try {
-      const result = await sql`
-        UPDATE replacement_profiles SET photo_url = ${photo_url} WHERE user_id = ${user_id} RETURNING *
-      `;
+      let result;
+      if (user_type === "replacement") {
+        result = await sql`
+          UPDATE replacement_profiles SET photo_url = ${photo_url} WHERE user_id = ${user_id} RETURNING *
+        `;
+      } else if (user_type === "employer") {
+        result = await sql`
+          UPDATE employer_profiles SET photo_url = ${photo_url} WHERE user_id = ${user_id} RETURNING *
+        `;
+      } else {
+        throw new Error("Invalid user type");
+      }
       return result[0];
     } catch (error) {
       console.error("Error updating profile photo:", error);
       throw new Error("Failed to update profile photo");
     }
   },
+
+  // Document operations
+  async getDocumentsByUser(user_id: string) {
+    try {
+      const result = await sql`
+        SELECT * FROM documents WHERE user_id = ${user_id} ORDER BY uploaded_at DESC
+      `;
+      return result;
+    } catch (error) {
+      console.error("Error getting documents by user:", error);
+      return [];
+    }
+  }
 }

@@ -57,13 +57,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate document type
-    const validDocumentTypes = ["rpps", "diploma", "cv", "insurance", "contract", "invoice"]
+    const validDocumentTypes = ["rpps", "diploma", "cv", "cin", "diplome"]
     if (!validDocumentTypes.includes(documentType)) {
       return NextResponse.json({ error: "Invalid document type" }, { status: 400 })
     }
 
+
+    // Determine subfolder based on document type
+    let subfolder = "uploadsOther"
+    if (documentType === "cv") subfolder = "uploadsCV"
+    else if (documentType === "cin") subfolder = "uploadsCIN"
+    else if (documentType === "diplome" || documentType === "diploma") subfolder = "uploadsDiploms"
+
     // Create upload directory if it doesn't exist
-    const uploadDir = join(process.cwd(), "public", "uploads", decoded.userId)
+    const uploadDir = join(process.cwd(), "public", subfolder, decoded.userId)
     if (!existsSync(uploadDir)) {
       await mkdir(uploadDir, { recursive: true })
     }
@@ -73,12 +80,17 @@ export async function POST(request: NextRequest) {
     const fileExtension = file.name.split(".").pop()
     const fileName = `${documentType}_${timestamp}.${fileExtension}`
     const filePath = join(uploadDir, fileName)
-    const publicPath = `/uploads/${decoded.userId}/${fileName}`
+    const publicPath = `/${subfolder}/${decoded.userId}/${fileName}`
 
     // Save file
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     await writeFile(filePath, buffer)
+
+    // Delete any existing document of this type for this user
+    await sql`
+      DELETE FROM documents WHERE user_id = ${decoded.userId} AND document_type = ${documentType}
+    `
 
     // Save document info to database
     const document = await sql`

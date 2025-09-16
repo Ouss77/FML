@@ -9,12 +9,16 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get("file"); 
     const userId = formData.get("userId");
+  const userTypeRaw = formData.get("userType");
     console.log("[UPLOAD-API] Received file:", file);
     console.log("[UPLOAD-API] Received userId:", userId);
-    if (!file || typeof userId !== "string" || !(file instanceof File)) {
-      console.error("[UPLOAD-API] Invalid file or userId", { file, userId });
-      return NextResponse.json({ error: "Invalid file or userId" }, { status: 400 });
+    console.log("[UPLOAD-API] Received userType:", userTypeRaw);
+    const allowedTypes = ["replacement", "employer"];
+    if (!file || typeof userId !== "string" || typeof userTypeRaw !== "string" || !(file instanceof File) || !allowedTypes.includes(userTypeRaw)) {
+      console.error("[UPLOAD-API] Invalid file, userId, or userType", { file, userId, userType: userTypeRaw });
+      return NextResponse.json({ error: "Invalid file, userId, or userType" }, { status: 400 });
     }
+    const userType = userTypeRaw as "replacement" | "employer";
     // Save file to /public/uploads
     const ext = path.extname(file.name) || ".jpg";
     const fileName = `${userId}_${Date.now()}${ext}`;
@@ -26,10 +30,10 @@ export async function POST(req: Request) {
     // Update DB
     const photoUrl = `/uploads/${fileName}`;
     try {
-      const dbResult = await db.updateProfilePhoto(userId, photoUrl);
+  const dbResult = await db.updateProfilePhoto(userId, userType, photoUrl);
       console.log("[UPLOAD-API] DB update result:", dbResult);
     } catch (dbErr) {
-      console.error("[UPLOAD-API] Error updating DB:", dbErr);
+      console.error("[UPLOAD-API] Error updating DB:", dbErr); 
       return NextResponse.json({ error: "DB update failed" }, { status: 500 });
     }
     return NextResponse.json({ photo_url: photoUrl });

@@ -51,9 +51,6 @@ export async function GET(request: NextRequest) {
       sqlQuery = db.sql`${sqlQuery} AND (m.daily_rate <= ${Number.parseFloat(maxRate)} OR m.hourly_rate <= ${Number.parseFloat(maxRate)})`
     }
 
-    if (isUrgent === "true") {
-      sqlQuery = db.sql`${sqlQuery} AND m.is_urgent = true`
-    }
 
     if (missionType) {
       sqlQuery = db.sql`${sqlQuery} AND m.mission_type = ${missionType}`

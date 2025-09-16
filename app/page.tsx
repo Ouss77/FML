@@ -136,9 +136,9 @@ export default function HomePage() {
     </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100 py-20 md:pb-28 pt-10">
+      <section className="relative overflow-hidden  h-dvh bg-gradient-to-br from-blue-50 via-white to-blue-100 py-20 md:pb-28 pt-10">
         {/* Decorative circles */}
-        <div className="absolute -top-32 -left-32 w-80 h-80 bg-blue-200 rounded-full blur-3xl opacity-40" />
+        <div className="absolute -top-32 -left-32 w-80 h-60 bg-blue-200 rounded-full blur-3xl opacity-40" />
         <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-blue-300 rounded-full blur-3xl opacity-30" />
 
         <div className="relative container mx-auto flex flex-col md:flex-row items-center justify-between px-6 lg:px-12 gap-12">
@@ -173,15 +173,15 @@ export default function HomePage() {
           </div>
 
           {/* Right image */}
-          <div className="relative w-full md:w-1/2 flex justify-center">
-            <div className="relative">
+          <div className="relative w-full md:w-1/2  flex justify-center">
+            <div className="relative ">
               <img
                 src="hero.png"
                 alt="Doctor replacement illustration"
-                className="drop-shadow-2xl rounded-3xl border-4 border-white w-[90%] sm:w-[80%] md:w-full mx-auto"
+                className="drop-shadow-2xl rounded-3xl border-4  border-white h-[80%] sm:w-[80%] md:w-[90%] mx-auto"
               />
               {/* Floating card */}
-              <div className="absolute -bottom-8 -left-6 sm:-left-10 bg-white shadow-xl rounded-2xl px-6 py-4 flex items-center gap-3 animate-bounce">
+              <div className="absolute -left-6 sm:-left-10 bg-white shadow-xl rounded-2xl px-6 py-4 flex items-center gap-3 animate-bounce">
                 <Users className="w-6 h-6 text-blue-600" />
                 <div>
                   <p className="text-sm font-semibold text-gray-800">+300 médecins</p>
@@ -193,95 +193,95 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 px-4 bg-gray-50">
-        <div className="container mx-auto">
-          <div className="text-center mb-20">
-            <Badge className="mb-4 bg-blue-100 text-blue-700 border-0">Fonctionnalités</Badge>
-            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6">
-              Une plateforme complète pour tous vos besoins
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Des outils puissants et intuitifs pour simplifier la gestion des remplacements médicaux
-            </p>
-          </div>
+{/* Features Section */}
+<section
+  id="features"
+  className="py-20 px-6 bg-gradient-to-br from-indigo-50 via-white to-purple-50 font-sans"
+>
+  <div className="container mx-auto">
+    {/* Header */}
+    <div className="text-center mb-16">
+      <Badge className="mb-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-1 rounded-full shadow-md">
+        Fonctionnalités
+      </Badge>
+      <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
+        Une plateforme complète pour tous vos besoins
+      </h2>
+      <p className="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        Des outils puissants et intuitifs pour simplifier la gestion des remplacements médicaux
+      </p>
+    </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="medical-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <Users className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold mb-3">Matching intelligent</CardTitle>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  Algorithme de correspondance basé sur la spécialité, localisation et disponibilités pour des matches
-                  parfaits
-                </CardDescription>
-              </CardHeader>
-            </Card>
+    {/* Cards */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[
+        {
+          title: "Matching intelligent",
+          description:
+            "Algorithme de correspondance basé sur la spécialité, localisation et disponibilités pour des matches parfaits",
+          icon: Users,
+          color: "from-indigo-500 to-indigo-600",
+        },
+        {
+          title: "Profils vérifiés",
+          description:
+            "Validation rigoureuse des documents RPPS, diplômes et certifications par notre équipe d'experts",
+          icon: Shield,
+          color: "from-emerald-500 to-emerald-600",
+        },
+        {
+          title: "Gestion simplifiée",
+          description:
+            "Planning intégré, gestion des contrats et facturation automatisée pour un workflow optimal",
+          icon: Calendar,
+          color: "from-purple-500 to-purple-600",
+        },
+        {
+          title: "Recherche géolocalisée",
+          description:
+            "Trouvez des missions ou des remplaçants près de chez vous avec notre système de géolocalisation avancé",
+          icon: MapPin,
+          color: "from-orange-500 to-orange-600",
+        },
+        {
+          title: "Réponse rapide",
+          description:
+            "Notifications en temps réel et système de réponse instantané pour ne jamais manquer une opportunité",
+          icon: Clock,
+          color: "from-rose-500 to-rose-600",
+        },
+        {
+          title: "Système d'évaluation",
+          description:
+            "Évaluations mutuelles transparentes pour maintenir la qualité du service et la confiance",
+          icon: Star,
+          color: "from-yellow-400 to-yellow-500",
+        },
+      ].map((feature, i) => (
+        <Card
+          key={i}
+          className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-xl group w-full max-w-sm mx-auto"
+        >
+          <CardHeader className="p-6">
+            <div
+              className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md`}
+            >
+              <feature.icon className="w-6 h-6 text-white" />
+            </div>
+            <CardTitle className="text-lg font-semibold text-gray-900 mb-2">
+              {feature.title}
+            </CardTitle>
+            <CardDescription className="text-gray-600 text-sm leading-relaxed">
+              {feature.description}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>
 
-            <Card className="medical-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold mb-3">Profils vérifiés</CardTitle>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  Validation rigoureuse des documents RPPS, diplômes et certifications par notre équipe d'experts
-                </CardDescription>
-              </CardHeader>
-            </Card>
 
-            <Card className="medical-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <Calendar className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold mb-3">Gestion simplifiée</CardTitle>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  Planning intégré, gestion des contrats et facturation automatisée pour un workflow optimal
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="medical-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <MapPin className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold mb-3">Recherche géolocalisée</CardTitle>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  Trouvez des missions ou des remplaçants près de chez vous avec notre système de géolocalisation avancé
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="medical-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <Clock className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold mb-3">Réponse rapide</CardTitle>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  Notifications en temps réel et système de réponse instantané pour ne jamais manquer une opportunité
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="medical-card border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-              <CardHeader className="p-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <Star className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold mb-3">Système d'évaluation</CardTitle>
-                <CardDescription className="text-gray-600 leading-relaxed">
-                  Évaluations mutuelles transparentes pour maintenir la qualité du service et la confiance
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* How it works */}
  <section id="how-it-works" className="py-20 md:py-28 bg-white">

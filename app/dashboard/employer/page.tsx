@@ -1,5 +1,5 @@
 "use client"
-import { Users, Building2, Briefcase, UserCheck, Settings, Bell, LogOut, ChevronLeft, ChevronRight, Plus } from "lucide-react"
+import { Users, Building2, Briefcase, UserCheck, Settings, Bell, LogOut, ChevronLeft, ChevronRight, Plus, FileText } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -9,12 +9,13 @@ import StatsCards from "./components/StatsCards"
 import MissionsList from "./components/MissionsList"
 import DoctorsList from "./components/DoctorsList"
 import ProfileTabs from "./components/ProfileTabs"
+import EmployerDocumentsSection from "./components/EmployerDocumentsSection"
 import AddMissionModal from "./components/AddMissionModal"
 import Candidature from "./components/Candidature"
 import { useAuth } from "@/lib/auth"
 
 export default function EmployerDashboard() {
-  
+
   const { logout } = useAuth()
   const [activeTab, setActiveTab] = useState("missions")
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -81,6 +82,7 @@ export default function EmployerDashboard() {
     { id: "doctors", label: "Médecins disponibles", icon: Users, badge: null },
     { id: "applications", label: "Candidatures", icon: UserCheck, badge: pendingApplications },
     { id: "profile", label: "Mon établissement", icon: Building2, badge: null },
+    { id: "documents", label: "Documents établissement", icon: FileText, badge: null },
   ]
 
   const renderContent = () => {
@@ -102,6 +104,8 @@ export default function EmployerDashboard() {
         return <Candidature missions={missions} />
       case "profile":
         return <ProfileTabs />
+      case "documents":
+        return employerId ? <EmployerDocumentsSection employerId={employerId} /> : null;
       default:
         return null
     }
@@ -121,9 +125,9 @@ export default function EmployerDashboard() {
           <img
             src="../logo.png"
             alt="Logo Le Foyer Médical"
-            className="w-12 h-12 rounded-full shadow-md border border-white"
+            className="w-20 h-20 rounded-full shadow-md border border-white"
           />
-          <h1 className="text-xl  font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+          <h1 className=" text-lg font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
             Le Foyer Médical
           </h1>
         </div>
@@ -211,16 +215,16 @@ export default function EmployerDashboard() {
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
                 <Avatar className="ring-2 ring-white shadow-md">
-                  <AvatarImage src={profileData.photo_url} />
+                  <AvatarImage src={profileData.photo_url || "/placeholder.svg?height=32&width=32"} />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold">
                    ouss
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">
-                    {profileData.organization_name}  
+                    {profileData.organization_name || profileData.establishmentName}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">{profileData.organization_type}</p>
+                  <p className="text-xs text-gray-500 truncate">{profileData.organization_type || profileData.establishmentType}</p>
                 </div>
                 
                 <button

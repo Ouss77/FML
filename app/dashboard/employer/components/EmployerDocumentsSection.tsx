@@ -3,8 +3,7 @@ import { FileUpload } from "@/components/file-upload"
 import { Download } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
-export default function DocumentsSection() {
-  const [cv, setCv] = useState<any>(null)
+export default function EmployerDocumentsSection({ employerId }: { employerId: string }) {
   const [cin, setCin] = useState<any>(null)
   const [diplome, setDiplome] = useState<any>(null)
   const [loading, setLoading] = useState<string | null>(null)
@@ -15,7 +14,7 @@ export default function DocumentsSection() {
     setLoading(type)
     setError(null)
     try {
-      const res = await fetch(`/api/documents?documentType=${type}`, { credentials: "include" })
+      const res = await fetch(`/api/documents?documentType=${type}&userId=${employerId}`, { credentials: "include" })
       if (!res.ok) throw new Error(`Erreur lors de la récupération du document ${type}`)
       const data = await res.json()
       setter(data.documents && data.documents.length > 0 ? data.documents[0] : null)
@@ -27,10 +26,11 @@ export default function DocumentsSection() {
   }
 
   useEffect(() => {
-    fetchDocument("cv", setCv)
-    fetchDocument("cin", setCin)
-    fetchDocument("diplome", setDiplome)
-  }, [])
+    if (employerId) {
+      fetchDocument("cin", setCin)
+      fetchDocument("diplome", setDiplome)
+    }
+  }, [employerId])
 
   const handleDelete = async (doc: any, type: string, setter: (doc: any) => void) => {
     setLoading(type)
@@ -103,12 +103,11 @@ export default function DocumentsSection() {
   return (
     <Card className="mb-6">
       <CardHeader>
-        <CardTitle>Documents</CardTitle>
+        <CardTitle>Documents Employeur</CardTitle>
         <CardDescription>Gérez et téléchargez vos documents professionnels</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-6">
-          {renderDocSection("CV professionnel", "cv", cv, setCv)}
           {renderDocSection("Carte d'identité nationale (CIN)", "cin", cin, setCin)}
           {renderDocSection("Diplôme", "diplome", diplome, setDiplome)}
         </div>

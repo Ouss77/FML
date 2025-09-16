@@ -4,53 +4,41 @@ import { db } from "@/lib/database"
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
 
-// Get all users (admin only)
+
+function verifyAuthToken(request: NextRequest) {
+  const token = request.cookies.get("auth-token")?.value;
+  if (!token) {
+    return { error: "Authentication required", status: 401 };
+  }
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; userType: string };
+    return { decoded };
+  } catch (err) {
+    return { error: "Invalid or expired token", status: 401 };
+  }
+}
+
+// Get all doctors and employers (admin only)
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get("auth-token")?.value
-
-    if (!token) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+    const auth = verifyAuthToken(request);
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
-
-    const decoded = jwt.verify(token, JWT_SECRET) as {
-      userId: string
-      userType: string
+    const { decoded } = auth;
+    if (!decoded || decoded.userType !== "admin") {
+      return NextResponse.json({ error: "Admin access required" }, { status: 403 });
     }
-
-    if (decoded.userType !== "admin") {
-      return NextResponse.json({ error: "Admin access required" }, { status: 403 })
-    }
-
-    const { searchParams } = new URL(request.url)
-    const userType = searchParams.get("userType")
-    const status = searchParams.get("status")
-
-    let query = db.sql`
-      SELECT u.*, 
-             rp.specialty, rp.location as rp_location, rp.profile_status as rp_status,
-             ep.organization_name, ep.organization_type, ep.profile_status as ep_status
-      FROM users u
-      LEFT JOIN replacement_profiles rp ON u.id = rp.user_id
-      LEFT JOIN employer_profiles ep ON u.id = ep.user_id
-      WHERE u.user_type != 'admin'
-    `
-
-    if (userType) {
-      query = db.sql`${query} AND u.user_type = ${userType}`
-    }
-
-    if (status) {
-      query = db.sql`${query} AND (rp.profile_status = ${status} OR ep.profile_status = ${status})`
-    }
-
-    query = db.sql`${query} ORDER BY u.created_at DESC`
-
-    const users = await query
-
-    return NextResponse.json({ users })
+    // Fetch both replacement doctors and employers
+    // Fetch doctors and employers, ensuring profile_status is included
+    const doctors = await db.getReplacementDoctors();
+    const employers = await db.getEmployers();
+    // Map status for each
+    const mappedDoctors = doctors.map((u: any) => ({ ...u, profile_status: u.profile_status || u.rp_status || "pending" }));
+    const mappedEmployers = employers.map((u: any) => ({ ...u, profile_status: u.profile_status || u.ep_status || "pending" }));
+    return NextResponse.json({ doctors: mappedDoctors, employers: mappedEmployers })
   } catch (error) {
-    console.error("Users fetch error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Users fetch error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

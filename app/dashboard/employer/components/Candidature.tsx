@@ -52,73 +52,86 @@ export default function Candidature({ missions }: CandidatureProps) {
 
   return (
     <div className="space-y-12">
-      {missionsWithApplications.map((mission) => (
-        <div key={mission.id}>
-          {/* Mission Header */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-indigo-700">{mission.title}</h2>
-            <p className="text-sm text-gray-500">
-              Candidats pour cette mission
-            </p>
-          </div>
+  {missionsWithApplications.map((mission) => (
+    <div key={mission.id}>
+      {/* Mission Header */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-indigo-700">{mission.title}</h2>
+        <p className="text-sm text-gray-500">
+          Candidats pour cette mission
+        </p>
+      </div>
 
-          {/* Candidates Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {applicationsByMission[mission.id].map((app: any) => (
-              <div
-                key={app.id}
-                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 flex flex-col items-center text-center border border-gray-100"
-              >
-                <Avatar className="w-20 h-20 mb-3 ring-4 ring-indigo-100">
-                  <AvatarImage src={app.photo_url || "/placeholder-user.jpg"} />
-                  <AvatarFallback>
-                    {app.first_name?.[0]}{app.last_name?.[0]}
-                  </AvatarFallback>
-                </Avatar>
+      {/* Candidates Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {applicationsByMission[mission.id].map((app: any) => (
+          <div
+            key={app.id}
+            className="bg-white rounded-2xl shadow-md hover:shadow-lg transition border border-gray-100 flex flex-col"
+          >
+            {/* Content Section */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6">
+              {/* Candidate Photo */}
+              <div className="w-28 h-28 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
+                <img
+                  src={app.photo_url || "/placeholder-user.jpg"}
+                  alt={`${app.first_name} ${app.last_name}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
+              {/* Candidate Info */}
+              <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-lg font-semibold text-gray-800">
                   {app.first_name} {app.last_name}
                 </h3>
+
                 {app.specialty && (
-                  <Badge className="mt-1 bg-indigo-50 text-indigo-700 rounded-full px-3 py-1 text-xs">
+                  <Badge className="mt-2 bg-indigo-50 text-indigo-700 rounded-lg px-3 py-1 text-xs">
                     {app.specialty}
                   </Badge>
                 )}
 
-                <div className="mt-4 text-sm text-gray-600 space-y-1">
+                <div className="mt-4 text-sm text-gray-600 space-y-2">
                   {app.email && (
-                    <p className="flex items-center justify-center gap-2">
-                      <Mail className="w-4 h-4 text-gray-400" /> {app.email}
+                    <p className="flex items-center gap-2 justify-center sm:justify-start">
+                      <Mail className="w-4 h-4 text-gray-400" />
+                      {app.email}
                     </p>
                   )}
                   {app.phone && (
-                    <p className="flex items-center justify-center gap-2">
-                      <Phone className="w-4 h-4 text-gray-400" /> {app.phone}
+                    <p className="flex items-center gap-2 justify-center sm:justify-start">
+                      <Phone className="w-4 h-4 text-gray-400" />
+                      {app.phone}
                     </p>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2 mt-5 w-full">
-                  <DownloadCVButton userId={app.user_id || app.id} />
-                  {app.phone && (
-                    <a
-                      href={`https://wa.me/${app.phone.replace(/\D/g, "")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1"
-                    >
-                      <button className="w-full flex items-center justify-center gap-2 py-2 rounded-xl border border-green-200 text-green-700 hover:bg-green-50 transition">
-                        <MessageCircle className="w-4 h-4" /> WhatsApp
-                      </button>
-                    </a>
                   )}
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 border-t border-gray-100 p-4">
+              <DownloadCVButton userId={app.user_id || app.id} />
+
+              {app.phone && (
+                <a
+                  href={`https://wa.me/${app.phone.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1"
+                >
+                  <button className="w-full flex items-center justify-center gap-2 py-2 rounded-xl border border-green-500 text-green-600 hover:bg-green-50 transition">
+                    <MessageCircle className="w-4 h-4" /> WhatsApp
+                  </button>
+                </a>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
+  ))}
+</div>
+
   );
 }

@@ -15,7 +15,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       id: user.id,
       first_name: user.first_name, 
       last_name: user.last_name,
-      // Optionally: add avatar/photo_url if available
     };
     // Fetch replacement profile
     const profile = await db.getReplacementProfile(id);

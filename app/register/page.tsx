@@ -134,57 +134,58 @@ export default function RegisterPage() {
       )}
 
       {/* Left side: Logo Section */}
-        <div className="lg:w-2/5 bg-gradient-to-b from-blue-200 to-blue-300 text-white flex flex-col items-center p-0 relative top-0">
-          <div className="flex flex-col items-center w-full h-full pt-6 pb-2">
-          <img
-            src="/logo.png"
-            alt="MedReplace Logo"
-            className="w-72 h-72 rounded-full shadow-lg mb-4 border-4 border-white bg-white object-contain"
-          />
-          <h2 className="text-2xl font-semibold mb-1 text-blue-100">Rejoignez MedReplace</h2>
-          <ul className="space-y-2 text-left text-base max-w-xs mx-auto">
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
-              Connexion rapide et sécurisée
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
-              Conçu pour les professionnels de santé
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-yellow-200 rounded-full"></span>
-              Sans frais ni commissions
-            </li>
-          </ul>
-          <p className="mt-4 text-sm text-blue-100">Inscription en moins de 2 minutes !</p>
-          <p className="mt-2 text-xs text-blue-100 opacity-70">© {new Date().getFullYear()} MedReplace</p>
-        </div>
-      </div>
+    <div className="hidden  lg:w-3/6 h-lvh md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
+        <h2 className="text-4xl font-bold mb-4 text-center">
+        Bienvenue sur Le Foyer Medical
+      </h2>
+      <img
+        src="https://www.praktischarzt.de/wp-content/uploads/2023/03/Becoming-a-medical-doctor-or-physician-in-Germany.jpg"
+        alt="Connexion illustration"
+        className="  mb-6 drop-shadow-2xl rounded-2xl"
+      />
+
+      <p className="text-lg text-gray-100 text-center max-w-md">
+        La plateforme qui connecte médecins titulaires et remplaçants partout au Maroc.  
+        Accédez à vos missions ou trouvez un remplaçant en toute simplicité.
+      </p>
+    </div>
+
 
       {/* Right side: Registration Form */}
-      <div className="lg:w-2/5 w-full mx-auto flex flex-col p-10 m-0 ">
-          <CardContent className="p-0">
+      <div className="lg:w-3/6 w-full mx-auto flex flex-col p-10 m-0 ">
+          <CardContent className="p-0 w-[80%] mx-auto">
             <Tabs value={userType} onValueChange={(value: string) => setUserType(value as 'replacement' | 'employer')}>
-              <TabsList className="flex w-full mx-auto justify-center bg-gray-100 border border-blue-200 shadow  p-10 mb-8 gap-0 overflow-hidden rounded-2xl">
-                <TabsTrigger
-                  value="replacement"
-                  className="flex-1 p-10 text-2xl font-semibold border-r border-blue-200 last:border-r-0 transition-all duration-200
-                    data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:scale-105 data-[state=active]:shadow-md
-                    data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
-                    rounded-none focus:outline-none"
-                >
-                  Médecin remplaçant
-                </TabsTrigger>
-                <TabsTrigger
-                  value="employer"
-                  className="flex-1 w-full p-10 text-xl font-semibold transition-all duration-200
-                    data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:scale-105 data-[state=active]:shadow-md
-                    data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
-                    rounded-none focus:outline-none"
-                >
-                  Demandeur
-                </TabsTrigger>
-              </TabsList>
+            <TabsList className="flex w-full mx-auto justify-center gap-6 mb-8 bg-gradient-to-br from-blue-50 to-indigo-100">
+              <TabsTrigger
+                value="replacement"
+                className="flex items-center justify-center gap-3 flex-1 max-w-sm py-6 px-6 text-lg font-semibold rounded-2xl border border-blue-200 
+                  transition-all duration-300
+                  data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
+                  data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
+                  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                  className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 7.292M15 12h6m-3-3v6m-6 9a9 9 0 100-18 9 9 0 000 18z" />
+                </svg>
+                Médecin remplaçant
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="employer"
+                className="flex items-center justify-center gap-3 flex-1 max-w-sm py-6 px-6 text-lg font-semibold rounded-2xl border border-blue-200
+                  transition-all duration-300
+                  data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
+                  data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
+                  focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                  className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5m3-9a4 4 0 118 0 4 4 0 01-8 0z" />
+                </svg>
+                Demandeur
+              </TabsTrigger>
+            </TabsList>
 
               <TabsContent value="replacement">
                 <ReplacementRegisterForm
@@ -210,7 +211,7 @@ export default function RegisterPage() {
                 />
               </TabsContent>
             </Tabs>
-            <div className="mt-8 text-center">
+            <div className="mt-5 text-center">
               <p className="text-base text-gray-600">
                 Déjà inscrit ?{" "}
                 <Link href="/login" className="text-blue-600 hover:underline font-semibold">
