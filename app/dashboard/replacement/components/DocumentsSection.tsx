@@ -50,7 +50,7 @@ export default function DocumentsSection() {
   }
 
   const renderDocSection = (label: string, docType: string, doc: any, setter: (doc: any) => void) => (
-    <div className="">
+  <div className=" min-w-[200px] max-w-[500px] p-2 rounded-lg border border-gray-100 bg-gray-50 shadow-sm text-xs flex flex-col mx-auto">
       <div className="flex items-center justify-between mb-2">
         <span className="font-medium">{label}</span>
       </div>
@@ -59,7 +59,7 @@ export default function DocumentsSection() {
         documentType={docType}
         onUploadComplete={() => fetchDocument(docType, setter)}
         acceptedTypes={["application/pdf"]}
-        className="max-w-md"
+        className="max-w-[400px] text-xs "
       />
 
       {loading === docType && <p className="text-xs text-gray-500 mt-2">Chargement du document...</p>}
@@ -70,10 +70,10 @@ export default function DocumentsSection() {
           <p className="text-xs text-gray-500 mt-2">
             Dernier upload : {new Date(doc.uploaded_at).toLocaleString()}
           </p>
-          <div className="mt-4 border rounded-md overflow-hidden">
+          <div className="mt-2 border rounded-md overflow-hidden">
             <iframe
               src={doc.file_path}
-              className="w-full h-96"
+              className="w-full h-60"
               title={`Aperçu du ${label}`}
             />
           </div>
@@ -102,10 +102,7 @@ export default function DocumentsSection() {
 
   return (
     <Card className="mb-6">
-      <CardHeader>
-        <CardTitle>Documents</CardTitle>
-        <CardDescription>Gérez et téléchargez vos documents professionnels</CardDescription>
-      </CardHeader>
+
       <CardContent>
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-6">
           {renderDocSection("CV professionnel", "cv", cv, setCv)}

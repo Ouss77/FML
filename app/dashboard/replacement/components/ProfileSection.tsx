@@ -13,7 +13,8 @@ interface ProfileData {
   lastName: string;
   email: string;
   phone: string;
-  specialty: string; 
+  specialty: string;
+  profession: string;
   location: string;
   experience_years?: number;
   languages?: string[];
@@ -45,6 +46,7 @@ async function fetchProfileData(): Promise<ProfileData | null> {
       phone: user?.phone || "",
       imageProfile: profile?.photo_url || "",
       specialty: profile?.specialty || "",
+      profession: profile?.profession || "",
       location: profile?.location || "",
       experience_years: profile?.experience_years ?? "",
       languages: profile?.languages || [],
@@ -110,10 +112,13 @@ export default function ProfileSection({
             </span>
           )}
         </div>
-  <p className="text-base font-medium text-gray-800">
+        <p className="text-base font-medium text-gray-800">
           {profileData.firstName} {profileData.lastName}
         </p>
-  <p className="text-blue-600 text-sm">{profileData.specialty || "-"}</p>
+        <p className="text-blue-600 text-sm">
+          {profileData.profession ? profileData.profession : "-"}
+          {profileData.specialty ? ` (${profileData.specialty})` : ""}
+        </p>
 
         {/* Buttons */}
   <div className="flex gap-2 mt-2">
@@ -174,7 +179,7 @@ export default function ProfileSection({
               {profileData.is_available ? "Disponible" : "Non disponible"}
             </span>
           </div>
-
+{/* 
           <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Calendar className="w-5 h-5 text-blue-500" />
             <span>
@@ -191,14 +196,14 @@ export default function ProfileSection({
                 ? new Date(profileData.availability_end).toLocaleDateString()
                 : "-"}
             </span>
-          </div>
+          </div> */}
 
           <div className="flex items-start gap-1 bg-gray-50 p-2 rounded-xl col-span-2">
             <FileText className="w-5 h-5 text-blue-500 mt-1" />
             <span>{profileData.bio || "-"}</span>
           </div>
         </div>
-
+ 
         {/* Edit dialog */}
         <EditProfileDialog
           open={isEditProfileOpen}

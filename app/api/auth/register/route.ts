@@ -1,22 +1,12 @@
+
 export const dynamic = "force-dynamic";
 import { type NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/database"
+import jwt, { Secret } from "jsonwebtoken"
 
-// Simple JWT implementation to avoid library issues
-function createToken(payload: any, secret: string, expiresIn = "7d") {
-  const header = { alg: "HS256", typ: "JWT" }
-  const now = Math.floor(Date.now() / 1000)
-  const exp = now + 7 * 24 * 60 * 60 // 7 days in seconds
-
-  const tokenPayload = { ...payload, iat: now, exp }
-
-  const encodedHeader = btoa(JSON.stringify(header))
-  const encodedPayload = btoa(JSON.stringify(tokenPayload))
-
-  const signature = btoa(`${encodedHeader}.${encodedPayload}.${secret}`)
-  
-
-  return `${encodedHeader}.${encodedPayload}.${signature}`
+function createToken(payload: object, secret: jwt.Secret, expiresIn = "7d") {
+  // @ts-ignore
+  return jwt.sign(payload, secret, { expiresIn })
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "medical-replacement-platform-secret-key-2024"
@@ -31,15 +21,10 @@ export async function POST(request: NextRequest) {
       firstName,
       lastName,
       phone,
-      // Replacement doctor fields
-      specialty,
+      profession,
       location,
-      availability,
-      // Employer fields
       companyName,
       companyType,
-      siret,
-      description,
     } = body
 
     // Validate required fields
@@ -64,23 +49,19 @@ export async function POST(request: NextRequest) {
     })
 
     // Create profile based on user type
-    if (userType === "replacement" && specialty && location) {
+    if (userType === "replacement"  ) {
       await db.createReplacementProfile({
         user_id: user.id,
-        specialty,
-        location,
-        bio: availability,
+        profession: profession || "",
+        location: location || ""
       })
     } else if (userType === "employer" && companyName && companyType) {
       await db.createEmployerProfile({
         user_id: user.id,
         organization_name: companyName,
         organization_type: companyType.toLowerCase().replace(/\s+/g, "_"),
-        siret_number: siret,
         address: location || "",
         city: location?.split(",")[0] || "",
-        postal_code: "00000", // Default, should be extracted from location
-        description,
       })
     }
 

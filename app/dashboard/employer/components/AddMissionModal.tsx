@@ -118,7 +118,7 @@ export default function AddMissionModal({ showForm, setShowForm, setMissions, em
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="startDate" className="text-sm font-medium text-gray-700">
                 Date de début
               </Label>
@@ -152,7 +152,7 @@ export default function AddMissionModal({ showForm, setShowForm, setMissions, em
                   className="pl-10 py-3 bg-gray-50 border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent rounded-lg transition-all"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="location" className="text-sm font-medium text-gray-700">

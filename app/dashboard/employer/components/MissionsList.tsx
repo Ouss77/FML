@@ -102,10 +102,10 @@ export default function MissionsList({
                     <MapPin className="w-4 h-4 text-blue-500" />
                     {mission.location}
                   </span>
-                  <span className="flex items-center gap-1">
+                  {/* <span className="flex items-center gap-1">
                     <Calendar className="w-4 h-4 text-purple-500" />
                     {formatDateDMY(mission.start_date || mission.startDate)} - {formatDateDMY(mission.end_date || mission.endDate)}
-                  </span>
+                  </span> */}
                   <span className="flex items-center gap-1">
                     <Users className="w-4 h-4 text-pink-500" />
                     {mission.applicants ?? 0} candidature(s)

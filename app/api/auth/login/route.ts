@@ -10,11 +10,11 @@ const JWT_SECRET = process.env.JWT_SECRET || "medical-replacement-platform-secre
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, password, userType } = body
+    const { email, password } = body
 
     // Validate required fields
-    if (!email || !password || !userType) {
-      return NextResponse.json({ error: "Email, password, and user type are required" }, { status: 400 })
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
     }
 
     // Find user by email
@@ -23,10 +23,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
-    // Check if user type matches
-    if (user.user_type !== userType) {
-      return NextResponse.json({ error: "Invalid user type for this account" }, { status: 401 })
-    }
 
     if (password !== user.password_hash) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })

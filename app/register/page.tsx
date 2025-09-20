@@ -4,21 +4,20 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import EmployerRegisterForm from "./EmployerRegisterForm";
 import ReplacementRegisterForm from "./ReplacementRegisterForm";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {  CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Users, CheckCircle } from "lucide-react";
+import {  CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState<"replacement" | "employer">("replacement");
-    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "", lastName: "", email: "", phone: "",  password: "",
-    confirmPassword: "", acceptTerms: false, specialty: "", location: "",
-    availability: "", companyName: "", companyType: "", siret: "", description: "",
+   acceptTerms: false, location: "",
+   companyName: "", companyType: "",  description: "", profession: "",
   });
   const router = useRouter();
 
@@ -39,11 +38,6 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Les mots de passe ne correspondent pas");
-      return;
-    }
-
     if (!formData.acceptTerms) {
       alert("Vous devez accepter les conditions d'utilisation");
       return;
@@ -62,13 +56,11 @@ export default function RegisterPage() {
           firstName: formData.firstName,
           lastName: formData.lastName,
           phone: formData.phone,
-          specialty: formData.specialty,
           location: formData.location,
-          availability: formData.availability,
           companyName: formData.companyName,
           companyType: formData.companyType,
-          siret: formData.siret,
           description: formData.description,
+          profession: formData.profession,
         }),
       });
 
@@ -91,19 +83,6 @@ export default function RegisterPage() {
       alert("Erreur de connexion au serveur");
     }
   };
-
-  const specialties = [
-    "Médecine générale",
-    "Cardiologie",
-    "Dermatologie",
-    "Gynécologie",
-    "Pédiatrie",
-    "Psychiatrie",
-    "Radiologie",
-    "Anesthésie",
-    "Chirurgie générale",
-    "Urgences",
-  ];
 
   const companyTypes = [
     "Hôpital public",
@@ -134,7 +113,7 @@ export default function RegisterPage() {
       )}
 
       {/* Left side: Logo Section */}
-    <div className="hidden  lg:w-3/6 h-lvh md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
+        <div className="hidden  lg:w-3/6 h-lvh md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-purple-700 text-white p-10">
         <h2 className="text-4xl font-bold mb-4 text-center">
         Bienvenue sur Le Foyer Medical
       </h2>
@@ -152,75 +131,82 @@ export default function RegisterPage() {
 
 
       {/* Right side: Registration Form */}
-      <div className="lg:w-3/6 w-full mx-auto flex flex-col p-10 m-0 ">
-          <CardContent className="p-0 w-[80%] mx-auto">
-            <Tabs value={userType} onValueChange={(value: string) => setUserType(value as 'replacement' | 'employer')}>
-            <TabsList className="flex w-full mx-auto justify-center gap-6 mb-8 bg-gradient-to-br from-blue-50 to-indigo-100">
-              <TabsTrigger
-                value="replacement"
-                className="flex items-center justify-center gap-3 flex-1 max-w-sm py-6 px-6 text-lg font-semibold rounded-2xl border border-blue-200 
-                  transition-all duration-300
-                  data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
-                  data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
-                  focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                  className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 7.292M15 12h6m-3-3v6m-6 9a9 9 0 100-18 9 9 0 000 18z" />
-                </svg>
-                Médecin remplaçant
-              </TabsTrigger>
+<div className="lg:w-3/6 w-full mx-auto flex flex-col p-0 mt-4">
+  <CardContent className="p-0 w-[80%] mx-auto">
+    <Tabs value={userType} onValueChange={(value: string) => setUserType(value as 'replacement' | 'employer')}>
+      <TabsList className="flex w-full mx-auto justify-center gap-6 mb-0 ">
+        <TabsTrigger
+          value="replacement"
+          className="flex items-center justify-center gap-3 flex-1 max-w-sm py-6 px-6 text-lg font-semibold rounded-2xl border border-blue-200 
+                     transition-all duration-300
+                     data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
+                     data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
+                     focus:outline-none focus:ring-2 focus:ring-blue-400 "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" 
+            className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 7.292M15 12h6m-3-3v6m-6 9a9 9 0 100-18 9 9 0 000 18z" />
+          </svg>
+          Médecin remplaçant
+        </TabsTrigger>
 
-              <TabsTrigger
-                value="employer"
-                className="flex items-center justify-center gap-3 flex-1 max-w-sm py-6 px-6 text-lg font-semibold rounded-2xl border border-blue-200
-                  transition-all duration-300
-                  data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
-                  data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
-                  focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                  className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5m3-9a4 4 0 118 0 4 4 0 01-8 0z" />
-                </svg>
-                Demandeur
-              </TabsTrigger>
-            </TabsList>
+        <TabsTrigger
+          value="employer"
+          className="flex items-center justify-center gap-3 flex-1 max-w-sm py-6 px-6 text-lg font-semibold rounded-2xl border border-blue-200
+                     transition-all duration-300
+                     data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105
+                     data-[state=inactive]:bg-white data-[state=inactive]:text-blue-700 hover:data-[state=inactive]:bg-blue-50
+                     focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" 
+            className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5m3-9a4 4 0 118 0 4 4 0 01-8 0z" />
+          </svg>
+          Recruteur
+        </TabsTrigger>
+      </TabsList>
 
-              <TabsContent value="replacement">
-                <ReplacementRegisterForm
-                  formData={formData}
-                  setFormData={setFormData}
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                  specialties={specialties}
-                />
-              </TabsContent>
+      <TabsContent value="replacement" className="-mt-4">
+        <ReplacementRegisterForm
+          formData={formData}
+          setFormData={setFormData}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+          handleInputChange={handleInputChange}
+          handleSubmit={handleSubmit}
+        />
+        <div className="text-center mt-0">
+          <p className="text-base text-gray-600">
+            Déjà inscrit ?{" "}
+            <Link href="/login" className="text-blue-600 hover:underline font-semibold">
+              Se connecter
+            </Link>
+          </p>
+        </div>
+      </TabsContent>
 
-              <TabsContent value="employer">
-                <EmployerRegisterForm
-                  formData={formData}
-                  setFormData={setFormData}
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                  companyTypes={companyTypes}
-                />
-              </TabsContent>
-            </Tabs>
-            <div className="mt-5 text-center">
-              <p className="text-base text-gray-600">
-                Déjà inscrit ?{" "}
-                <Link href="/login" className="text-blue-600 hover:underline font-semibold">
-                  Se connecter
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-      </div>
+      <TabsContent value="employer" className="-mt-4">
+        <EmployerRegisterForm
+          formData={formData}
+          setFormData={setFormData}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+          handleInputChange={handleInputChange}
+          handleSubmit={handleSubmit}
+          companyTypes={companyTypes}
+        />
+        <div className="text-center !mt-0">
+          <p className="text-base text-gray-600">
+            Déjà inscrit ?{" "}
+            <Link href="/login" className="text-blue-600 hover:underline font-semibold">
+              Se connecter
+            </Link>
+          </p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  </CardContent>
+</div>
     </div>
   );
 }

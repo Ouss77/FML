@@ -108,7 +108,7 @@ export default function EmployerDashboard() {
         return employerId ? <EmployerDocumentsSection employerId={employerId} /> : null;
       default:
         return null
-    }
+    } 
   }
 
   return (
@@ -215,16 +215,16 @@ export default function EmployerDashboard() {
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
                 <Avatar className="ring-2 ring-white shadow-md">
-                  <AvatarImage src={profileData.photo_url || "/placeholder.svg?height=32&width=32"} />
+                  <AvatarImage src={"/placeholder.svg?height=32&width=32"} />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold">
                    ouss
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">
-                    {profileData.organization_name || profileData.establishmentName}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">{profileData.organization_type || profileData.establishmentType}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-900 truncate">
+                      {profileData ? profileData.establishmentName : "No profile found"}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">{profileData ? profileData.establishmentType : ""}</p>
                 </div>
                 
                 <button
@@ -239,7 +239,7 @@ export default function EmployerDashboard() {
                 <Avatar className="ring-2 ring-white shadow-md">
                   <AvatarImage src="/placeholder.svg?height=32&width=32" />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold">
-                    {profileData.firstName?.[0]}{profileData.lastName?.[0]}
+                    {profileData ? (profileData.firstName?.[0] || "") : ""}{profileData ? (profileData.lastName?.[0] || "") : ""}
                   </AvatarFallback>
                 </Avatar>
                 <button
@@ -264,7 +264,7 @@ export default function EmployerDashboard() {
                   {sidebarItems.find(item => item.id === activeTab)?.label}
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  {profileData.establishmentName}  {profileData.position}
+                  {profileData ? profileData.establishmentName : "No profile"}  {profileData ? profileData.position : ""}
                 </p>
               </div>
               <div className="flex items-center gap-4">
@@ -298,7 +298,7 @@ export default function EmployerDashboard() {
     showForm={showCreateMission}
     setShowForm={setShowCreateMission}
     setMissions={setMissions}
-    employerId={employerId}
+  employerId={employerId ?? ""}
     setLoading={setLoading}
     setError={setError}
   />

@@ -140,4 +140,4 @@ export default function AvailableMissionsSection() {
       <MissionContactDialog open={contactOpen} onOpenChange={setContactOpen} mission={selectedMission} />
     </Card>
   );
-}
+} 

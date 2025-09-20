@@ -96,40 +96,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: `DB error: ${dbError instanceof Error ? dbError.message : dbError}` }, { status: 500 })
     }
 
-    // Notify available doctors
-  // let relevantDoctors: { id: string }[] = []
-  //   try {
-  //     relevantDoctors = (await sql`
-  //       SELECT u.id 
-  //       FROM users u
-  //       JOIN replacement_profiles rp ON u.id = rp.user_id
-  //       WHERE rp.specialty = ${specialty_required}
-  //       AND rp.location ILIKE ${"%" + location + "%"}
-  //       AND rp.is_available = true
-  //       AND rp.profile_status = 'approved'
-  //     `) as { id: string }[]
-  //   } catch (doctorError) {
-  //     console.error("Doctor select error:", doctorError)
-  //     // Continue, but log error
-  //   }
-
-  //   for (const doctor of relevantDoctors) {
-  //     try {
-  //       await sql`
-  //         INSERT INTO notifications (user_id, title, message, notification_type, related_id)
-  //         VALUES (
-  //           ${doctor.id}, 
-  //           'Nouvelle mission disponible',
-  //           ${`Une nouvelle mission en ${specialty_required} est disponible à ${location}.`},
-  //           'new_mission',
-  //           ${mission.id}
-  //         )
-  //       `
-  //     } catch (notifError) {
-  //       console.error("Notification insert error for doctor", doctor.id, ":", notifError)
-  //     }
-  //   }
-
     return NextResponse.json({ mission }, { status: 201 })
   } catch (error) {
     console.error("POST /missions error:", error)

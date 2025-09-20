@@ -37,8 +37,8 @@ export const db = {
   async getReplacementDoctors() {
     try {
       const result = await sql`
-        SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
-        rp.photo_url, rp.specialty, rp.location, rp.created_at, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, rp.profile_status
+  SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
+  rp.photo_url, rp.profession, rp.specialty, rp.location, rp.created_at, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, rp.profile_status
         FROM users u
         JOIN replacement_profiles rp ON u.id = rp.user_id
         WHERE u.user_type = 'replacement' 
@@ -99,28 +99,17 @@ export const db = {
 
   // Replacement profile operations
   async createReplacementProfile(profileData: {
-    user_id: string
-    specialty: string
-    location: string
-    experience_years?: number
-    diploma?: string
-    languages?: string[]
-    bio?: string
-    availability_start?: string
-    availability_end?: string
+  user_id: string
+  profession: string
+  location: string
   }) {
     try {
       const result = await sql`
         INSERT INTO replacement_profiles (
-          user_id,  specialty, location, experience_years, 
-          diploma, languages, hourly_rate, daily_rate, bio, 
-          availability_start, availability_end
+          user_id, profession, location, specialty
         )
         VALUES (
-          ${profileData.user_id}, ${profileData.specialty}, ${profileData.location}, 
-          ${profileData.experience_years || null}, ${profileData.diploma || null},
-          ${profileData.languages || []}, ${profileData.bio || null},
-          ${profileData.availability_start || null}, ${profileData.availability_end || null}
+          ${profileData.user_id}, ${profileData.profession}, ${profileData.location}, 'medecin generaliste'
         )
         RETURNING *
       `
@@ -134,9 +123,9 @@ export const db = {
   async getReplacementProfile(user_id: string) {
     try {
       const result = await sql`
-        SELECT rp.photo_url, rp.specialty, rp.location, rp.bio,
-        rp.availability_start, rp.availability_end, rp.is_available, rp.languages, rp.profile_status,
-        rp.experience_years, u.first_name, u.last_name, u.email, u.phone
+  SELECT rp.photo_url, rp.profession, rp.specialty, rp.location, rp.bio,
+  rp.availability_start, rp.availability_end, rp.is_available, rp.languages, rp.profile_status,
+  rp.experience_years, u.first_name, u.last_name, u.email, u.phone
         FROM replacement_profiles rp
         JOIN users u ON rp.user_id = u.id
         WHERE rp.user_id = ${user_id}
@@ -153,11 +142,8 @@ export const db = {
     user_id: string
     organization_name: string
     organization_type: string
-    siret_number?: string
     address: string
     city: string
-    postal_code: string
-    contact_person?: string
     description?: string
     website?: string
   }) {
@@ -177,15 +163,13 @@ export const db = {
 
       const result = await sql`
         INSERT INTO employer_profiles (
-          user_id, organization_name, organization_type, siret_number,
-          address, city, postal_code, contact_person, description, website
+          user_id, organization_name, organization_type, 
+          address, city, description
         )
         VALUES (
           ${profileData.user_id}, ${profileData.organization_name}, 
-          ${mappedType}, ${profileData.siret_number || null},
-          ${profileData.address}, ${profileData.city}, ${profileData.postal_code},
-          ${profileData.contact_person || null}, ${profileData.description || null},
-          ${profileData.website || null}
+          ${mappedType}, ${profileData.address}, ${profileData.city},
+          ${profileData.description || null}
         )
         RETURNING *
       `

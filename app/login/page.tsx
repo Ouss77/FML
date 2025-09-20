@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [userType, setUserType] = useState("replacement")
+  // Removed userType selection
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
@@ -28,36 +28,20 @@ export default function LoginPage() {
     setError("")
 
     try {
-      console.log("Starting login process...")
       const response = await fetch("/api/auth/login",  {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         }, 
-        
         body: JSON.stringify({
           email,
           password,
-          userType,
         }),
       })
-
-      console.log("Login API response status:", response.status)
       const data = await response.json()
-      console.log("Login API response data:", data)
-
       if (response.ok) {
-        console.log("Login successful, calling refreshUser...")
-        try {
-          await refreshUser()
-          console.log("RefreshUser completed successfully")
-        } catch (refreshError) {
-          console.error("RefreshUser failed:", refreshError)
-          setError("Erreur lors de la mise à jour du profil")
-          return
-        }
-        console.log("Redirecting to dashboard for user type:", data.user.userType)
-        // Redirect based on user type
+        await refreshUser()
+        // Redirect based on user type returned from backend
         if (data.user.userType === "replacement") {
           router.push("/dashboard/replacement")
         } else if (data.user.userType === "employer") {
@@ -66,11 +50,9 @@ export default function LoginPage() {
           router.push("/dashboard/admin")
         }
       } else {
-        console.error("Login failed:", data.error)
         setError(data.error || "Erreur de connexion")
       }
     } catch (err) {
-      console.error("Login error:", err)
       setError("Erreur de connexion. Veuillez réessayer.")
     } finally {
       setIsLoading(false)
@@ -110,29 +92,20 @@ export default function LoginPage() {
         </div>
 
         <Card className="rounded-2xl shadow-xl">
-          <CardHeader> 
-            <CardTitle className="text-xl font-bold text-blue-700">Se connecter</CardTitle>
-            <CardDescription className="text-sm text-gray-500">
-              Choisissez votre type de compte et connectez-vous
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs value={userType} onValueChange={setUserType} className="mb-9">
-              <TabsList className="grid w-full grid-cols-3 rounded-xl overflow-hidden pb-12">
-                <TabsTrigger value="replacement" className="text-base py-2">Remplaçant</TabsTrigger>
-                <TabsTrigger value="employer" className="text-base py-2">Employeur</TabsTrigger>
-                <TabsTrigger value="admin" className="text-base py-2">Admin</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            {error && (
-              <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm">
-                <p className="text-red-600">{error}</p>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-1">
+            <CardHeader> 
+              <CardTitle className="text-xl font-bold text-blue-700">Se connecter</CardTitle>
+              <CardDescription className="text-sm text-gray-500">
+                Connectez-vous à votre espace personnel
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {error && (
+                <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm">
+                  <p className="text-red-600">{error}</p>
+                </div>
+              )}
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-1">
                   <Input
                     id="email"
                     type="email"
@@ -144,10 +117,9 @@ export default function LoginPage() {
                     className="py-3 px-4 text-base placeholder:text-base rounded-2xl border-blue-200 bg-blue-50 focus:ring-2 focus:ring-blue-400 h-12"
                     style={{ fontSize: "1rem" }}
                   />
-              </div>
-
-              <div className="space-y-1">
-                <div className="relative">
+                </div>
+                <div className="space-y-1">
+                  <div className="relative">
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}

@@ -150,11 +150,11 @@ export function FileUpload({
   }
 
   return (
-    <Card className={cn("relative", className)}>
+    <Card className={cn("relative", className)} >
       <CardContent className="p-6">
         <div
           className={cn(
-            "border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer",
+            "border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ",
             isDragging && "border-blue-400 bg-blue-50",
             uploadStatus === "success" && "border-green-400 bg-green-50",
             uploadStatus === "error" && "border-red-400 bg-red-50",
@@ -172,13 +172,13 @@ export function FileUpload({
           <input
             id={`file-input-${documentType}`}
             type="file"
-            className="hidden"
+            className="hidden h-20"
             accept={acceptedTypes.join(",")}
             onChange={handleFileSelect}
             disabled={isUploading}
           />
 
-          <div className="space-y-4">
+          <div className="space-y-4 h-36">
             {getStatusIcon()}
 
             <div>
@@ -209,13 +209,13 @@ export function FileUpload({
 
             {!isUploading && uploadStatus === "idle" && (
               <Button variant="outline" size="sm">
-                <File className="w-4 h-4 mr-2" />
+                <File className="w-4  mr-2" />
                 Sélectionner un fichier
               </Button>
             )}
           </div>
         </div>
-      </CardContent>
+      </CardContent> 
     </Card>
   )
 }
