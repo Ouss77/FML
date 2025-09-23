@@ -1,555 +1,396 @@
 'use client'; // Important! Forces client-side rendering
 
-import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react"; // Imported useEffect
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
 import {
-  Users,
-  Calendar,
-  MapPin,
-  Shield,
-  Clock,
-  Star,
+  Menu,
+  X,
   Stethoscope,
-  Heart,
-  Award,
-  CheckCircle,
   ArrowRight,
-  Play
-} from "lucide-react"
+  UserPlus,
+  UploadCloud,
+  MailCheck,
+  FilePenLine, 
+  FileSearch,
+  Handshake,
+
+} from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+
+  const socialLinks = [
+    { name: 'Facebook', icon: Facebook, href: 'https://facebook.com/lefoyermedical' },
+    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/lefoyermedical' },
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/lefoyermedical' },
+    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/lefoyermedical' },
+  ];
 
 export default function HomePage() {
-  // Clear any existing auth data when landing page loads
-  if (typeof window !== 'undefined') {
-    // Clear localStorage
-    localStorage.removeItem('mock-auth')
-    
-    // Clear auth-token cookie
-    document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-  }
+  // Use useEffect to clear auth data only once on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Clear localStorage
+      localStorage.removeItem('mock-auth');
+      // Clear auth-token cookie
+      document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+  }, []); // Empty dependency array ensures this runs only once
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-   <header className="border-b bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo + Title */}
-        <div className="flex items-center gap-4">
-          <img
-            src="logo.png"
-            alt="Logo Le Foyer Médical"
-            className="w-12 h-12 rounded-full shadow-md border border-white"
-          />
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-            Le Foyer Médical
-          </h1>
-        </div>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link
-            href="#features"
-            className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-          >
-            Fonctionnalités
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-          >
-            Comment ça marche
-          </Link>
-          <Link
-            href="#testimonials"
-            className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-          >
-            Témoignages
-          </Link>
-        </nav>
-
-        {/* Buttons (desktop) */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link href="/login">
-            <Button variant="ghost" className="font-medium">
-              Connexion
-            </Button>
-          </Link>
-          <Link href="/register">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg">
-              S'inscrire
-            </Button>
-          </Link>
-        </div>
-
-        {/* Mobile Hamburger */}
-        <button
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-white shadow-md border-t">
-          <nav className="flex flex-col items-start gap-4 p-4">
-            <Link
-              href="#features"
-              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-              onClick={() => setMobileOpen(false)}
-            >
-              Fonctionnalités
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-              onClick={() => setMobileOpen(false)}
-            >
-              Comment ça marche
-            </Link>
-            <Link
-              href="#testimonials"
-              className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
-              onClick={() => setMobileOpen(false)}
-            >
-              Témoignages
-            </Link>
-            <hr className="w-full border-gray-200 my-2" />
-            <Link href="/login" onClick={() => setMobileOpen(false)}>
-              <Button variant="ghost" className="w-full text-left">
-                Connexion
-              </Button>
-            </Link>
-            <Link href="/register" onClick={() => setMobileOpen(false)}>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg">
-                S'inscrire
-              </Button>
-            </Link>
+        <header className="absolute top-0 left-0 w-full z-20 flex items-center justify-between px-10 py-8 bg-transparent">
+          <div className="flex items-center gap-3">
+            <img src="logo.png" alt="Logo Le Foyer Médical" className="w-10 h-10 rounded-full" />
+            <span className="font-bold text-xl text-white">Le Foyer Médical</span>
+          </div>
+          <nav className="hidden md:flex gap-10">
+            <Link href="#features" className="text-white text-base font-medium hover:text-blue-200 transition">Fonctionnalités</Link>
+            <Link href="#how-it-works" className="text-white text-base font-medium hover:text-blue-200 transition">Comment ça marche</Link>
           </nav>
-        </div>
-      )}
-    </header>
-
-      {/* Hero Section */}
-      <section className="relative overflow-hidden  h-dvh bg-gradient-to-br from-blue-50 via-white to-blue-100 py-20 md:pb-28 pt-10">
-        {/* Decorative circles */}
-        <div className="absolute -top-32 -left-32 w-80 h-60 bg-blue-200 rounded-full blur-3xl opacity-40" />
-        <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-blue-300 rounded-full blur-3xl opacity-30" />
-
-        <div className="relative container mx-auto flex flex-col md:flex-row items-center justify-between px-6 lg:px-12 gap-12">
-          {/* Left content */}
-          <div className="max-w-2xl text-center md:text-left space-y-6">
-            <div className="flex items-center justify-center md:justify-start gap-2 text-blue-600 font-semibold">
-              <Stethoscope className="w-5 h-5" />
-              <span>Votre santé, toujours assurée</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-800 leading-tight">
-              Trouvez un <span className="text-blue-600">médecin remplaçant</span> en un clic
-            </h1>
-            <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto md:mx-0">
-              Gagnez du temps et restez serein : notre plateforme connecte instantanément
-              médecins titulaires et remplaçants partout au Maroc.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 flex items-center gap-2 shadow-md"
-              >
-                <Users className="w-5 h-5" /> Trouver un remplaçant
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="rounded-full px-6 flex items-center gap-2 border-2"
-              >
-                Proposer mes services <ArrowRight className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Right image */}
-          <div className="relative w-full md:w-1/2  flex justify-center">
-            <div className="relative ">
-              <img
-                src="hero.png"
-                alt="Doctor replacement illustration"
-                className="drop-shadow-2xl rounded-3xl border-4  border-white h-[80%] sm:w-[80%] md:w-[90%] mx-auto"
-              />
-              {/* Floating card */}
-              <div className="absolute -left-6 sm:-left-10 bg-white shadow-xl rounded-2xl px-6 py-4 flex items-center gap-3 animate-bounce">
-                <Users className="w-6 h-6 text-blue-600" />
-                <div>
-                  <p className="text-sm font-semibold text-gray-800">+300 médecins</p>
-                  <p className="text-xs text-gray-500">déjà inscrits</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-{/* Features Section */}
-<section
-  id="features"
-  className="py-20 px-6 bg-gradient-to-br from-indigo-50 via-white to-purple-50 font-sans"
->
-  <div className="container mx-auto">
-    {/* Header */}
-    <div className="text-center mb-16">
-      <Badge className="mb-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-1 rounded-full shadow-md">
-        Fonctionnalités
-      </Badge>
-      <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
-        Une plateforme complète pour tous vos besoins
-      </h2>
-      <p className="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-        Des outils puissants et intuitifs pour simplifier la gestion des remplacements médicaux
-      </p>
-    </div>
-
-    {/* Cards */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[
-        {
-          title: "Matching intelligent",
-          description:
-            "Algorithme de correspondance basé sur la spécialité, localisation et disponibilités pour des matches parfaits",
-          icon: Users,
-          color: "from-indigo-500 to-indigo-600",
-        },
-        {
-          title: "Profils vérifiés",
-          description:
-            "Validation rigoureuse des documents RPPS, diplômes et certifications par notre équipe d'experts",
-          icon: Shield,
-          color: "from-emerald-500 to-emerald-600",
-        },
-        {
-          title: "Gestion simplifiée",
-          description:
-            "Planning intégré, gestion des contrats et facturation automatisée pour un workflow optimal",
-          icon: Calendar,
-          color: "from-purple-500 to-purple-600",
-        },
-        {
-          title: "Recherche géolocalisée",
-          description:
-            "Trouvez des missions ou des remplaçants près de chez vous avec notre système de géolocalisation avancé",
-          icon: MapPin,
-          color: "from-orange-500 to-orange-600",
-        },
-        {
-          title: "Réponse rapide",
-          description:
-            "Notifications en temps réel et système de réponse instantané pour ne jamais manquer une opportunité",
-          icon: Clock,
-          color: "from-rose-500 to-rose-600",
-        },
-        {
-          title: "Système d'évaluation",
-          description:
-            "Évaluations mutuelles transparentes pour maintenir la qualité du service et la confiance",
-          icon: Star,
-          color: "from-yellow-400 to-yellow-500",
-        },
-      ].map((feature, i) => (
-        <Card
-          key={i}
-          className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-xl group w-full max-w-sm mx-auto"
-        >
-          <CardHeader className="p-6">
-            <div
-              className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md`}
-            >
-              <feature.icon className="w-6 h-6 text-white" />
-            </div>
-            <CardTitle className="text-lg font-semibold text-gray-900 mb-2">
-              {feature.title}
-            </CardTitle>
-            <CardDescription className="text-gray-600 text-sm leading-relaxed">
-              {feature.description}
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      ))}
-    </div>
-  </div>
-</section>
-
-
-
-      {/* How it works */}
- <section id="how-it-works" className="py-20 md:py-28 bg-white">
-  <div className="container mx-auto px-6 lg:px-12">
-    {/* Section header */}
-    <div className="text-center mb-16 md:mb-20">
-      <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
-        Processus
-      </Badge>
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6">
-        Comment ça marche ?
-      </h2>
-      <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
-        Un processus simple et efficace pour tous
-      </p>
-    </div>
-
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
-      {/* Pour les remplaçants */}
-      <div className="relative flex flex-col items-center lg:items-start">
-        <div className="text-center lg:text-left mb-12">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto lg:mx-0 mb-4 shadow-xl">
-            <Stethoscope className="w-10 h-10 text-white" />
-          </div>
-          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
-            Pour les médecins remplaçants
-          </h3>
-        </div>
-
-        <div className="space-y-8 w-full">
-          {[
-            {
-              step: "1",
-              title: "Créez votre profil",
-              desc: "Renseignez vos spécialités, disponibilités et tarifs en quelques minutes",
-            },
-            {
-              step: "2",
-              title: "Uploadez vos documents",
-              desc: "RPPS, diplômes et certifications pour validation rapide et sécurisée",
-            },
-            {
-              step: "3",
-              title: "Recevez des propositions",
-              desc: "Acceptez ou refusez les missions qui correspondent à vos critères",
-            },
-          ].map((item) => (
-            <div
-              key={item.step}
-              className="flex gap-6 items-start group transition-transform"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                {item.step}
-              </div>
-              <div className="pt-1">
-                <h4 className="font-bold text-gray-900 mb-2 text-lg">
-                  {item.title}
-                </h4>
-                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 w-full flex justify-center lg:justify-start">
-          <img
-            src="remp.png"
-            alt="Médecin utilisant une tablette"
-            className="w-full max-w-sm object-contain rounded-2xl shadow-xl"
-          />
-        </div>
-      </div>
-
-      {/* Pour les établissements */}
-      <div className="relative flex flex-col items-center lg:items-start">
-        <div className="text-center lg:text-left mb-12">
-          <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto lg:mx-0 mb-4 shadow-xl">
-            <Users className="w-10 h-10 text-white" />
-          </div>
-          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
-            Pour les établissements
-          </h3>
-        </div>
-
-        <div className="space-y-8 w-full">
-          {[
-            {
-              step: "1",
-              title: "Publiez votre mission",
-              desc: "Spécialité, dates, tarif et localisation en quelques clics",
-            },
-            {
-              step: "2",
-              title: "Consultez les profils",
-              desc: "Parcourez les médecins correspondant parfaitement à vos critères",
-            },
-            {
-              step: "3",
-              title: "Trouvez votre remplaçant",
-              desc: "Envoyez des propositions et gérez vos contrats facilement",
-            },
-          ].map((item) => (
-            <div
-              key={item.step}
-              className="flex gap-6 items-start group transition-transform"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                {item.step}
-              </div>
-              <div className="pt-1">
-                <h4 className="font-bold text-gray-900 mb-2 text-lg">
-                  {item.title}
-                </h4>
-                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 w-full flex justify-center lg:justify-start">
-          <img
-            src="empl.png"
-            alt="Établissement médical"
-            className="w-full max-w-sm object-contain rounded-2xl shadow-xl"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-      {/* Testimonials */}
-      <section id="testimonials" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <Badge className="mb-4 bg-green-100 text-green-700 border-0">Témoignages</Badge>
-            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-6">Ils nous font confiance</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="medical-card border-0 shadow-xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <img
-                  src="/professional-female-doctor.png"
-                  alt="Dr. Marie Dubois"
-                  className="w-15 h-15 rounded-full object-cover"
-                />
-                <div>
-                  <div className="font-bold text-gray-900">Dr. Marie Dubois</div>
-                  <div className="text-sm text-gray-500">Médecin généraliste</div>
-                </div>
-              </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                "MedReplace a révolutionné ma façon de trouver des missions. Interface intuitive et propositions
-                parfaitement adaptées à mes critères."
-              </p>
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-current" />
-                ))}
-              </div>
-            </Card>
-
-            <Card className="medical-card border-0 shadow-xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <img
-                  src="/empl.png"
-                  alt="Jean Martin"
-                  className="w-15 h-15 rounded-full object-cover"
-                />
-                <div>
-                  <div className="font-bold text-gray-900">Jean Martin</div>
-                  <div className="text-sm text-gray-500">Directeur Clinique Saint-Louis</div>
-                </div>
-              </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                "Nous trouvons des remplaçants qualifiés en quelques heures. La plateforme nous fait gagner un temps
-                précieux."
-              </p>
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-current" />
-                ))}
-              </div>
-            </Card>
-
-            <Card className="medical-card border-0 shadow-xl p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <img
-                  src="/confident-male-doctor.png"
-                  alt="Dr. Pierre Leroy"
-                  className="w-15 h-15 rounded-full object-cover"
-                />
-                <div>
-                  <div className="font-bold text-gray-900">Dr. Pierre Leroy</div>
-                  <div className="text-sm text-gray-500">Cardiologue</div>
-                </div>
-              </div>
-              <p className="text-gray-600 leading-relaxed mb-4">
-                "Excellent système de matching. J'ai trouvé des missions parfaitement adaptées à ma spécialité et mes
-                disponibilités."
-              </p>
-              <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-current" />
-                ))}
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl lg:text-6xl font-serif font-bold mb-6">Prêt à simplifier vos remplacements ?</h2>
-          <p className="text-xl mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
-            Rejoignez des milliers de professionnels qui font confiance à MedReplace pour leurs remplacements médicaux
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="hidden md:flex items-center gap-2">
+            <Link href="/login">
+              <Button variant="ghost" className="text-white px-6 py-2 rounded-xl font-semibold">Connexion</Button>
+            </Link>
             <Link href="/register">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="w-full sm:w-auto text-lg px-8 py-4 bg-white text-blue-600 hover:bg-gray-100 shadow-xl"
-              >
-                Commencer gratuitement
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-blue-600 bg-transparent text-lg px-8 py-4"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Voir la démo
-              </Button>
+              <Button className="bg-white text-blue-600 px-6 py-2 rounded-xl font-semibold shadow-lg">S'inscrire</Button>
             </Link>
           </div>
-        </div>
-      </section>
+          <button className="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X size={28} className="text-white" /> : <Menu size={28} className="text-white" />}
+          </button>
+          {mobileOpen && (
+            <div className="md:hidden bg-gray-900/95 shadow-md border-t absolute top-full left-0 w-full">
+              <nav className="flex flex-col items-start gap-4 p-4">
+                <Link href="#features" className="text-white text-base font-medium hover:text-blue-200 transition" onClick={() => setMobileOpen(false)}>Fonctionnalités</Link>
+                <Link href="#how-it-works" className="text-white text-base font-medium hover:text-blue-200 transition" onClick={() => setMobileOpen(false)}>Comment ça marche</Link>
+                <hr className="w-full border-gray-700 my-2" />
+                <Link href="/missions/new" onClick={() => setMobileOpen(false)}>
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-semibold shadow-lg">Publier une mission</Button>
+                </Link>
+              </nav>
+            </div>
+          )}
+        </header>
+
+      <main>
+        {/* Hero Section - New Design */}
+        <section className="relative h-[700px] flex items-center justify-center overflow-hidden bg-gray-900">
+          <div className="absolute inset-0 w-full h-full z-0" style={{ backgroundImage: 'url(/herofoyer.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          <div className="absolute inset-0 w-full h-full bg-gray-900/60 z-10" />
+          <div className="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-10 gap-40">
+            {/* Left: Headline and search */}
+            <div className="flex-1 flex flex-col justify-center items-start gap-8">
+              <h1 className="text-white text-xl md:text-4xl font-extrabold leading-tight mb-4 drop-shadow-lg">
+                Simplifier les remplacements<br /> garantir les soins.
+              </h1>
+              <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+                <input type="text" placeholder="Entrez votre spécialité" className="flex-1 px-5 py-3 rounded-xl text-lg bg-white/90 focus:outline-none" />
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-lg font-semibold shadow-lg">
+                  Voir les missions disponibles
+                </Button>
+              </div>  
+              {/* <div className="flex gap-8 mt-8">
+                <div className="text-white text-lg font-semibold">
+                  <div className="text-base font-normal">Je cherche un remplaçant</div>
+                </div>
+                <div className="text-white text-lg font-semibold">
+                  <div className="text-2xl font-bold">32 421</div>
+                  <div className="text-base font-normal">missions pourvues</div>
+                </div>
+                <div className="text-white text-lg font-semibold">
+                  <div className="text-2xl font-bold">+24 %</div>
+                  <div className="text-base font-normal">patients traités</div>
+                </div>
+              </div> */}
+            </div>
+            {/* Right: Floating card */}
+            <div className="ml-72 mt-32 flex justify-center items-center ">
+              <div className="bg-white/90 rounded-2xl shadow-2xl p-6 w-[340px] max-w-full">
+                <div className="mb-4 flex items-center gap-2">
+                  <div className="bg-blue-100 rounded-lg p-2"><Stethoscope className="w-6 h-6 text-blue-600" /></div>
+                  <span className="font-semibold text-gray-700">Médecin Disponible</span>
+                  <span className="ml-auto text-gray-400">...</span>
+                </div>
+                <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
+                  <div className="font-bold text-gray-800">Medecin généraliste</div>
+                  <div className="text-blue-600 text-sm">Marauna, Prevence</div>
+                  <div className="text-gray-500 text-xs">16 jun 2025 &nbsp; 8 h00 - 18 h00</div>
+                </div>
+                <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
+                  <div className="font-bold text-gray-800">Cardiologue</div>
+                  <div className="text-blue-600 text-sm">Lyon, linans</div>
+                  <div className="text-gray-500 text-xs">12 jun 2025 &nbsp; 8 h00 -</div>
+                </div>
+                <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
+                  <div className="font-bold text-gray-800">Pediatre</div>
+                  <div className="text-blue-600 text-sm">Fata, Ile de l'rance</div>
+                  <div className="text-gray-500 text-xs">14 jun 2025</div>
+                  <div className="text-gray-400 text-xs">Paris, liete france</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Professionnels de santé Section - Adapted for dark mode */}
+        <section id="features" className="py-20 bg-gray-900">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center text-white mb-4">Tous les professionnels de santé</h2>
+            <p className="text-lg text-center text-gray-300 mb-12">Notre plateforme couvre tous les domaines de la santé pour répondre à vos besoins</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Card 1 */}
+              <div className="bg-gray-800 rounded-2xl shadow-sm p-8 flex flex-col items-center">
+                <div className="bg-blue-600 rounded-2xl shadow-sm p-8 flex flex-col items-center">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6h8" /><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 12h.01" /></svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2 text-center">Médecins Généralistes</h3>
+                <p className="text-gray-300 text-center">Trouvez des médecins qualifiés pour remplacer votre cabinet médical</p>
+              </div>
+              {/* Card 2 */}
+              <div className="bg-gray-800 rounded-2xl shadow-sm p-8 flex flex-col items-center">
+                <div className="w-20 h-20 rounded-xl flex items-center justify-center mb-6 bg-blue-600">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21C12 21 7 16.5 7 12.5C7 9.5 9.5 7 12 7C14.5 7 17 9.5 17 12.5C17 16.5 12 21 12 21Z" /></svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2 text-center">Kinésithérapeutes</h3>
+                <p className="text-gray-300 text-center">Connectez-vous avec des kinés expérimentés pour vos remplacements</p>
+              </div>
+              {/* Card 3 */}
+              <div className="bg-gray-800 rounded-2xl shadow-sm p-8 flex flex-col items-center">
+                <div className="w-20 h-20 rounded-xl flex items-center justify-center mb-6 bg-blue-600">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="10" r="3" /><path d="M8 16c1.333-1.333 2.667-1.333 4 0" /></svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2 text-center">Dentistes</h3>
+                <p className="text-gray-300 text-center">Remplacez vos cabinets dentaires avec des professionnels de confiance</p>
+              </div>
+              {/* Card 4 */}
+              <div className="bg-gray-800 rounded-2xl shadow-sm p-8 flex flex-col items-center">
+                <div className="w-20 h-20 rounded-xl flex items-center justify-center mb-6 bg-blue-600">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="7" y="2" width="10" height="20" rx="2" /><path d="M7 7h10" /><path d="M7 13h10" /></svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2 text-center">Cliniques</h3>
+                <p className="text-gray-300 text-center">Solutions de remplacement pour cliniques et centres médicaux</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section id="how-it-works" className="py-24 md:py-10 bg-gray-900">
+          <div className="container mx-auto px-6 lg:px-12">
+            {/* En-tête de la section */}
+            <div className="text-center mb-16 md:mb-20">
+              <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
+                Processus
+              </Badge>
+              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
+                Comment ça marche ?
+              </h2>
+              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                Un processus simple et efficace pour tous
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-24">
+              
+              {/* === Carte pour les Remplaçants === */}
+              <div className="relative">
+                {/* Le Titre qui chevauche */}
+                <h3 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-xl font-serif font-bold bg-white text-gray-900 px-6 py-3 rounded-full shadow-lg border border-gray-200">
+                  Pour les Remplaçants
+                </h3>
+                
+                {/* Conteneur de la carte avec l'image de fond */}
+                <div className="relative flex flex-col rounded-2xl bg-cover bg-center overflow-hidden h-full p-8 md:p-12 pt-20" style={{ backgroundImage: 'url(/rep.png)' }}>
+                  {/* Superposition de dégradé pour la lisibilité */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-0"></div>
+                  
+                  <div className="relative z-10 w-full space-y-8">
+                    {/* Ligne de connexion verticale */}
+                    <div className="absolute left-6 top-6 h-[calc(100%-3rem)] w-0.5 bg-white/20" aria-hidden="true" />
+
+                    {[
+                      {
+                        icon: <UserPlus className="w-6 h-6 text-blue-400" />,
+                        title: "Créez votre profil",
+                        desc: "Renseignez vos spécialités, disponibilités et tarifs en quelques minutes.",
+                      },
+                      {
+                        icon: <UploadCloud className="w-6 h-6 text-blue-400" />,
+                        title: "Uploadez vos documents",
+                        desc: "RPPS, diplômes et certifications pour validation rapide et sécurisée.",
+                      },
+                      {
+                        icon: <MailCheck className="w-6 h-6 text-blue-400" />,
+                        title: "Recevez des propositions",
+                        desc: "Acceptez ou refusez les missions qui correspondent à vos critères.",
+                      },
+                    ].map((item, index) => (
+                      <div key={index} className="relative flex gap-5 items-start top-10">
+                        <div className="relative z-10 w-12 h-12 bg-gray-800/50 border border-white/20 rounded-full flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
+                          {item.icon}
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 flex-grow">
+                          <h4 className="font-bold text-white mb-1 text-lg">{item.title}</h4>
+                          <p className="text-gray-300 leading-relaxed text-sm">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* === Carte pour les Établissements === */}
+              <div className="relative">
+                {/* Le Titre qui chevauche */}
+                <h3 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-xl font-serif font-bold bg-white text-gray-900 px-6 py-3 rounded-full shadow-lg border border-gray-200">
+                  Pour les Établissements
+                </h3>
+
+                {/* Conteneur de la carte avec l'image de fond */}
+                <div className="relative flex flex-col rounded-2xl bg-cover bg-center overflow-hidden h-full p-8 md:p-12 pt-20" style={{ backgroundImage: 'url(/emp.png)' }}>
+                  {/* Superposition de dégradé pour la lisibilité */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent z-0"></div>
+
+                  <div className="relative z-10 w-full space-y-8">
+                    {/* Ligne de connexion verticale */}
+                    <div className="absolute left-6 top-6 h-[calc(100%-3rem)] w-0.5 bg-white/20" aria-hidden="true" />
+
+                    {[
+                      {
+                        icon: <FilePenLine className="w-6 h-6 text-green-400" />,
+                        title: "Publiez votre mission",
+                        desc: "Spécialité, dates, tarif et localisation en quelques clics.",
+                      },
+                      {
+                        icon: <FileSearch className="w-6 h-6 text-green-400" />,
+                        title: "Consultez les profils",
+                        desc: "Parcourez les médecins correspondant parfaitement à vos critères.",
+                      },
+                      {
+                        icon: <Handshake className="w-6 h-6 text-green-400" />,
+                        title: "Trouvez votre remplaçant",
+                        desc: "Envoyez des propositions et gérez vos contrats facilement.",
+                      },
+                    ].map((item, index) => (
+                      <div key={index} className="relative flex gap-5 items-start top-10">
+                        <div className="relative z-10 w-12 h-12 bg-gray-800/50 border border-white/20 rounded-full flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
+                          {item.icon}
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 flex-grow">
+                          <h4 className="font-bold text-white mb-1 text-lg">{item.title}</h4>
+                          <p className="text-gray-300 leading-relaxed text-sm">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-24 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <h2 className="text-4xl lg:text-6xl font-serif font-bold mb-6">Prêt à simplifier vos remplacements ?</h2>
+            <p className="text-xl mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
+              Rejoignez des milliers de professionnels qui font confiance à Le Foyer Médical pour leurs remplacements.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Link href="/register">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full sm:w-auto text-lg px-8 py-4 bg-white text-blue-600 hover:bg-gray-100 shadow-xl"
+                >
+                  Commencer gratuitement <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-10 mt-12">
-        <div className="container mx-auto px-4 flex flex-col items-center text-center">
-          <div className="flex items-center gap-4 mb-4">
-            <img
-              src="logo.png"
-              alt="Logo Le Foyer Médical"
-              className="w-12 h-12 rounded-full shadow-md border border-white"
-            />
-            <h1 className="text-xl font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-              Le Foyer Médical
-            </h1>
+  <footer className="bg-gray-900 text-gray-300">
+      <div className="container mx-auto px-6 py-12">
+        
+        {/* === Section principale du footer === */}
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10 md:gap-16">
+          
+          {/* Col 1: Marque et Slogan */}
+          <div className="max-w-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <img src="/logo.png" alt="Logo Le Foyer Médical" className="w-12 h-12 rounded-full" />
+              <span className="text-xl font-bold text-white tracking-wide">
+                Le Foyer Médical
+              </span>
+            </div>
+            <p className="text-gray-400 leading-relaxed">
+              La plateforme de référence pour simplifier les remplacements médicaux au Maroc. Connecter les talents, assurer la continuité des soins.
+            </p>
           </div>
-          <p className="text-gray-400 leading-relaxed mb-2 max-w-md">
-            Plateforme de référence pour les remplacements médicaux en France et au Maroc.
-          </p>
-          <p className="text-gray-400 mb-2 text-sm">
-            Contact : <a href="mailto:contact@medreplace.com" className="underline hover:text-blue-300">contact@medreplace.com</a>
-          </p>
-          <p className="text-gray-500 text-xs">&copy; 2024 MedReplace. Tous droits réservés.</p>
+          
+          {/* Col 2: Contact */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-4">Nous Contacter</h3>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <a href="mailto:contact@lefoyermedical.com" className="hover:text-blue-400 transition-colors">
+                  contact@lefoyermedical.com
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <span>+212 6 00 00 00 00</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <span>Rabat, Maroc</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Réseaux Sociaux */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-4">Suivez-nous</h3>
+            <div className="flex items-center gap-4">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-300"
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
-      </footer>
+
+        {/* === Barre de copyright inférieure === */}
+        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
+          <p className="text-gray-500 text-sm mb-4 sm:mb-0">
+            &copy; {new Date().getFullYear()} Le Foyer Médical. Tous droits réservés.
+          </p>
+          <div className="flex items-center gap-6 text-gray-500 text-sm">
+            <a href="/terms" className="hover:text-white transition-colors">Conditions d'utilisation</a>
+            <a href="/privacy" className="hover:text-white transition-colors">Politique de confidentialité</a>
+          </div>
+        </div>
+      </div>
+    </footer>
     </div>
-  )
+  );
 }

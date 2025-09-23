@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Eye, Users, Star, MapPin, Euro, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Dialog } from "@/components/ui/dialog";
+import { DialogContent, DialogClose } from "@/components/ui/dialog";
 import DoctorProfileModal from "./DoctorProfileModal";
 
 interface Doctor {
@@ -22,6 +23,9 @@ interface Doctor {
   availability?: string;
   last_active?: string;
   about?: string;
+  phone?: string;
+  email?: string;
+  cv_url?: string;
 }
 
 export default function DoctorsList() {
@@ -33,6 +37,8 @@ export default function DoctorsList() {
   const [location, setLocation] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
   const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contactDoctor, setContactDoctor] = useState<Doctor | null>(null);
 
   const specialties = ["Cardiologie", "Médecine générale", "Pédiatrie"];
   const locations = ["Lyon", "Villeurbanne"];
@@ -71,6 +77,90 @@ export default function DoctorsList() {
       {/* Doctor Profile Modal */}
       <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
         <DoctorProfileModal open={profileOpen} onOpenChange={setProfileOpen} doctorId={selectedDoctorId} />
+      </Dialog>
+      {/* Modale de contact */}
+      <Dialog open={contactOpen} onOpenChange={setContactOpen}>
+        <DialogContent className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-200">
+          {contactDoctor && (
+            <>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-6 h-6 text-blue-600" />
+                  <h2 className="text-xl font-bold text-gray-900">Contact de l'établissement</h2>
+                </div>
+                <DialogClose asChild>
+                  <button className="text-gray-400 hover:text-gray-600 text-xl font-bold" aria-label="Fermer">×</button>
+                </DialogClose>
+              </div>
+              <p className="text-gray-500 mb-6">Coordonnées et adresse complète du cabinet ou de la clinique.</p>
+              <div className="space-y-6">
+                {/* Nom */}
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <MapPin className="w-5 h-5 text-blue-500" />
+                    <span className="text-sm text-gray-500">Nom</span>
+                  </div>
+                  <div className="ml-7 text-base text-gray-900 font-semibold">{contactDoctor.first_name}</div>
+                </div>
+                {/* Téléphone */}
+                {contactDoctor.phone && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm0 10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zm10-10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zm0 10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                      <span className="text-sm text-gray-500">Téléphone</span>
+                    </div>
+                    <div className="ml-7 text-base text-gray-900 font-semibold">{contactDoctor.phone}</div>
+                  </div>
+                )}
+                {/* Email */}
+                {contactDoctor.email && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12H8m8 0a4 4 0 10-8 0m8 0v4a4 4 0 01-4 4H8a4 4 0 01-4-4v-4a4 4 0 014-4h8a4 4 0 014 4z" /></svg>
+                      <span className="text-sm text-gray-500">Email</span>
+                    </div>
+                    <div className="ml-7 text-base text-gray-900 font-semibold">
+                      <a href={`mailto:${contactDoctor.email}`} className="text-blue-600 underline">{contactDoctor.email}</a>
+                    </div>
+                  </div>
+                )}
+                {/* Adresse complète */}
+                {contactDoctor.location && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <MapPin className="w-5 h-5 text-purple-500" />
+                      <span className="text-sm text-gray-500">Adresse complète</span>
+                    </div>
+                    <div className="ml-7 text-base text-gray-900 font-semibold">{contactDoctor.location}</div>
+                  </div>
+                )}
+                {/* Télécharger le CV */}
+                {contactDoctor.cv_url && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
+                      <span className="text-sm text-gray-500">CV</span>
+                    </div>
+                    <div className="ml-7">
+                      <Button asChild variant="secondary" className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-6 py-2">
+                        <a href={contactDoctor.cv_url} target="_blank" rel="noopener noreferrer" download>
+                          Télécharger le CV
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-center mt-8">
+                <DialogClose asChild>
+                  <Button variant="outline" className="rounded-xl px-8 py-2 font-bold text-blue-700 border-blue-300 w-full">
+                    Fermer
+                  </Button>
+                </DialogClose>
+              </div>
+            </>
+          )}
+        </DialogContent>
       </Dialog>
 
 
@@ -200,7 +290,13 @@ export default function DoctorsList() {
                       <Eye className="w-5 h-5 mr-2" />
                       Profil
                     </Button>
-                    <Button className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:scale-105 transition-all duration-300">
+                    <Button
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:scale-105 transition-all duration-300"
+                      onClick={() => {
+                        setContactDoctor(doctor);
+                        setContactOpen(true);
+                      }}
+                    >
                       Contacter
                     </Button>
                   </div>

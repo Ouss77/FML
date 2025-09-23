@@ -232,7 +232,8 @@ export const db = {
   }) {
     try {
       let query = sql`
-        SELECT m.*, ep.organization_name, u.first_name, u.last_name
+        SELECT m.*, ep.organization_name, u.first_name, u.last_name,
+          (SELECT COUNT(*) FROM applications a WHERE a.mission_id = m.id) AS applications_count
         FROM missions m
         JOIN users u ON m.employer_id = u.id
         LEFT JOIN employer_profiles ep ON u.id = ep.user_id

@@ -23,6 +23,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 
     const applications = await db.getApplications({ mission_id: params.id })
+    console.log(applications)
 
     return NextResponse.json({ applications })
   } catch (error) {

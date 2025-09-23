@@ -39,7 +39,7 @@ export function DownloadCVButton({ userId }: DownloadCVButtonProps) {
           rel="noopener noreferrer"
         >
           <button className="flex items-center gap-2 px-3 py-1 border rounded text-blue-700 border-blue-200 hover:bg-blue-50 transition">
-            <Download className="w-4 h-4" /> Télécharger le CV
+            <Download className="w-4 h-4" /> CV
           </button>
         </a>
       ) : (
@@ -48,7 +48,7 @@ export function DownloadCVButton({ userId }: DownloadCVButtonProps) {
           onClick={fetchCV}
           disabled={loading}
         >
-          <Download className="w-4 h-4" /> {loading ? "Recherche..." : "Télécharger le CV"}
+          <Download className="w-4 h-4" /> {loading ? "Recherche..." : "CV"}
         </button>
       )}
       {error && <div className="text-xs text-red-500 mt-1">{error}</div>}

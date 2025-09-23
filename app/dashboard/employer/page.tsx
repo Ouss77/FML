@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
-import StatsCards from "./components/StatsCards"
 import MissionsList from "./components/MissionsList"
 import DoctorsList from "./components/DoctorsList"
 import ProfileTabs from "./components/ProfileTabs"
@@ -50,13 +49,14 @@ export default function EmployerDashboard() {
         const data = await res.json();
         setEmployerId(data.user?.id || null);
         setProfileData(data.profile || null);
+        console.log("Fetched profile data:", data);
       } catch (err) {
         setError("Impossible de charger le profil utilisateur");
       }
     }
     fetchProfile();
   }, []);
-
+ 
   // Fetch missions from DB
   useEffect(() => {
     if (!employerId) return;
@@ -66,6 +66,7 @@ export default function EmployerDashboard() {
       .then(res => res.json())
       .then(data => {
         setMissions(data.missions || []);
+        console.log("Fetched missions:", data.missions);
         setLoading(false);
       })
       .catch(() => {
@@ -121,15 +122,13 @@ export default function EmployerDashboard() {
             {!sidebarCollapsed && (
               <Link href="/" className="flex items-center gap-3">
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-16">
           <img
             src="../logo.png"
             alt="Logo Le Foyer Médical"
-            className="w-20 h-20 rounded-full shadow-md border border-white"
+            className="w-32 h-32  rounded-full shadow-md border border-white"
           />
-          <h1 className=" text-lg font-bold bg-gradient-to-r from-teal-500 via-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-            Le Foyer Médical
-          </h1>
+
         </div>
               </Link>
             )}
@@ -215,19 +214,22 @@ export default function EmployerDashboard() {
             {!sidebarCollapsed ? (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
                 <Avatar className="ring-2 ring-white shadow-md">
-                  <AvatarImage src={"/placeholder.svg?height=32&width=32"} />
+                  <AvatarImage src={profileData?.photo_url || "/placeholder-user.jpg"} />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold">
-                   ouss
+                    {profileData?.firstName?.[0] || ""}{profileData?.lastName?.[0] || ""}
                   </AvatarFallback>
                 </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 truncate">
-                      {profileData ? profileData.establishmentName : "No profile found"}
-                    </p>
-                    <p className="text-xs text-gray-500 truncate">{profileData ? profileData.establishmentType : ""}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">
+                    {profileData ? `${profileData.first_name} ${profileData.last_name
+}` : "No profile found"}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {profileData?.fonction || "Spécialité non renseignée"}
+                  </p>
                 </div>
-                
                 <button
+                  onClick={logout}
                   className="p-2 rounded-lg hover:bg-red-100 text-gray-400 hover:text-red-600 transition-colors duration-200"
                   title="Déconnexion"
                 >

@@ -102,20 +102,32 @@ export default function ProfileTabs() {
   if (!profileData) return null;
 
   return (
-    <Card className="max-w-2xl mx-auto shadow-xl border-0 bg-white rounded-3xl overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-22"></div>
-      {/* Profile Image */}
-      <div className="relative flex flex-col items-center -mt-16">
-        <div className="w-32 h-32 rounded-full border-4 border-white overflow-hidden shadow-md bg-gray-100 flex items-center justify-center">
+    <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+      {/* Header Gradient */}
+      <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-32 relative">
+        {/* Avatar */}
+        <div className="absolute left-1/2 top-24 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-4 border-white overflow-hidden shadow-lg bg-gray-100 flex items-center justify-center">
           {profileData.photo_url ? (
-            <img src={profileData.photo_url} alt="Profil établissement" className="object-cover w-full h-full" />
+            <img src={profileData.photo_url} alt="Photo de profil" className="object-cover w-full h-full" />
           ) : (
-            <Building2 className="w-16 h-16 text-blue-300" />
+            <User2 className="w-16 h-16 text-blue-300" />
           )}
         </div>
+      </div>
+      {/* Main Info */}
+      <div className="pt-16 pb-4 flex flex-col items-center">
+        <h2 className="text-2xl font-bold text-blue-900 mb-1">{profileData.firstName} {profileData.lastName}</h2>
+        <div className="text-blue-600 text-md font-medium mb-1">{profileData.fonction || "-"}</div>
+        <div className="text-blue-500 text-sm mb-2">{profileData.establishmentType === "hospital"
+          ? "Hôpital public"
+          : profileData.establishmentType === "clinic"
+          ? "Clinique privée"
+          : profileData.establishmentType === "cabinet"
+          ? "Cabinet médical"
+          : <span className="text-gray-400">-</span>}</div>
         <Button
           size="sm"
-          className="mt-2 bg-blue-600 text-white px-4 py-1 rounded-full shadow"
+          className="mt-2 bg-white border border-blue-500 text-blue-700 px-4 py-1 rounded-full shadow hover:bg-blue-50"
           onClick={() => {
             setForm({ ...profileData });
             setEditOpen(true);
@@ -124,56 +136,36 @@ export default function ProfileTabs() {
           Modifier le profil
         </Button>
       </div>
-      <CardContent className="flex flex-col items-center text-center">
-        <h2 className="text-xl font-bold text-blue-900 mb-1">{profileData.establishmentName || <span className="text-gray-400">-</span>}</h2>
-        <p className="text-blue-600 text-sm mb-2">
-          {profileData.establishmentType === "hospital"
-            ? "Hôpital public"
-            : profileData.establishmentType === "clinic"
-            ? "Clinique privée"
-            : profileData.establishmentType === "cabinet"
-            ? "Cabinet médical"
-            : <span className="text-gray-400">-</span>}
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mt-4 text-sm">
-
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
-            <span className="font-semibold text-green-900 w-32">Prénom:</span>
-            <span className="text-green-950 font-medium">{profileData.firstName || <span className="text-gray-400">-</span>}</span>
+      {/* About Section */}
+      <div className="px-8 pb-4">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">À PROPOS</h3>
+        <p className="text-gray-600 text-sm mb-4">{profileData.description || "Aucune description renseignée."}</p>
+        <hr className="my-4" />
+        {/* Contact Info */}
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">INFORMATIONS DE CONTACT</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M16 12a4 4 0 01-8 0" /><circle cx="12" cy="7" r="4" /><path d="M12 14v7" /></svg>
+            <a href={`mailto:${profileData.email}`} className="text-blue-700 underline">{profileData.email || "-"}</a>
           </div>
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
-            <span className="font-semibold text-green-900 w-32">Nom:</span>
-            <span className="text-green-950 font-medium">{profileData.lastName || <span className="text-gray-400">-</span>}</span>
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 16.92V19a2 2 0 01-2.18 2A19.86 19.86 0 013 5.18 2 2 0 015 3h2.09a2 2 0 012 1.72c.13 1.13.37 2.25.72 3.34a2 2 0 01-.45 2.11l-1.27 1.27a16 16 0 006.58 6.58l1.27-1.27a2 2 0 012.11-.45c1.09.35 2.21.59 3.34.72A2 2 0 0121 16.91z" /></svg>
+            <span className="font-semibold text-green-700">Téléphone:</span> <span>{profileData.phone || "-"}</span>
           </div>
-                    <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
-            <span className="font-semibold text-blue-900 w-32">SIRET:</span>
-            <span className="text-blue-950 font-medium">{profileData.siret || <span className="text-gray-400">-</span>}</span>
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10.5a8.38 8.38 0 01-1.9 5.4c-1.5 2-4.1 4.1-7.1 4.1s-5.6-2.1-7.1-4.1A8.38 8.38 0 013 10.5C3 6.36 7.03 3 12 3s9 3.36 9 7.5z" /></svg>
+            <span>{profileData.phone || "-"}</span>
           </div>
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
-            <span className="font-semibold text-green-900 w-32">Fonction:</span>
-            <span className="text-green-950 font-medium">{profileData.fonction || <span className="text-gray-400">-</span>}</span>
-          </div>
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
-            <span className="font-semibold text-green-900 w-32">Email:</span>
-            <span className="text-green-950 font-medium">{profileData.email || <span className="text-gray-400">-</span>}</span>
-          </div>
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl">
-            <span className="font-semibold text-green-900 w-32">Téléphone:</span>
-            <span className="text-green-950 font-medium">{profileData.phone || <span className="text-gray-400">-</span>}</span>
-          </div>
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl col-span-2">
-            <span className="font-semibold text-blue-900 w-32">Adresse:</span>
-            <span className="text-blue-950 font-medium">{profileData.address || <span className="text-gray-400">-</span>}</span>
-          </div>
-          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-xl col-span-2">
-            <span className="font-semibold text-blue-900 w-32">Description:</span>
-            <span className="text-blue-950 font-medium">{profileData.description || <span className="text-gray-400">-</span>}</span>
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 12.414a2 2 0 00-2.828 0l-4.243 4.243" /><path d="M7 10V7a5 5 0 0110 0v3" /><path d="M12 19v2" /></svg>
+            <a href={`https://maps.google.com/?q=${encodeURIComponent(profileData.address)}`} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">{profileData.address || "-"}</a>
           </div>
         </div>
-      </CardContent>
-
-      {/* Unified Edit Dialog */}
+        <div className="mt-4 text-sm text-gray-700"><span className="font-semibold">SIRET:</span> {profileData.siret || "-"}</div>
+      </div>
+      {/* Edit Dialog (unchanged) */}
       {editOpen && (
+        // ...existing code...
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg relative">
             <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-700" onClick={() => setEditOpen(false)}>&times;</button>
@@ -264,6 +256,6 @@ export default function ProfileTabs() {
           </div>
         </div>
       )}
-    </Card>
+    </div>
   );
 }

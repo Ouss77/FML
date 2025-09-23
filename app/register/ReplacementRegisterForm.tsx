@@ -46,18 +46,18 @@ export default function ReplacementRegisterForm({
   handleInputChange,
   handleSubmit,
 }: ReplacementRegisterFormProps) {
-  return ( 
-    <div className=" pb-0 !mb-0 mt-10 flex items-center justify-center  px-4">
+  return (
+    <div className="pb-0 !mb-0 mt-10 flex items-center justify-center px-4 bg-gray-900">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-md mt-0 w-full max-w-3xl space-y-8 border border-gray-200"
+        className="bg-gray-800 p-8 rounded-2xl shadow-xl mt-0 w-full max-w-3xl space-y-8 border border-gray-700"
       >
         {/* Header */}
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-blue-400">
             Inscription Remplaçant
           </h2>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-gray-400 text-sm mt-1">
             Créez votre compte en quelques minutes
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function ReplacementRegisterForm({
               value={formData.firstName}
               onChange={(e) => handleInputChange("firstName", e.target.value)}
               required
-              className="pl-12 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded"
+              className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Prénom"
             />
           </div>
@@ -82,7 +82,7 @@ export default function ReplacementRegisterForm({
               value={formData.lastName}
               onChange={(e) => handleInputChange("lastName", e.target.value)}
               required
-              className="pl-12 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded"
+              className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Nom"
             />
           </div>
@@ -94,7 +94,7 @@ export default function ReplacementRegisterForm({
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
               required
-              className="pl-12 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded"
+              className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Adresse email"
             />
           </div>
@@ -106,7 +106,7 @@ export default function ReplacementRegisterForm({
               value={formData.phone}
               onChange={(e) => handleInputChange("phone", e.target.value)}
               required
-              className="pl-12 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded"
+              className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Téléphone"
             />
           </div>
@@ -121,7 +121,7 @@ export default function ReplacementRegisterForm({
               value={formData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               required
-              className="pl-12 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded"
+              className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Ville ou région"
             />
           </div>
@@ -132,14 +132,14 @@ export default function ReplacementRegisterForm({
               onValueChange={(value) => handleInputChange("profession", value)}
               required
             >
-              <SelectTrigger className="!h-12 w-full pl-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded">
+              <SelectTrigger className="!h-12 w-full pl-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded">
                 <SelectValue placeholder="Profession" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Médecin">Médecin</SelectItem>
-                <SelectItem value="Dentiste">Dentiste</SelectItem>
-                <SelectItem value="Kinésithérapeute">Kinésithérapeute</SelectItem>
-                <SelectItem value="Infirmier">Infirmier</SelectItem>
+              <SelectContent className="bg-gray-900 text-white border-gray-700">
+                <SelectItem value="Médecin" className="bg-gray-900 text-white hover:bg-blue-900">Médecin</SelectItem>
+                <SelectItem value="Dentiste" className="bg-gray-900 text-white hover:bg-blue-900">Dentiste</SelectItem>
+                <SelectItem value="Kinésithérapeute" className="bg-gray-900 text-white hover:bg-blue-900">Kinésithérapeute</SelectItem>
+                <SelectItem value="Infirmier" className="bg-gray-900 text-white hover:bg-blue-900">Infirmier</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -154,12 +154,12 @@ export default function ReplacementRegisterForm({
               value={formData.password}
               onChange={(e) => handleInputChange("password", e.target.value)}
               required
-              className="pr-12 pl-4 h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded"
+              className="pr-12 pl-4 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Mot de passe"
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-200"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Masquer" : "Afficher"}
             >
@@ -180,15 +180,15 @@ export default function ReplacementRegisterForm({
             onCheckedChange={(checked) =>
               handleInputChange("acceptTerms", checked as boolean)
             }
-            className="border-gray-300 rounded focus:ring-blue-500 mt-1"
+            className="border-gray-700 rounded focus:ring-blue-500 mt-1"
           />
-          <span className="text-sm text-gray-600 leading-5">
+          <span className="text-sm text-gray-400 leading-5">
             J'accepte les{" "}
-            <a href="/terms" className="text-blue-600 hover:underline">
+            <a href="/terms" className="text-blue-400 hover:underline">
               conditions d'utilisation
             </a>{" "}
             et la{" "}
-            <a href="/privacy" className="text-blue-600 hover:underline">
+            <a href="/privacy" className="text-blue-400 hover:underline">
               politique de confidentialité
             </a>
             .
@@ -198,7 +198,7 @@ export default function ReplacementRegisterForm({
         {/* Submit */}
         <Button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded shadow-md transition duration-300 disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg transition duration-300 disabled:opacity-50"
           disabled={!formData.acceptTerms}
         >
           Créer mon compte
