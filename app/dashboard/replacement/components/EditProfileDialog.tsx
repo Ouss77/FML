@@ -202,9 +202,6 @@ export default function EditProfileDialog({
                   <option value="Dermatologue">Dermatologue</option>
                   <option value="Pédiatre">Pédiatre</option>
                   <option value="Gynécologue">Gynécologue</option>
-                  <option value="Dentiste">Dentiste</option>
-                  <option value="Kinésithérapeute">Kinésithérapeute</option>
-                  <option value="Infirmier">Infirmier</option>
                   <option value="Radiologue">Radiologue</option>
                   <option value="Anesthésiste">Anesthésiste</option>
                   <option value="Autre">Autre</option>

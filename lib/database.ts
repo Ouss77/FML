@@ -1,23 +1,30 @@
-import { neon } from "@neondatabase/serverless"
+import { neon } from "@neondatabase/serverless";
 
-// Check for DATABASE_URL and provide helpful error message
 if (!process.env.DATABASE_URL) {
-  console.error("❌ DATABASE_URL is not set!")
-  console.error("Please create a .env.local file with your database connection string:")
-  console.error("DATABASE_URL=postgresql://username:password@host:port/database")
-  console.error("")
-  console.error("You can get a free Neon database at: https://neon.tech")
-  console.error("")
-  throw new Error("DATABASE_URL is not set. Please check the console for setup instructions.")
-
-
+  console.error("❌ DATABASE_URL is not set!");
+  console.error("Please create a .env.local file with your database connection string:");
+  console.error("DATABASE_URL=postgresql://username:password@host:port/database");
+  console.error("");
+  console.error("You can get a free Neon database at: https://neon.tech");
+  console.error("");
+  throw new Error("DATABASE_URL is not set. Please check the console for setup instructions.");
 }
 
-// Create a reusable SQL client
-export const sql = neon(process.env.DATABASE_URL)
- 
-// Database helper functions
+export const sql = neon(process.env.DATABASE_URL);
+
 export const db = {
+  async savePasswordResetToken(userId: string, token: string, expiresAt: number) {
+    try {
+      await sql`
+        INSERT INTO password_resets (user_id, token, expires_at)
+        VALUES (${userId}, ${token}, to_timestamp(${expiresAt} / 1000.0))
+        ON CONFLICT (user_id) DO UPDATE SET token = ${token}, expires_at = to_timestamp(${expiresAt} / 1000.0)
+      `;
+    } catch (error) {
+      console.error("Error saving password reset token:", error);
+      throw new Error("Failed to save password reset token");
+    }
+  },
   async getEmployers() {
     try {
       const result = await sql`
@@ -37,11 +44,12 @@ export const db = {
   async getReplacementDoctors() {
     try {
       const result = await sql`
-  SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
-  rp.photo_url, rp.profession, rp.specialty, rp.location, rp.created_at, rp.bio, rp.availability_start, rp.availability_end, rp.experience_years, rp.profile_status
+        SELECT u.id, u.first_name, u.last_name, u.email, u.phone,
+          rp.photo_url, rp.profession, rp.specialty, rp.location, rp.created_at, rp.bio, rp.availability_start,
+          rp.availability_end, rp.experience_years, rp.is_available, rp.profile_status
         FROM users u
         JOIN replacement_profiles rp ON u.id = rp.user_id
-        WHERE u.user_type = 'replacement' 
+        WHERE u.user_type = 'replacement'
         ORDER BY u.first_name, u.last_name
       `
       return result
@@ -202,19 +210,17 @@ export const db = {
     description: string
     specialty_required: string
     location: string
-    start_date: string
-    end_date: string
   }) {
     try {
       const result = await sql`
-    INSERT INTO missions (employer_id, title, description, specialty_required, location,
-      start_date, end_date
-    )
-    VALUES (
-      ${missionData.employer_id}, ${missionData.title}, ${missionData.description},
-      ${missionData.specialty_required}, ${missionData.location},
-      ${missionData.start_date}, ${missionData.end_date}
-    )
+        INSERT INTO missions (employer_id, title, description, specialty_required, location)
+        VALUES (
+          ${missionData.employer_id},
+          ${missionData.title},
+          ${missionData.description},
+          ${missionData.specialty_required},
+          ${missionData.location}
+        )
         RETURNING *
       `
       return result[0]
@@ -264,10 +270,10 @@ export const db = {
 
   // Application operations
   async createApplication(applicationData: {
-    mission_id: string
-    replacement_id: string
-    cover_letter?: string
-    proposed_rate?: number
+    mission_id: string;
+    replacement_id: string;
+    cover_letter?: string;
+    proposed_rate?: number;
   }) {
     try {
       const result = await sql`

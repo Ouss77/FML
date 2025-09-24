@@ -1,5 +1,5 @@
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+
 import { Building2, User2, Upload } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -106,16 +106,16 @@ export default function ProfileTabs() {
       {/* Header Gradient */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-32 relative">
         {/* Avatar */}
-        <div className="absolute left-1/2 top-24 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-4 border-white overflow-hidden shadow-lg bg-gray-100 flex items-center justify-center">
+        <div className="absolute left-30 top-30 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-lg bg-gray-100 flex items-center justify-center">
           {profileData.photo_url ? (
-            <img src={profileData.photo_url} alt="Photo de profil" className="object-cover w-full h-full" />
+            <img src={profileData.photo_url} alt="Photo de profil" className="object-fill h-full w-[99%]" />
           ) : (
-            <User2 className="w-16 h-16 text-blue-300" />
-          )}
+            <User2 className="w-20 h-20 text-blue-300" />
+          )}  
         </div>
       </div>
       {/* Main Info */}
-      <div className="pt-16 pb-4 flex flex-col items-center">
+      <div className="pt-10 pb-4 flex flex-col items-center">
         <h2 className="text-2xl font-bold text-blue-900 mb-1">{profileData.firstName} {profileData.lastName}</h2>
         <div className="text-blue-600 text-md font-medium mb-1">{profileData.fonction || "-"}</div>
         <div className="text-blue-500 text-sm mb-2">{profileData.establishmentType === "hospital"
@@ -127,7 +127,7 @@ export default function ProfileTabs() {
           : <span className="text-gray-400">-</span>}</div>
         <Button
           size="sm"
-          className="mt-2 bg-white border border-blue-500 text-blue-700 px-4 py-1 rounded-full shadow hover:bg-blue-50"
+          className="mt-2 inline-block bg-white border border-blue-500 text-blue-700 px-4 py-1 rounded-full shadow hover:bg-blue-50"
           onClick={() => {
             setForm({ ...profileData });
             setEditOpen(true);
@@ -137,7 +137,7 @@ export default function ProfileTabs() {
         </Button>
       </div>
       {/* About Section */}
-      <div className="px-8 pb-4">
+      <div className="px-8 mt-0 pb-4">
         <h3 className="text-lg font-semibold text-gray-800 mb-2">À PROPOS</h3>
         <p className="text-gray-600 text-sm mb-4">{profileData.description || "Aucune description renseignée."}</p>
         <hr className="my-4" />

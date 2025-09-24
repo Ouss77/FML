@@ -1,7 +1,6 @@
 'use client'; // Important! Forces client-side rendering
 
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react"; // Imported useEffect
 import Link from "next/link";
@@ -83,30 +82,36 @@ export default function HomePage() {
           <div className="absolute inset-0 w-full h-full z-0" style={{ backgroundImage: 'url(/herofoyer.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <div className="absolute inset-0 w-full h-full bg-gray-900/60 z-10" />
           <div className="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-10 gap-40">
-            {/* Left: Headline and search */}
-            <div className="flex-1 flex flex-col justify-center items-start gap-8">
-              <h1 className="text-white text-xl md:text-4xl font-extrabold leading-tight mb-4 drop-shadow-lg">
+            {/* Left: Headline and CTA buttons */}
+            <div className="flex-1 flex flex-col justify-center items-start gap-10">
+              <h1
+                className="text-white text-3xl md:text-6xl font-extrabold mb-6 drop-shadow-lg tracking-tight"
+                style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif', letterSpacing: '-0.03em' }}
+              >
                 Simplifier les remplacements<br /> garantir les soins.
               </h1>
-              <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-                <input type="text" placeholder="Entrez votre spécialité" className="flex-1 px-5 py-3 rounded-xl text-lg bg-white/90 focus:outline-none" />
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-lg font-semibold shadow-lg">
-                  Voir les missions disponibles
-                </Button>
-              </div>  
-              {/* <div className="flex gap-8 mt-8">
-                <div className="text-white text-lg font-semibold">
-                  <div className="text-base font-normal">Je cherche un remplaçant</div>
-                </div>
-                <div className="text-white text-lg font-semibold">
-                  <div className="text-2xl font-bold">32 421</div>
-                  <div className="text-base font-normal">missions pourvues</div>
-                </div>
-                <div className="text-white text-lg font-semibold">
-                  <div className="text-2xl font-bold">+24 %</div>
-                  <div className="text-base font-normal">patients traités</div>
-                </div>
-              </div> */}
+              <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg mt-2">
+                <Link href="/register?type=replacement" passHref legacyBehavior>
+                  <a>
+                    <Button
+                      className="w-full text-2xl py-6 px-8 rounded-2xl font-bold bg-blue-600 text-white shadow-xl hover:bg-blue-700 transition-all duration-200"
+                      style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif' }}
+                    >
+                      Vous cherchez une mission ?
+                    </Button>
+                  </a>
+                </Link>
+                <Link href="/register?type=employer" passHref legacyBehavior>
+                  <a>
+                    <Button
+                      className="w-full text-2xl py-6 px-8 rounded-2xl font-bold bg-purple-600 text-white shadow-xl hover:bg-purple-700 transition-all duration-200"
+                      style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif' }}
+                    >
+                      Vous cherchez un médecin ?
+                    </Button>
+                  </a>
+                </Link>
+              </div>
             </div>
             {/* Right: Floating card */}
             <div className="ml-72 mt-32 flex justify-center items-center ">

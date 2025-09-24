@@ -144,7 +144,8 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
+
+                <div className="flex items-center justify-end">
                   <Link
                     href="/forgot-password"
                     className="text-sm text-blue-400 hover:underline font-medium"

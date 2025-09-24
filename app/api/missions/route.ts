@@ -59,8 +59,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST /api/missions
- * Employers create new missions
+ * POST /api/missions * Employers create new missions
  */
 export async function POST(request: NextRequest) {
   try {
@@ -72,11 +71,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Only employers can create missions" }, { status: 403 })}
     const body = await request.json()
     const {
-      title, description, specialty_required, location, start_date, end_date
+      title, description, specialty_required, location
     } = body
 
     // Basic validation
-    if (!title || !description || !specialty_required || !location || !start_date || !end_date) {
+    if (!title || !description || !specialty_required || !location ) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
@@ -87,9 +86,8 @@ export async function POST(request: NextRequest) {
         title,
         description,
         specialty_required,
-        location,
-        start_date,
-        end_date,
+        location
+
       })
     } catch (dbError) {
       console.error("DB createMission error:", dbError)
