@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+/* Then your custom CSS below */
+
 @custom-variant dark (&:is(.dark *));
 
 /* Fixed dark mode implementation - removed problematic @custom-variant syntax */
