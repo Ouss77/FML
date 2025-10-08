@@ -27,6 +27,7 @@ export default function RegisterPage() {
     companyType: "",
     description: "",
     profession: "",
+    specialty: "", // Added specialty field
   });
   const router = useRouter();
 
@@ -52,6 +53,12 @@ export default function RegisterPage() {
       return;
     }
 
+    // Validation for medical specialty
+    if (userType === "replacement" && formData.profession === "Médecin" && !formData.specialty) {
+      alert("Veuillez sélectionner une spécialité médicale");
+      return;
+    }
+
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -70,6 +77,7 @@ export default function RegisterPage() {
           companyType: formData.companyType,
           description: formData.description,
           profession: formData.profession,
+          specialty: formData.specialty, // Include specialty in API call
         }),
       });
 

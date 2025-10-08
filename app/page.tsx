@@ -78,69 +78,94 @@ export default function HomePage() {
 
       <main>
         {/* Hero Section - New Design */}
-        <section className="relative h-[700px] flex items-center justify-center overflow-hidden bg-gray-900">
-          <div className="absolute inset-0 w-full h-full z-0" style={{ backgroundImage: 'url(/herofoyer.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <div className="absolute inset-0 w-full h-full bg-gray-900/60 z-10" />
-          <div className="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-10 gap-40">
-            {/* Left: Headline and CTA buttons */}
-            <div className="flex-1 flex flex-col justify-center items-start gap-10">
-              <h1
-                className="text-white text-3xl md:text-6xl font-extrabold mb-6 drop-shadow-lg tracking-tight"
-                style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif', letterSpacing: '-0.03em' }}
-              >
-                Simplifier les remplacements<br /> garantir les soins.
-              </h1>
-              <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg mt-2">
-                <Link href="/register?type=replacement" passHref legacyBehavior>
-                  <a>
-                    <Button
-                      className="w-full text-2xl py-6 px-8 rounded-2xl font-bold bg-blue-600 text-white shadow-xl hover:bg-blue-700 transition-all duration-200"
-                      style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif' }}
-                    >
-                      Vous cherchez une mission ?
-                    </Button>
-                  </a>
-                </Link>
-                <Link href="/register?type=employer" passHref legacyBehavior>
-                  <a>
-                    <Button
-                      className="w-full text-2xl py-6 px-8 rounded-2xl font-bold bg-purple-600 text-white shadow-xl hover:bg-purple-700 transition-all duration-200"
-                      style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif' }}
-                    >
-                      Vous cherchez un médecin ?
-                    </Button>
-                  </a>
-                </Link>
-              </div>
+ <section className="relative h-screen sm:h-[700px] flex items-center justify-center overflow-hidden bg-gray-900 py-16">
+      {/* Background Image and Overlay (Z-Index remains the same) */}
+      <div 
+        className="absolute inset-0 w-full h-full z-0" 
+        style={{ backgroundImage: 'url(/herofoyer.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} 
+      />
+      <div className="absolute inset-0 w-full h-full bg-gray-900/60 z-10" />
+      
+      {/* Content Container */}
+      {/* Updated: reduced the fixed gap-40. Changed to p-4 sm:p-10 for better padding on small devices. */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between p-4 sm:p-10 md:gap-20">
+        
+        {/* Left: Headline and CTA buttons */}
+        {/* Updated: Added text-center on mobile, changed to items-center on mobile, removed flex-1 from mobile view to allow full width. */}
+        <div className="flex w-full flex-col justify-center items-center md:items-start text-center md:text-left gap-8 md:gap-10 mt-10 md:mt-0">
+          <h1
+            // Updated: text-4xl on mobile, text-6xl on md screens. Changed mb-6 to mb-2 for smaller screens.
+            className="text-white text-4xl sm:text-5xl md:text-6xl font-extrabold mb-2 md:mb-6 drop-shadow-lg tracking-tight"
+            style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif', letterSpacing: '-0.03em' }}
+          >
+            Simplifier les remplacements<br /> garantir les soins.
+          </h1>
+          
+          {/* CTA Buttons Container */}
+          {/* Updated: Changed w-full and max-w-sm on mobile for better flow. Added mx-auto for center alignment on mobile. */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full max-w-sm sm:max-w-lg mt-2 mx-auto md:mx-0">
+            {/* Button 1 */}
+            <Link href="/register?type=replacement" passHref legacyBehavior>
+              <a className="w-full">
+                {/* Updated: text-lg on mobile, text-2xl on larger screens. Reduced py/px for smaller buttons on mobile. */}
+                <button
+                  className="w-full text-lg sm:text-2xl py-4 sm:py-6 px-4 sm:px-8 rounded-xl sm:rounded-2xl font-bold bg-blue-600 text-white shadow-xl hover:bg-blue-700 transition-all duration-200"
+                  style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif' }}
+                >
+                  Vous cherchez une mission ?
+                </button>
+              </a>
+            </Link>
+            
+            {/* Button 2 */}
+            <Link href="/register?type=employer" passHref legacyBehavior>
+              <a className="w-full">
+                {/* Updated: text-lg on mobile, text-2xl on larger screens. Reduced py/px for smaller buttons on mobile. */}
+                <button
+                  className="w-full text-lg sm:text-2xl py-4 sm:py-6 px-4 sm:px-8 rounded-xl sm:rounded-2xl font-bold bg-purple-600 text-white shadow-xl hover:bg-purple-700 transition-all duration-200"
+                  style={{ fontFamily: 'Montserrat, Inter, Arial, sans-serif' }}
+                >
+                  Vous cherchez un médecin ?
+                </button>
+              </a>
+            </Link>
+          </div>
+        </div>
+        
+        {/* Right: Floating card */}
+        {/* Key change: Card is hidden on small screens and reappears on medium (md) screens, 
+            positioned to the right without the fixed ml-72 mt-32.
+            If you want it visible on mobile, remove 'hidden' and adjust the positioning. */}
+        <div className="hidden md:flex justify-center items-center md:pt-16 md:mt-0">
+          <div className="bg-white/90 rounded-2xl shadow-2xl p-6 w-[340px] max-w-full">
+            <div className="mb-4 flex items-center gap-2">
+              {/* NOTE: Replace Stethoscope with an actual icon component */}
+              <div className="bg-blue-100 rounded-lg p-2">{/* <Stethoscope className="w-6 h-6 text-blue-600" /> */}</div>
+              <span className="font-semibold text-gray-700">Médecin Disponible</span>
+              <span className="ml-auto text-gray-400">...</span>
             </div>
-            {/* Right: Floating card */}
-            <div className="ml-72 mt-32 flex justify-center items-center ">
-              <div className="bg-white/90 rounded-2xl shadow-2xl p-6 w-[340px] max-w-full">
-                <div className="mb-4 flex items-center gap-2">
-                  <div className="bg-blue-100 rounded-lg p-2"><Stethoscope className="w-6 h-6 text-blue-600" /></div>
-                  <span className="font-semibold text-gray-700">Médecin Disponible</span>
-                  <span className="ml-auto text-gray-400">...</span>
-                </div>
-                <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
-                  <div className="font-bold text-gray-800">Medecin généraliste</div>
-                  <div className="text-blue-600 text-sm">Marauna, Prevence</div>
-                  <div className="text-gray-500 text-xs">16 jun 2025 &nbsp; 8 h00 - 18 h00</div>
-                </div>
-                <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
-                  <div className="font-bold text-gray-800">Cardiologue</div>
-                  <div className="text-blue-600 text-sm">Lyon, linans</div>
-                  <div className="text-gray-500 text-xs">12 jun 2025 &nbsp; 8 h00 -</div>
-                </div>
-                <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
-                  <div className="font-bold text-gray-800">Pediatre</div>
-                  <div className="text-blue-600 text-sm">Fata, Ile de l'rance</div>
-                  <div className="text-gray-500 text-xs">14 jun 2025</div>
-                  <div className="text-gray-400 text-xs">Paris, liete france</div>
-                </div>
-              </div>
+            <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
+              <div className="font-bold text-gray-800">Medecin généraliste</div>
+              <div className="text-blue-600 text-sm">TAZA</div>
+                            <div className="text-gray-400 text-xs">Disponible Weekend</div>
+
+            </div>
+            <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
+              <div className="font-bold text-gray-800">Cardiologue</div>
+              <div className="text-blue-600 text-sm">Rabat</div>
+              <div className="text-gray-400 text-xs">Temps plein</div>
+
+            </div>
+            <div className="mb-3 p-3 rounded-xl bg-white shadow flex flex-col gap-1">
+              <div className="font-bold text-gray-800">Pediatre</div>
+              <div className="text-blue-600 text-sm">Fata, Ile de l'rance</div>
+              <div className="text-gray-400 text-xs">Temps partiel</div>
             </div>
           </div>
-        </section>
+        </div>
+        
+      </div>
+    </section>
 
         {/* Professionnels de santé Section - Adapted for dark mode */}
         <section id="features" className="py-20 bg-gray-900">

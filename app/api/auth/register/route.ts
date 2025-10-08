@@ -1,105 +1,113 @@
-
 export const dynamic = "force-dynamic";
-import { type NextRequest, NextResponse } from "next/server"
-import { db } from "@/lib/database"
-import jwt, { Secret } from "jsonwebtoken"
+import { NextRequest, NextResponse } from 'next/server';
+import { neon } from '@neondatabase/serverless';
+import jwt from 'jsonwebtoken';
 
-function createToken(payload: object, secret: jwt.Secret, expiresIn = "7d") {
-  // @ts-ignore
-  return jwt.sign(payload, secret, { expiresIn })
-}
-
-const JWT_SECRET = process.env.JWT_SECRET || "medical-replacement-platform-secret-key-2024"
+const sql = neon(process.env.DATABASE_URL!);
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const {
-      email,
-      password,
-      userType,
-      firstName,
-      lastName,
-      phone,
+    const { 
+      email, 
+      password, 
+      userType, 
+      firstName, 
+      lastName, 
+      phone, 
+      location, 
+      companyName, 
+      companyType, 
+      description, 
       profession,
-      location,
-      companyName,
-      companyType,
-    } = body
+      specialty // Added specialty field
+    } = await request.json();
 
     // Validate required fields
     if (!email || !password || !userType || !firstName || !lastName) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Tous les champs requis doivent être remplis' },
+        { status: 400 }
+      );
+    }
+
+    // Validate medical specialty for doctors
+    if (userType === 'replacement' && profession === 'Médecin' && !specialty) {
+      return NextResponse.json(
+        { error: 'La spécialité médicale est requise pour les médecins' },
+        { status: 400 }
+      );
     }
 
     // Check if user already exists
-    const existingUser = await db.getUserByEmail(email)
-    if (existingUser) {
-      return NextResponse.json({ error: "User already exists with this email" }, { status: 409 })
+    const existingUser = await sql`
+      SELECT id FROM users WHERE email = ${email}
+    `;
+
+    if (existingUser.length > 0) {
+      return NextResponse.json(
+        { error: 'Un compte avec cet email existe déjà' },
+        { status: 400 }
+      );
     }
+
+    // Hash password
 
     // Create user
-    const user = await db.createUser({
-      email,
-      password_hash: password, // Store plain text password
-      user_type: userType,
-      first_name: firstName,
-      last_name: lastName,
-      phone,
-    })
+    const user = await sql`
+      INSERT INTO users (email, password_hash, user_type, first_name, last_name, phone)
+      VALUES (${email}, ${password}, ${userType}, ${firstName}, ${lastName}, ${phone})
+      RETURNING id, email, user_type, first_name, last_name, phone
+    `;
+
+    const userId = user[0].id;
 
     // Create profile based on user type
-    if (userType === "replacement"  ) {
-      await db.createReplacementProfile({
-        user_id: user.id,
-        profession: profession || "",
-        location: location || ""
-      })
-    } else if (userType === "employer" && companyName && companyType) {
-      await db.createEmployerProfile({
-        user_id: user.id,
-        organization_name: companyName,
-        organization_type: companyType.toLowerCase().replace(/\s+/g, "_"),
-        address: location || "",
-        city: location?.split(",")[0] || "",
-      })
+    if (userType === 'replacement') {
+      await sql`
+        INSERT INTO replacement_profiles (user_id, profession, specialty, location)
+        VALUES (${userId}, ${profession || ''}, ${specialty || ''}, ${location || ''})
+      `;
+    } else if (userType === 'employer') {
+      await sql`
+        INSERT INTO employers (user_id, company_name, company_type, description, location)
+        VALUES (${userId}, ${companyName || ''}, ${companyType || ''}, ${description || ''}, ${location || ''})
+      `;
     }
 
-    const token = createToken(
-      {
-        userId: user.id,
-        email: user.email,
-        userType: user.user_type,
-      },
-      JWT_SECRET,
-    )
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId, email, userType },
+      process.env.JWT_SECRET!,
+      { expiresIn: '7d' }
+    );
 
     // Create response
-    const response = NextResponse.json(
-      {
-        message: "User registered successfully",
-        user: {
-          id: user.id,
-          email: user.email,
-          userType: user.user_type,
-          firstName: user.first_name,
-          lastName: user.last_name,
-        },
+    const response = NextResponse.json({
+      message: 'Inscription réussie',
+      user: {
+        id: userId,
+        email,
+        userType,
+        firstName,
+        lastName,
       },
-      { status: 201 },
-    )
+    });
 
     // Set HTTP-only cookie
-    response.cookies.set("auth-token", token, {
+    response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60, // 7 days
-    })
+    });
 
-    return response
+    return response;
+
   } catch (error) {
-    console.error("Registration error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error('Registration error:', error);
+    return NextResponse.json(
+      { error: 'Erreur serveur lors de l\'inscription' },
+      { status: 500 }
+    );
   }
 }

@@ -16,6 +16,7 @@ import {
   Eye,
   EyeOff,
   Briefcase,
+  Stethoscope,
 } from "lucide-react";
 
 interface ReplacementRegisterFormProps {
@@ -29,6 +30,7 @@ interface ReplacementRegisterFormProps {
     confirmPassword: string;
     acceptTerms: boolean;
     profession: string;
+    specialty?: string;
   };
   setFormData: (data: any) => void;
   showPassword: boolean;
@@ -37,6 +39,29 @@ interface ReplacementRegisterFormProps {
   handleSubmit: (e: React.FormEvent) => void;
   specialties: string[]; 
 } 
+
+const medicalSpecialties = [
+  "Médecine générale",
+  "Cardiologie",
+  "Dermatologie", 
+  "Gastro-entérologie",
+  "Gynécologie-obstétrique",
+  "Neurologie",
+  "Ophtalmologie",
+  "Orthopédie",
+  "Pédiatrie",
+  "Pneumologie",
+  "Psychiatrie",
+  "Radiologie",
+  "Rhumatologie",
+  "Urologie",
+  "Anesthésie-réanimation",
+  "Chirurgie générale",
+  "Endocrinologie",
+  "Hématologie",
+  "Néphrologie",
+  "Oncologie"
+];
 
 export default function ReplacementRegisterForm({
   formData,
@@ -93,7 +118,6 @@ export default function ReplacementRegisterForm({
               type="email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
-              required
               className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Adresse email"
             />
@@ -120,7 +144,6 @@ export default function ReplacementRegisterForm({
               id="location"
               value={formData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
-              required
               className="pl-12 h-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded"
               placeholder="Ville ou région"
             />
@@ -129,7 +152,13 @@ export default function ReplacementRegisterForm({
             <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-10 w-5" />
             <Select
               value={formData.profession}
-              onValueChange={(value) => handleInputChange("profession", value)}
+              onValueChange={(value) => {
+                handleInputChange("profession", value);
+                // Reset specialty when profession changes
+                if (value !== "Médecin") {
+                  handleInputChange("specialty", "");
+                }
+              }}
               required
             >
               <SelectTrigger className="!h-12 w-full pl-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded">
@@ -144,6 +173,35 @@ export default function ReplacementRegisterForm({
             </Select>
           </div>
         </section>
+
+        {/* Medical Specialty - Only shown when profession is "Médecin" */}
+        {formData.profession === "Médecin" && (
+          <section>
+            <div className="relative">
+              <Stethoscope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Select
+                value={formData.specialty || ""}
+                onValueChange={(value) => handleInputChange("specialty", value)}
+                required
+              >
+                <SelectTrigger className="!h-12 w-full pl-12 border-gray-700 bg-gray-900 text-white focus:border-blue-500 focus:ring-blue-500 rounded">
+                  <SelectValue placeholder="Choisir une spécialité médicale" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-900 text-white border-gray-700 max-h-60">
+                  {medicalSpecialties.map((specialty) => (
+                    <SelectItem 
+                      key={specialty} 
+                      value={specialty} 
+                      className="bg-gray-900 text-white hover:bg-blue-900"
+                    >
+                      {specialty}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </section>
+        )}
 
         {/* Password */}
         <section>
@@ -199,7 +257,7 @@ export default function ReplacementRegisterForm({
         <Button
           type="submit"
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl shadow-lg transition duration-300 disabled:opacity-50"
-          disabled={!formData.acceptTerms}
+          disabled={!formData.acceptTerms || (formData.profession === "Médecin" && !formData.specialty)}
         >
           Créer mon compte
         </Button>

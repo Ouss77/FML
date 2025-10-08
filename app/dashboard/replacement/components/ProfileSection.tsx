@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, MapPin, Briefcase, Globe, Heart, Pencil, Calendar, FileText } from "lucide-react"
+import { Mail, Phone, MapPin, Briefcase, Globe, Heart, Pencil, Calendar, FileText, User } from "lucide-react"
 import EditProfileDialog from "./EditProfileDialog";
 
 interface ProfileData {
@@ -92,19 +92,35 @@ export default function ProfileSection({
 
       {/* Profile Image */}
       <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-        <div className="w-40 h-40 rounded-full border-4 border-white overflow-hidden shadow-md">
-          <img
-            src={profileData.imageProfile}
-            alt="profile"
-            className="object-cover w-full h-full"
-          />
+        <div className="w-40 h-40 rounded-full border-4 border-white overflow-hidden shadow-md bg-gray-100">
+          {profileData.imageProfile ? (
+            <img
+              src={profileData.imageProfile}
+              alt={`Photo de profil de ${profileData.firstName} ${profileData.lastName}`}
+              className="object-cover w-full h-full"
+              onError={(e) => {
+                // Fallback to default avatar if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          {/* Default Avatar - shown when no image or image fails to load */}
+          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 ${profileData.imageProfile ? 'hidden' : ''}`}>
+            <div className="text-center">
+              <User className="w-16 h-16 text-white mx-auto mb-2" />
+              <div className="text-white text-xl font-bold">
+                {profileData.firstName?.[0]?.toUpperCase() || '?'}
+                {profileData.lastName?.[0]?.toUpperCase() || '?'}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </div> 
 
   <CardContent className="pt-10 pb-6 flex flex-col items-center text-center text-[0.92rem]">
         {/* Title */}
         <div className="flex items-center justify-center gap-2">
-          <h2 className="text-lg font-bold text-blue-900">Profil Médecin</h2>
           {profileData.profile_status === "approved" && (
             <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-300">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -115,7 +131,7 @@ export default function ProfileSection({
         <p className="text-base font-medium text-gray-800">
           {profileData.firstName} {profileData.lastName}
         </p>
-        <p className="text-blue-600 text-sm">
+        <p className="text-blue-600 text-lg">
           {profileData.profession ? profileData.profession : "-"}
           {profileData.specialty ? ` (${profileData.specialty})` : ""}
         </p>
@@ -134,7 +150,7 @@ export default function ProfileSection({
         </div>
 
         {/* Info grid */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full mt-4 text-xs">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full mt-4 text-lg">
           <div className="flex items-center gap-1 bg-gray-50 p-2 rounded-xl">
             <Mail className="w-5 h-5 text-blue-500" />
             <span>{profileData.email}</span>
